@@ -1,0 +1,66 @@
+{
+  "name": "react-multi-datepicker",
+  "private": false,
+  "version": "0.0.0",
+  "description": "A multi calendar and highly customizable datepicker component for react",
+  "author": "Sepehr Karimi <karimi.sepehr2@gmail.com>",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com/sepehr09/react-multi-datepicker.git",
+    "directory": "/"
+  },
+  "keywords": [
+    "react",
+    "datepicker",
+    "calendar",
+    "jalali",
+    "persian",
+    "gregorian",
+    "multi-calendar",
+    "multi-datepicker",
+    "multi-date-picker"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17 || ^18",
+    "react-dom": "^16.8.0 || ^17 || ^18"
+  },
+  "dependencies": {
+    "date-fns": "^3.3.1"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^7.6.10",
+    "@storybook/addon-interactions": "^7.6.10",
+    "@storybook/addon-links": "^7.6.10",
+    "@storybook/addon-onboarding": "^1.0.11",
+    "@storybook/blocks": "^7.6.10",
+    "@storybook/react": "^7.6.10",
+    "@storybook/react-vite": "^7.6.10",
+    "@storybook/test": "^7.6.10",
+    "@types/jalaali-js": "^1.1.3",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.17",
+    "eslint": "^8.55.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "eslint-plugin-storybook": "^0.6.15",
+    "postcss": "^8.4.33",
+    "storybook": "^7.6.10",
+    "storybook-addon-deep-controls": "^0.3.1",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8"
+  }
+}
