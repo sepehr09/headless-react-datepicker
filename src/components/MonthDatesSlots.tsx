@@ -12,8 +12,14 @@ function MonthDatesSlots() {
     onClickSlot,
     calendar,
   } = useContext(PickerContext);
-  const { locale, showOtherDays, otherDaysSelectable, dayFormat } =
-    config || {};
+  const {
+    locale,
+    showOtherDays,
+    otherDaysSelectable,
+    dayFormat,
+    minDate,
+    maxDate,
+  } = config || {};
 
   const dayFormatter = (day) => {
     if (calendar === "persian") {
@@ -54,6 +60,10 @@ function MonthDatesSlots() {
 
     if (!isSameMonth && !otherDaysSelectable) return;
 
+    if (minDate && date < minDate) return;
+
+    if (maxDate && date > maxDate) return;
+
     onClickSlot?.(date);
   };
 
@@ -72,6 +82,10 @@ function MonthDatesSlots() {
         const isEndOfRange =
           Array.isArray(selectedDay) &&
           isSameDay(date, selectedDay?.[selectedDay?.length - 1]);
+        const isDisabled =
+          (minDate && date < minDate) ||
+          (maxDate && date > maxDate) ||
+          !isSameMonth;
 
         if (!showOtherDays && !isSameMonth) return <div />;
 
@@ -85,11 +99,11 @@ function MonthDatesSlots() {
                 : ""
             }
             ${
-              !isSameMonth && !otherDaysSelectable
+              isDisabled || (!isSameMonth && !otherDaysSelectable)
                 ? "rhjd-cursor-default"
                 : "rhjd-cursor-pointer"
             }
-            ${isSameMonth ? "" : "rhjd-text-gray-400"}
+            ${isDisabled ? "rhjd-text-gray-400" : ""}
             ${isRangeSelected ? "rhjd-bg-[#EAEAEC]" : ""}
             ${isStartOfRange ? "rhjd-rounded-s-xl" : ""}
             ${isEndOfRange ? "rhjd-rounded-e-xl" : ""}

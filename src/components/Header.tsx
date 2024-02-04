@@ -1,3 +1,5 @@
+import { Intl, Temporal } from "@js-temporal/polyfill";
+import { toDate } from "date-fns";
 import { useContext, useMemo } from "react";
 import { PickerContext } from "../store/pickerContext";
 import { getAllMonths } from "../utils/datePicker";
@@ -6,7 +8,7 @@ function Header() {
   const {
     goToNextMonth,
     goToPrevMonth,
-    goToMonth,
+    goToDate,
     firstDayOfMonth,
     calendar = "persian",
     config,
@@ -14,7 +16,7 @@ function Header() {
     yearInTheCalendar,
   } = useContext(PickerContext);
 
-  const { locale } = config || {};
+  const { locale, yearRangeFrom, yearRangeTo } = config || {};
 
   const formattedDate = Intl.DateTimeFormat(locale, {
     year: "numeric",
@@ -26,6 +28,32 @@ function Header() {
     () => getAllMonths({ locale: locale!, calendar }),
     [calendar, locale]
   );
+
+  const handleGoToMonth = (month: number) => {
+    const newDate = Temporal.PlainDate.from({
+      year: yearInTheCalendar,
+      month: month,
+      day: 1,
+      calendar: calendar,
+    }).getISOFields();
+
+    goToDate?.(
+      toDate(`${newDate.isoYear}-${newDate.isoMonth}-${newDate.isoDay}`)
+    );
+  };
+
+  const handleGoToYear = (year: number) => {
+    const newDate = Temporal.PlainDate.from({
+      year: year,
+      month: monthInTheCalendar,
+      day: 1,
+      calendar: calendar,
+    }).getISOFields();
+
+    goToDate?.(
+      toDate(`${newDate.isoYear}-${newDate.isoMonth}-${newDate.isoDay}`)
+    );
+  };
 
   return (
     <div>
@@ -40,7 +68,7 @@ function Header() {
         </div>
         <select
           onChange={(v) => {
-            goToMonth?.(parseInt(v.target.value, 10));
+            handleGoToMonth(parseInt(v.target.value, 10));
           }}
         >
           {allMonths.map((month) => (
@@ -49,9 +77,33 @@ function Header() {
               value={month.value}
               selected={month.value === monthInTheCalendar}
             >
-              {month.label}
+              {month.label} ({month.value})
             </option>
           ))}
+        </select>
+
+        <select
+          onChange={(v) => {
+            handleGoToYear(parseInt(v.target.value, 10));
+          }}
+        >
+          {Array.from({
+            length:
+              (yearRangeTo || yearInTheCalendar)! -
+              (yearRangeFrom || yearInTheCalendar - 20)! +
+              1,
+          }).map((_, i) => {
+            const year = (yearRangeFrom || yearInTheCalendar - 20)! + i;
+            return (
+              <option
+                key={year}
+                value={year}
+                selected={year === yearInTheCalendar}
+              >
+                {year}
+              </option>
+            );
+          })}
         </select>
         <div className="rhjd-cursor-pointer" onClick={() => goToPrevMonth?.()}>
           prev {">"}

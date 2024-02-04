@@ -71,4 +71,24 @@ export type TCalendarConfig = {
    * @default "numeric"
    */
   dayFormat?: "numeric" | "2-digit" | undefined;
+
+  /**
+   * @default "last 10 years"
+   */
+  yearRangeFrom?: number;
+
+  /**
+   * @default "Current year"
+   */
+  yearRangeTo?: number;
+
+  /**
+   * Prevent selecting dates before this date.
+   */
+  maxDate?: Date;
+
+  /**
+   * Prevent selecting dates after this date.
+   */
+  minDate?: Date;
 };

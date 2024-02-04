@@ -64,6 +64,10 @@ export const SDP: Story = {
       otherDaysSelectable: false,
       weekdayFormat: "narrow",
       dayFormat: "numeric",
+      // yearRangeFrom: 1330,
+      // yearRangeTo: 1400,
+      minDate: new Date("2024-01-01T00:00:00.000Z"),
+      maxDate: new Date(),
     },
   },
 };
@@ -80,6 +84,8 @@ export const RDP: Story = {
       otherDaysSelectable: false,
       weekdayFormat: "narrow",
       dayFormat: "numeric",
+      // yearRangeFrom: 1330,
+      // yearRangeTo: 1400,
     },
   },
 };
