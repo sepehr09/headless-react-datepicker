@@ -4,7 +4,7 @@ import { TDatePickerProps } from "../types";
 export type TPickerContext = {
   goToNextMonth?: () => void;
   goToPrevMonth?: () => void;
-  goToMonth?: (month: number) => void;
+  goToDate?: (date: Date) => void;
   daysOfMonth?: Date[];
   startDateIncludeOtherDays?: Date;
   endDateIncludeOtherDays?: Date;

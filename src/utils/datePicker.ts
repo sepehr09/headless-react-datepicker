@@ -187,36 +187,3 @@ export function getAllMonths({
   // return months.sort((a, b) => a.number - b.number);
 }
 
-export function convertToSpecificCalendar(inputDate, targetCalendar) {
-  // Ensure inputDate is a valid Date object
-  if (!(inputDate instanceof Date)) {
-    throw new Error("Invalid date format");
-  }
-
-  // Check if the targetCalendar is supported
-  const supportedCalendars = Intl.DateTimeFormat().resolvedOptions().calendar;
-  if (targetCalendar !== supportedCalendars) {
-    throw new Error(`Calendar "${targetCalendar}" is not supported`);
-  }
-
-  // Format the input date using the specified calendar
-  const formattedDate = inputDate.toLocaleDateString("en", {
-    calendar: targetCalendar,
-  });
-
-  return formattedDate;
-}
-
-// Example usage:
-const gregorianDate = new Date(2024, 0, 30); // January 30, 2024
-const targetCalendar = "islamic"; // Islamic calendar
-
-try {
-  const convertedDate = convertToSpecificCalendar(
-    gregorianDate,
-    targetCalendar
-  );
-  console.log(`Converted date to ${targetCalendar} calendar: ${convertedDate}`);
-} catch (error) {
-  console.error(error.message);
-}

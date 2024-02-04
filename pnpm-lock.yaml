@@ -5,14 +5,17 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@js-temporal/polyfill':
+    specifier: ^0.4.4
+    version: 0.4.4
   date-fns:
     specifier: ^3.3.1
     version: 3.3.1
   react:
-    specifier: ^18.2.0
+    specifier: ^16.8.0 || ^17 || ^18
     version: 18.2.0
   react-dom:
-    specifier: ^18.2.0
+    specifier: ^16.8.0 || ^17 || ^18
     version: 18.2.0(react@18.2.0)
 
 devDependencies:
@@ -2047,6 +2050,14 @@ packages:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
+
+  /@js-temporal/polyfill@0.4.4:
+    resolution: {integrity: sha512-2X6bvghJ/JAoZO52lbgyAPFj8uCflhTo2g7nkFzEQdXd/D8rEeD4HtmTEpmtGCva260fcd66YNXBOYdnmHqSOg==}
+    engines: {node: '>=12'}
+    dependencies:
+      jsbi: 4.3.0
+      tslib: 2.6.2
+    dev: false
 
   /@juggle/resize-observer@3.4.0:
     resolution: {integrity: sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==}
@@ -6401,6 +6412,10 @@ packages:
       argparse: 2.0.1
     dev: true
 
+  /jsbi@4.3.0:
+    resolution: {integrity: sha512-SnZNcinB4RIcnEyZqFPdGPVgrg2AcnykiBy0sHVJQKHYeaLUvi3Exj+iaPpLnFVkDPZIV4U0yvgC9/R4uEAZ9g==}
+    dev: false
+
   /jscodeshift@0.15.1(@babel/preset-env@7.23.9):
     resolution: {integrity: sha512-hIJfxUy8Rt4HkJn/zZPU9ChKfKZM1342waJ1QC2e2YsPcWhM+3BJ4dcfQCzArTrk1jJeNLB341H+qOcEHRxJZg==}
     hasBin: true
@@ -8360,7 +8375,6 @@ packages:
 
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
-    dev: true
 
   /tsutils@3.21.0(typescript@5.3.3):
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}

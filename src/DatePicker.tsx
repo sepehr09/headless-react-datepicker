@@ -71,11 +71,8 @@ function DatePicker(props: TDatePickerProps) {
     setCurrentDate(updatedDate);
   };
 
-  const goToMonth = (month: number) => {
-    const updatedDate = new Date(currentDate);
-    updatedDate.setMonth(month);
-
-    setCurrentDate(updatedDate);
+  const goToDate = (date: Date) => {
+    setCurrentDate(date);
   };
 
   const onClickSlot = (date: Date) => {
@@ -98,7 +95,7 @@ function DatePicker(props: TDatePickerProps) {
         ...props,
         goToNextMonth,
         goToPrevMonth,
-        goToMonth,
+        goToDate,
         daysOfMonth,
         startDateIncludeOtherDays,
         endDateIncludeOtherDays,
