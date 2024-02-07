@@ -56,8 +56,8 @@ export type TDaySlots = {
 
   inSelectedRangeStyles?: CSSProperties;
   inSelectedRangeClassName?: string;
-  inSelectedParentRangeStyles?: CSSProperties;
-  inSelectedParentRangeClassName?: string;
+  inSelectedRangeParentStyles?: CSSProperties;
+  inSelectedRangeParentClassName?: string;
 
   startOfRangeStyles?: CSSProperties;
   startOfRangeClassName?: string;
