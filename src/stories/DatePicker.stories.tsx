@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import DatePickerProvider from "../DatePickerProvider";
-import DaySlots from "../components/DaySlots";
 import DaysOfWeekHeader from "../components/DaysOfWeekHeader";
 import Header from "../components/Header";
 import Title from "../components/Title";
+import DaySlots from "../components/daySlots/DaySlots";
 import { TDatePickerProps } from "../types";
 
 const meta = {
@@ -63,7 +63,7 @@ const RenderDatePicker = (props: TDatePickerProps) => {
       style={{
         background: "#fff",
         boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-        width: "330px",
+        width: "300px",
         borderRadius: "10px",
         margin: "30px auto",
         padding: "10px",
@@ -72,29 +72,8 @@ const RenderDatePicker = (props: TDatePickerProps) => {
       <DatePickerProvider {...props}>
         <Title />
         <Header />
-        <DaysOfWeekHeader
-        // renderer={({ formattedTitle }) => {
-        //   return (
-        //     <div className="rhmdp-text-center rhmdp-font-bold">
-        //       {formattedTitle}
-        //     </div>
-        //   );
-        // }}
-        />
-        <DaySlots
-        // dayRenderer={({
-        //   date,
-        //   formattedDay,
-        //   isSelected,
-        //   handleClickSlot,
-        // }) => {
-        //   return (
-        //     <div onClick={() => handleClickSlot(date)}>
-        //       {isSelected ? `(${formattedDay})` : formattedDay}
-        //     </div>
-        //   );
-        // }}
-        />
+        <DaysOfWeekHeader />
+        <DaySlots  />
       </DatePickerProvider>
     </div>
   );
@@ -114,7 +93,7 @@ export const SDP: Story = {
       weekdayFormat: "narrow",
       dayFormat: "numeric",
       weekends: ["saturday", "friday"],
-      weekendSelectable: true,
+      weekendSelectable: false,
       // yearRangeFrom: 1330,
       // yearRangeTo: 1400,
       // minDate: new Date("2024-01-01T00:00:00.000Z"),
