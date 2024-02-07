@@ -10,6 +10,7 @@
     "url": "git@github.com/sepehr09/react-multi-datepicker.git",
     "directory": "/"
   },
+  "license": "MIT",
   "keywords": [
     "react",
     "datepicker",
@@ -21,13 +22,22 @@
     "multi-datepicker",
     "multi-date-picker"
   ],
+  "main": "./index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/d/index.d.ts",
+  "files": [
+    "/dist"
+  ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build-vite": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build": "rm -rf dist && yarn build:rollup",
+    "build-storybook": "storybook build",
+    "build:rollup": "NODE_ENV=production rollup -c --bundleConfigAsCjs",
+    "build:tailwind": "postcss src/styles/tailwind.css -o dist/css/tailwind.css"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17 || ^18",
@@ -38,6 +48,8 @@
     "date-fns": "^3.3.1"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
     "@storybook/addon-essentials": "^7.6.10",
     "@storybook/addon-interactions": "^7.6.10",
     "@storybook/addon-links": "^7.6.10",
@@ -58,9 +70,15 @@
     "eslint-plugin-react-refresh": "^0.4.5",
     "eslint-plugin-storybook": "^0.6.15",
     "postcss": "^8.4.33",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rollup": "^4.9.6",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-typescript2": "^0.36.0",
     "storybook": "^7.6.10",
     "storybook-addon-deep-controls": "^0.3.1",
     "tailwindcss": "^3.4.1",
+    "tslib": "^2.6.2",
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
   }

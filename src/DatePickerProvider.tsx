@@ -1,46 +1,45 @@
 import { addDays, subDays, toDate } from "date-fns";
 import { useMemo, useState } from "react";
-import DaysOfWeekHeader from "./components/DaysOfWeekHeader";
-import Header from "./components/Header";
-import MonthDatesSlots from "./components/MonthDatesSlots";
 import { PickerContext } from "./store/pickerContext";
+// import "./styles.css";
 import { TDatePickerProps } from "./types";
-import { getMonthSlots } from "./utils/datePicker";
+import { getAllMonths, getMonthSlots } from "./utils/datePicker";
 
-function DatePicker(props: TDatePickerProps) {
+function DatePickerProvider(props: TDatePickerProps) {
   const {
     initialValue,
     defaultStartDate,
     config,
     isRange,
     calendar = "gregory",
+    children,
   } = props;
-  const { weekStartsOn = 6 } = config || {};
+  const {
+    weekdayFormat = "narrow",
+    weekStartsOn = "saturday",
+    locale = "en-US",
+    dayFormat = "numeric",
+    yearRangeFrom,
+    yearRangeTo,
+  } = config || {};
 
   const [currentDate, setCurrentDate] = useState<Date>(
     defaultStartDate ||
       (initialValue
         ? toDate(
             Array.isArray(initialValue)
-              ? initialValue?.[0]?.toISOString()
-              : initialValue?.toISOString()
+              ? initialValue?.[0].toISOString()
+              : initialValue.toISOString()
           )
-        : toDate(new Date()))
+        : toDate(new Date().toISOString()))
   );
   const [selectedDay, setSelectedDay] = useState<Date | Date[] | undefined>(
     initialValue
       ? Array.isArray(initialValue)
-        ? initialValue?.map((v) => toDate(v?.toISOString()))
-        : toDate(initialValue?.toISOString())
+        ? initialValue?.map((v) => toDate(v))
+        : toDate(initialValue)
       : undefined
   );
-
-  console.log({ selectedDay });
-
-  // console.group("");
-  // console.log("selectedDay", selectedDay);
-  // console.log("currentDate", currentDate);
-  // console.groupEnd();
 
   const {
     startDateIncludeOtherDays,
@@ -75,13 +74,21 @@ function DatePicker(props: TDatePickerProps) {
     setCurrentDate(date);
   };
 
+  const goToCurrentMonth = () => {
+    setCurrentDate(new Date(new Date().setHours(0, 0, 0, 0)));
+  };
+
   const onClickSlot = (date: Date) => {
     if (isRange) {
+      if (!Array.isArray(selectedDay)) return;
+
       if (!selectedDay?.length || selectedDay.length === 2) {
         setSelectedDay([date]);
       } else {
         setSelectedDay(
-          [selectedDay[0], date].sort((a, b) => new Date(a) - new Date(b))
+          [selectedDay[0], date].sort(
+            (a, b) => new Date(a).getTime() - new Date(b).getTime()
+          )
         );
       }
     } else {
@@ -89,13 +96,40 @@ function DatePicker(props: TDatePickerProps) {
     }
   };
 
+  const monthsList = useMemo(
+    () => getAllMonths({ locale: locale!, calendar }),
+    [calendar, locale]
+  );
+
+  const yearsList = useMemo(
+    () =>
+      Array.from({
+        length:
+          (yearRangeTo || yearInTheCalendar)! -
+          (yearRangeFrom || (yearInTheCalendar || 0) - 20)! +
+          1,
+      }).map((_, i) => (yearRangeFrom || (yearInTheCalendar || 0) - 20)! + i),
+    [yearRangeFrom, yearRangeTo, calendar]
+  );
+
   return (
     <PickerContext.Provider
       value={{
         ...props,
+        calendar: calendar,
+        config: {
+          ...config,
+          weekdayFormat,
+          dayFormat,
+          locale,
+          weekStartsOn,
+        },
         goToNextMonth,
         goToPrevMonth,
         goToDate,
+        goToCurrentMonth,
+        monthsList,
+        yearsList,
         daysOfMonth,
         startDateIncludeOtherDays,
         endDateIncludeOtherDays,
@@ -108,13 +142,9 @@ function DatePicker(props: TDatePickerProps) {
         yearInTheCalendar,
       }}
     >
-      <div className="rhjd-w-fit" dir="rtl">
-        <Header />
-        <DaysOfWeekHeader />
-        <MonthDatesSlots />
-      </div>
+      {children}
     </PickerContext.Provider>
   );
 }
 
-export default DatePicker;
+export default DatePickerProvider;
