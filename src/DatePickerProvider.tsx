@@ -90,7 +90,7 @@ function DatePickerProvider<IsRange extends boolean>(
 
   const handleClickSlot = (date: Date) => {
     if (isRange) {
-      if (!Array.isArray(selectedDay)) return;
+      if (selectedDay !== undefined && !Array.isArray(selectedDay)) return;
 
       if (!selectedDay?.length || selectedDay.length === 2) {
         setSelectedDay([date]);
