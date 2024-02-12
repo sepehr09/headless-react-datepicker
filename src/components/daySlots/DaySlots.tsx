@@ -69,7 +69,7 @@ function DaySlots({
     minDate,
     maxDate,
     weekends,
-    weekendSelectable,
+    weekendSelectable = true,
   } = config || {};
 
   const dayFormatter = (day: Date) => {
@@ -216,7 +216,7 @@ function DaySlots({
             }}
           >
             <div
-              onClick={() => handleClickSlot?.(date)}
+              onClick={() => onClickSlot?.(date)}
               className={classJoin([
                 "rhmdp-p-2 rhmdp-rounded-lg",
                 IsToday && classJoin([todayClassName]),

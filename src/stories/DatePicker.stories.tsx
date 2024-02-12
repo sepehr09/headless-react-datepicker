@@ -51,6 +51,33 @@ const meta = {
       control: "select",
       options: ["numeric", "2-digit"],
     },
+    "config.yearRangeFrom": {
+      control: "number",
+    },
+    "config.yearRangeTo": {
+      control: "number",
+    },
+    "config.minDate": {
+      control: "date",
+    },
+    "config.maxDate": {
+      control: "date",
+    },
+    "config.weekends": {
+      control: "check",
+      options: [
+        "saturday",
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+      ],
+    },
+    "config.weekendSelectable": {
+      control: "boolean",
+    },
   },
 } satisfies Meta<typeof DatePickerProvider>;
 
@@ -84,15 +111,15 @@ export const SDP: Story = {
   args: {
     isRange: false,
     initialValue: new Date("2024-02-06T20:00:00.000Z"),
-    calendar: "persian",
+    calendar: "gregory",
     config: {
-      locale: "fa-IR",
-      weekStartsOn: "saturday",
+      locale: "en-US",
+      weekStartsOn: "monday",
       showOtherDays: false,
       otherDaysSelectable: false,
       weekdayFormat: "narrow",
       dayFormat: "numeric",
-      weekends: ["saturday", "friday"],
+      weekends: ["saturday", "sunday"],
       weekendSelectable: true,
       // yearRangeFrom: 1330,
       // yearRangeTo: 1400,
@@ -107,6 +134,28 @@ export const RDP: Story = {
   args: {
     isRange: true,
     initialValue: [new Date("2024-02-06"), new Date("2024-02-08")],
+    calendar: "gregory",
+    config: {
+      locale: "en-US",
+      weekStartsOn: "monday",
+      showOtherDays: false,
+      otherDaysSelectable: false,
+      weekdayFormat: "narrow",
+      dayFormat: "numeric",
+      weekends: ["saturday", "sunday"],
+      // yearRangeFrom: 1330,
+      // yearRangeTo: 1400,
+      // minDate: new Date("2024-01-01T00:00:00.000Z"),
+      // maxDate: new Date(),
+    },
+  },
+};
+
+export const SDPPersian: Story = {
+  render: RenderDatePicker,
+  args: {
+    isRange: true,
+    initialValue: [new Date("2024-02-06"), new Date("2024-02-08")],
     calendar: "persian",
     config: {
       locale: "fa-IR",
@@ -115,6 +164,31 @@ export const RDP: Story = {
       otherDaysSelectable: false,
       weekdayFormat: "narrow",
       dayFormat: "numeric",
+      weekends: ["thursday", "friday"],
+
+      // yearRangeFrom: 1330,
+      // yearRangeTo: 1400,
+      // minDate: new Date("2024-01-01T00:00:00.000Z"),
+      // maxDate: new Date(),
+    },
+  },
+};
+
+export const SDPIslamic: Story = {
+  render: RenderDatePicker,
+  args: {
+    isRange: true,
+    initialValue: [new Date("2024-02-06"), new Date("2024-02-08")],
+    calendar: "islamic-umalqura",
+    config: {
+      locale: "ar-EG",
+      weekStartsOn: "saturday",
+      showOtherDays: false,
+      otherDaysSelectable: false,
+      weekdayFormat: "narrow",
+      dayFormat: "numeric",
+      weekends: ["friday", "saturday"],
+
       // yearRangeFrom: 1330,
       // yearRangeTo: 1400,
       // minDate: new Date("2024-01-01T00:00:00.000Z"),
