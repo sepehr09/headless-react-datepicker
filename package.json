@@ -35,7 +35,7 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build": "rm -rf dist && yarn build:rollup",
-    "build-storybook": "storybook build",
+    "build-storybook": "storybook build --output-dir ./docs",
     "build:rollup": "NODE_ENV=production rollup -c --bundleConfigAsCjs",
     "build:tailwind": "postcss src/styles/tailwind.css -o dist/css/tailwind.css"
   },
