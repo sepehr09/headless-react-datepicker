@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import { TDatePickerProps, TMonthListItem } from "../types";
 
-export type TPickerContext = {
+export type TPickerContext<IsRange extends boolean> = {
   /**
    * Function to navigate to the next month
    */
@@ -80,7 +80,7 @@ export type TPickerContext = {
    * @param date
    * @returns
    */
-  onClickSlot?: (date: Date) => void;
+  handleClickSlot?: (date: Date) => void;
 
   /**
    * Current month in the calendar
@@ -112,9 +112,10 @@ export type TPickerContext = {
    * List of all years based on yearRangeFrom and yearRangeTo
    */
   yearsList?: number[];
-} & Omit<TDatePickerProps, "children">;
+} & Omit<TDatePickerProps<IsRange>, "children">;
 
-export const PickerContext = createContext<TPickerContext>({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const PickerContext = createContext<TPickerContext<any>>({
   goToNextMonth: () => {},
   goToPrevMonth: () => {},
   goToDate: () => {},

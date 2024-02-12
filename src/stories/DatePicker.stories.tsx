@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import DatePickerProvider from "../DatePickerProvider";
 import DaySlots from "../components/daySlots/DaySlots";
-import DaysOfWeekHeader from "../components/daysOfWeekHeader/DaysOfWeekHeader";
 import Header from "../components/header/Header";
 import Title from "../components/title/Title";
+import WeekDays from "../components/weekDays/WeekDays";
 import { TDatePickerProps } from "../types";
 
 const meta = {
@@ -57,7 +57,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const RenderDatePicker = (props: TDatePickerProps) => {
+const RenderDatePicker = <T extends boolean>(props: TDatePickerProps<T>) => {
   return (
     <div
       style={{
@@ -72,7 +72,7 @@ const RenderDatePicker = (props: TDatePickerProps) => {
       <DatePickerProvider {...props}>
         <Title />
         <Header />
-        <DaysOfWeekHeader />
+        <WeekDays />
         <DaySlots />
       </DatePickerProvider>
     </div>

@@ -57,7 +57,7 @@ function DaySlots({
     daysOfMonth,
     config,
     selectedDay,
-    onClickSlot,
+    handleClickSlot,
     calendar,
     monthInTheCalendar,
   } = useContext(PickerContext);
@@ -99,7 +99,7 @@ function DaySlots({
     return false;
   };
 
-  const handleClickSlot = (date: Date) => {
+  const onClickSlot = (date: Date) => {
     const isSameMonth =
       monthInTheCalendar &&
       calendar &&
@@ -117,7 +117,7 @@ function DaySlots({
 
     if (isInWeekend && !weekendSelectable) return;
 
-    onClickSlot?.(date);
+    handleClickSlot?.(date);
   };
 
   return (
@@ -173,7 +173,7 @@ function DaySlots({
             isEndOfRange,
             isInWeekend,
             isSelected,
-            handleClickSlot,
+            handleClickSlot: onClickSlot,
           });
         }
 

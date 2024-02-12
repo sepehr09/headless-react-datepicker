@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { TDay } from "../../types";
 
-export type TDaysOfWeekHeaderRendererArgs = {
+export type TWeekDaysRendererArgs = {
   /**
    * based on calendar config.weekdayFormat
    */
@@ -10,8 +10,8 @@ export type TDaysOfWeekHeaderRendererArgs = {
   weekDay: TDay;
 };
 
-export type TDaysOfWeekHeader = {
-  renderer?: (args: TDaysOfWeekHeaderRendererArgs) => ReactNode;
+export type TWeekDaysProps = {
+  renderer?: (args: TWeekDaysRendererArgs) => ReactNode;
   className?: string;
   rootClassName?: string;
 };

@@ -36,11 +36,13 @@ export type TMonthListItem = {
   value: number;
 };
 
-export type TDatePickerProps = {
+export type TDatePickerProps<IsRange extends boolean = false> = {
+  children?: React.ReactNode;
+
   /**
    * The initial value of the date picker.
    */
-  initialValue?: Date | Date[];
+  initialValue?: (IsRange extends true ? Date[] : Date) | undefined;
 
   /**
    * The default start date. Useful when you want to be on different month or year despite the initial value.
@@ -58,14 +60,18 @@ export type TDatePickerProps = {
    * Indicates whether the date picker is a range picker.
    * @default false
    */
-  isRange?: boolean;
+  isRange?: IsRange;
 
   /**
    * The calendar to use.
    * @default "gregory"
    */
   calendar?: TCalendar;
-  children?: React.ReactNode;
+
+  /**
+   * on calendar selected date change
+   */
+  onChange?: (value: IsRange extends true ? Date[] : Date) => void;
 };
 
 export type TCalendarConfig = {

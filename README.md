@@ -55,7 +55,7 @@ import React from "react";
 import DatePickerProvider, {
   Title,
   Header,
-  DaysOfWeekHeader,
+  WeekDays,
   DaySlots,
 } from "react-multi-datepicker";
 
@@ -64,7 +64,7 @@ const MyAwesomeDatePicker = () => {
     <DatePickerProvider>
       <Title />
       <Header />
-      <DaysOfWeekHeader />
+      <WeekDays />
       <DaySlots />
     </DatePickerProvider>
   );
@@ -81,14 +81,15 @@ import { DatePickerProvider } from "react-multi-datepicker";
 
 ### props
 
-| Name             | Type            | Description                                                                                                |
-| ---------------- | --------------- | ---------------------------------------------------------------------------------------------------------- |
-| initialValue     | Date \| Date[]  | The initial value of the date picker.                                                                      |
-| defaultStartDate | Date            | The default start date. Useful when you want to be on a different month or year despite the initial value. |
-| config           | TCalendarConfig | The configuration for the date picker.                                                                     |
-| isRange          | boolean         | Indicates whether the date picker is a range picker.                                                       |
-| calendar         | TCalendar       | The calendar to use.                                                                                       |
-| children         | ReactNode       | The other parts of the calendar or your custom components.                                                 |
+| Name             | Type                            | Description                                                                                                |
+| ---------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| initialValue     | Date \| Date[]                  | The initial value of the date picker.                                                                      |
+| defaultStartDate | Date                            | The default start date. Useful when you want to be on a different month or year despite the initial value. |
+| config           | TCalendarConfig                 | The configuration for the date picker.                                                                     |
+| isRange          | boolean                         | Indicates whether the date picker is a range picker.                                                       |
+| calendar         | TCalendar                       | The calendar to use.                                                                                       |
+| onChange         | (value: Date \| Date[]) => void | on calendar selected date change                                                                           |
+| children         | ReactNode                       | The other parts of the calendar or your custom components.                                                 |
 
 ### TCalendarConfig
 
@@ -157,23 +158,23 @@ import { Header } from "react-multi-datepicker";
 | yearSelectedOptionClassName  | string        | className the selected option in the year dropdown   |
 | yearSelectedOptionStyles     | CSSProperties | css styles the selected option in the year dropdown  |
 
-## DaysOfWeekHeader component
+## WeekDays component
 
-The `DaysOfWeekHeader` component is used to display the weekday header.
+The `WeekDays` component is used to display the weekday header.
 
 ```jsx
-import { DaysOfWeekHeader } from "react-multi-datepicker";
+import { WeekDays } from "react-multi-datepicker";
 ```
 
 ### props
 
-| Name          | Type                                                   | Description                                                       |
-| ------------- | ------------------------------------------------------ | ----------------------------------------------------------------- |
-| renderer      | (args: **TDaysOfWeekHeaderRendererArgs**) => ReactNode | Custom renderer. If provided, the whole component will be ignored |
-| className     | string                                                 | Custom class name for the element                                 |
-| rootClassName | string                                                 | Custom class name for the parent root element                     |
+| Name          | Type                                           | Description                                                       |
+| ------------- | ---------------------------------------------- | ----------------------------------------------------------------- |
+| renderer      | (args: **TWeekDaysRendererArgs**) => ReactNode | Custom renderer. If provided, the whole component will be ignored |
+| className     | string                                         | Custom class name for the element                                 |
+| rootClassName | string                                         | Custom class name for the parent root element                     |
 
-### TDaysOfWeekHeaderRendererArgs
+### TWeekDaysRendererArgs
 
 | Name           | Type   | Options                                                                                  | Description                                                                           |
 | -------------- | ------ | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
@@ -279,8 +280,8 @@ const MyCustomAwesomeHeader = () => {
 | firstDayOfMonth           | Date                        | First day of the month                                                                                   |
 | lastDayOfMonth            | Date                        | Last day of the month                                                                                    |
 | selectedDay               | Date \| Date[] \| undefined | The selected day in the calendar                                                                         |
-| onClickSlot               | (date: Date) => void        | Callback function when a date is clicked                                                                 |
-| monthInTheCalendar        | number                      | Current month in the calendar (based on desire calendar)                                                |
+| handleClickSlot           | (date: Date) => void        | Callback function when a date is clicked                                                                 |
+| monthInTheCalendar        | number                      | Current month in the calendar (based on desire calendar)                                                 |
 | totalDaysInTheCalendar    | number                      | Indicate the total days in the month                                                                     |
 | yearInTheCalendar         | number                      | Current year in the desire calendar                                                                      |
 | monthsList                | TMonthListItem[]            | List of all month based on culture                                                                       |

@@ -1,12 +1,13 @@
-import { addDays, subDays, toDate } from "date-fns";
-import { useMemo, useState } from "react";
-import { PickerContext } from "./store/pickerContext";
-// import "./styles.css";
 import { Temporal } from "@js-temporal/polyfill";
+import { addDays, subDays, toDate } from "date-fns";
+import { useEffect, useMemo, useState } from "react";
+import { PickerContext } from "./store/pickerContext";
 import { TDatePickerProps } from "./types";
 import { getAllMonths, getMonthSlots } from "./utils/datePicker";
 
-function DatePickerProvider(props: TDatePickerProps) {
+function DatePickerProvider<IsRange extends boolean>(
+  props: TDatePickerProps<IsRange>
+) {
   const {
     initialValue,
     defaultStartDate,
@@ -14,7 +15,9 @@ function DatePickerProvider(props: TDatePickerProps) {
     isRange,
     calendar = "gregory",
     children,
+    onChange,
   } = props;
+
   const {
     weekdayFormat = "narrow",
     weekStartsOn = "saturday",
@@ -34,13 +37,19 @@ function DatePickerProvider(props: TDatePickerProps) {
           )
         : toDate(new Date().toISOString()))
   );
-  const [selectedDay, setSelectedDay] = useState<Date | Date[] | undefined>(
+  const [selectedDay, setSelectedDay] = useState<Date[] | Date | undefined>(
     initialValue
       ? Array.isArray(initialValue)
         ? initialValue?.map((v) => toDate(v))
         : toDate(initialValue)
       : undefined
   );
+
+  useEffect(() => {
+    if (selectedDay !== undefined) {
+      onChange?.(selectedDay! as IsRange extends true ? Date[] : Date);
+    }
+  }, [onChange, selectedDay]);
 
   const {
     startDateIncludeOtherDays,
@@ -79,7 +88,7 @@ function DatePickerProvider(props: TDatePickerProps) {
     setCurrentDate(new Date(new Date().setHours(0, 0, 0, 0)));
   };
 
-  const onClickSlot = (date: Date) => {
+  const handleClickSlot = (date: Date) => {
     if (isRange) {
       if (!Array.isArray(selectedDay)) return;
 
@@ -161,13 +170,14 @@ function DatePickerProvider(props: TDatePickerProps) {
           locale,
           weekStartsOn,
         },
+        onChange: onChange! as (value: Date[] | Date) => void,
         goToNextMonth,
         goToPrevMonth,
         goToDate,
         goToCurrentMonth,
         goToMonth,
         goToYear,
-        onClickSlot,
+        handleClickSlot,
         monthsList,
         yearsList,
         daysOfMonth,

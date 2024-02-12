@@ -3,13 +3,9 @@ import { useContext } from "react";
 import { PickerContext } from "../../store/pickerContext";
 import { TDay } from "../../types";
 import { classJoin } from "../../utils/classJoin";
-import { TDaysOfWeekHeader } from "./types";
+import { TWeekDaysProps } from "./types";
 
-function DaysOfWeekHeader({
-  renderer,
-  className,
-  rootClassName,
-}: TDaysOfWeekHeader) {
+function WeekDays({ renderer, className, rootClassName }: TWeekDaysProps) {
   const { startDateIncludeOtherDays, config } = useContext(PickerContext);
   const { locale, weekdayFormat } = config || {};
 
@@ -54,4 +50,4 @@ function DaysOfWeekHeader({
   );
 }
 
-export default DaysOfWeekHeader;
+export default WeekDays;

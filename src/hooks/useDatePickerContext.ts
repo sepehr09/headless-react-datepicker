@@ -1,8 +1,10 @@
 import { useContext } from "react";
-import { PickerContext } from "../store/pickerContext";
+import { PickerContext, TPickerContext } from "../store/pickerContext";
 
-export const useDatePickerContext = () => {
-  const datePickerContext = useContext(PickerContext);
+export const useDatePickerContext = <IsRange extends boolean>() => {
+  const datePickerContext = useContext(
+    PickerContext
+  ) as TPickerContext<IsRange>;
 
   return datePickerContext;
 };
