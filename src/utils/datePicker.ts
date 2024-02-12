@@ -1,8 +1,9 @@
-import { Day, eachDayOfInterval, endOfWeek, startOfWeek } from "date-fns";
-import { TCalendar } from "../types";
+import { eachDayOfInterval, endOfWeek, startOfWeek } from "date-fns";
+import { bindWeekDayToNumber } from "../constants/weekdays";
+import { TCalendar, TDay } from "../types";
 
 export function getMonthInfo(date: Date, calendar: TCalendar) {
-  const startDate = new Date(date);
+  const startDate = new Date(new Date(date).setHours(0, 0, 0, 0));
   const locale = "en-US";
   const n = "numeric";
 
@@ -12,9 +13,11 @@ export function getMonthInfo(date: Date, calendar: TCalendar) {
   let calendarDays = 0;
 
   for (let i = 0; i < 32; i++) {
-    calendarDays = Number(
-      new Intl.DateTimeFormat(locale, { day: n, calendar }).format(gStartDate)
+    calendarDays = parseInt(
+      new Intl.DateTimeFormat(locale, { day: n, calendar }).format(gStartDate),
+      10
     );
+
     if (+calendarDays > totalDays) {
       totalDays = calendarDays;
       gregoryDays++;
@@ -33,7 +36,7 @@ export function getMonthInfo(date: Date, calendar: TCalendar) {
     gregoryMonthStartsOn: new Date(
       gStartT.setUTCDate(gStartT.getUTCDate() - totalDays + 1)
     ),
-    gregoryMonthEndsOn: new Date(gEndT),
+    gregoryMonthEndsOn: gEndT,
     dayInTheCalendar: parseInt(
       new Intl.DateTimeFormat(locale, { day: n, calendar }).format(startDate),
       10
@@ -57,10 +60,10 @@ export function getMonthInfo(date: Date, calendar: TCalendar) {
 export function getMonthSlots({
   currentDate,
   calendar,
-  weekStartsOn = 6,
+  weekStartsOn = "saturday",
 }: {
   currentDate: Date;
-  weekStartsOn: Day;
+  weekStartsOn: TDay;
   calendar: TCalendar;
 }): {
   daysOfMonth: Date[];
@@ -81,10 +84,10 @@ export function getMonthSlots({
   } = getMonthInfo(currentDate, calendar);
 
   const startDateIncludeOtherDays = startOfWeek(gregoryMonthStartsOn, {
-    weekStartsOn,
+    weekStartsOn: bindWeekDayToNumber[weekStartsOn],
   });
   const endDateIncludeOtherDays = endOfWeek(gregoryMonthEndsOn, {
-    weekStartsOn,
+    weekStartsOn: bindWeekDayToNumber[weekStartsOn],
   });
 
   const daysOfMonth = eachDayOfInterval({
@@ -186,4 +189,3 @@ export function getAllMonths({
   // }
   // return months.sort((a, b) => a.number - b.number);
 }
-

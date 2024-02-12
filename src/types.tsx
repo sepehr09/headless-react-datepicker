@@ -1,5 +1,3 @@
-import { Day } from "date-fns";
-
 export type TCalendar =
   /**
    * @default "gregory"
@@ -23,41 +21,80 @@ export type TCalendar =
   | "ethioaa"
   | "ethiopic"
   | "hebrew";
-export type TDatePickerProps = {
-  defaultStartDate?: Date;
-  initialValue?: Date | Date[];
-  config?: TCalendarConfig;
-  isRange?: boolean;
-  calendar?: TCalendar;
+
+export type TDay =
+  | "monday"
+  | "tuesday"
+  | "wednesday"
+  | "thursday"
+  | "friday"
+  | "saturday"
+  | "sunday";
+
+export type TMonthListItem = {
+  label: string;
+  value: number;
 };
 
-export type TDay = Day;
+export type TDatePickerProps<IsRange extends boolean = false> = {
+  children?: React.ReactNode;
+
+  /**
+   * The initial value of the date picker.
+   */
+  initialValue?: (IsRange extends true ? Date[] : Date) | undefined;
+
+  /**
+   * The default start date. Useful when you want to be on different month or year despite the initial value.
+   * @default initialValue || new Date()
+   */
+  defaultStartDate?: Date;
+
+  /**
+   * The configuration for the date picker.
+   * @type TCalendarConfig
+   */
+  config?: TCalendarConfig;
+
+  /**
+   * Indicates whether the date picker is a range picker.
+   * @default false
+   */
+  isRange?: IsRange;
+
+  /**
+   * The calendar to use.
+   * @default "gregory"
+   */
+  calendar?: TCalendar;
+
+  /**
+   * on calendar selected date change
+   */
+  onChange?: (value: IsRange extends true ? Date[] : Date) => void;
+};
 
 export type TCalendarConfig = {
   /**
    * The first day of the week.
-   * - 1 = Monday
-   * - 2 = Tuesday
-   * - 3 = Wednesday
-   * - 4 = Thursday
-   * - 5 = Friday
-   * - 6 = Saturday
-   * - 7 = Sunday
-   * @default 6
+   * @default "monday"
    */
   weekStartsOn?: TDay;
 
   /**
+   * The locale to use.
    * @default "en-US"
    */
   locale?: string;
 
   /**
+   * Show other days from the previous and next month or not.
    * @default false
    */
   showOtherDays?: boolean;
 
   /**
+   * Allow selecting other days from the previous and next month or not.
    * @default false
    */
   otherDaysSelectable?: boolean;
@@ -91,4 +128,15 @@ export type TCalendarConfig = {
    * Prevent selecting dates after this date.
    */
   minDate?: Date;
+
+  /**
+   * Specify which days of the week are holidays.
+   */
+  weekends?: TDay[];
+
+  /**
+   * Allow selecting weekends or not.
+   * @default true
+   */
+  weekendSelectable?: boolean;
 };
