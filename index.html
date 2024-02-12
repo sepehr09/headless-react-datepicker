@@ -1,13 +1,147 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <meta charset="utf-8" />
+
+    <title>@storybook/cli - Storybook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="./storybook-static/favicon.svg"
+    />
+
+    <link
+      rel="prefetch"
+      href="./storybook-static/sb-common-assets/nunito-sans-regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="prefetch"
+      href="./storybook-static/sb-common-assets/nunito-sans-bold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="stylesheet"
+      href="./storybook-static/sb-common-assets/fonts.css"
+    />
+
+    <link href="./storybook-static/sb-manager/runtime.js" rel="modulepreload" />
+
+    <link
+      href="./storybook-static/sb-addons/links-0/manager-bundle.js"
+      rel="modulepreload"
+    />
+
+    <link
+      href="./storybook-static/sb-addons/essentials-controls-1/manager-bundle.js"
+      rel="modulepreload"
+    />
+
+    <link
+      href="./storybook-static/sb-addons/essentials-actions-2/manager-bundle.js"
+      rel="modulepreload"
+    />
+
+    <link
+      href="./storybook-static/sb-addons/essentials-backgrounds-3/manager-bundle.js"
+      rel="modulepreload"
+    />
+
+    <link
+      href="./storybook-static/sb-addons/essentials-viewport-4/manager-bundle.js"
+      rel="modulepreload"
+    />
+
+    <link
+      href="./storybook-static/sb-addons/essentials-toolbars-5/manager-bundle.js"
+      rel="modulepreload"
+    />
+
+    <link
+      href="./storybook-static/sb-addons/essentials-measure-6/manager-bundle.js"
+      rel="modulepreload"
+    />
+
+    <link
+      href="./storybook-static/sb-addons/essentials-outline-7/manager-bundle.js"
+      rel="modulepreload"
+    />
+
+    <link
+      href="./storybook-static/sb-addons/onboarding-8/manager-bundle.js"
+      rel="modulepreload"
+    />
+
+    <link
+      href="./storybook-static/sb-addons/interactions-9/manager-bundle.js"
+      rel="modulepreload"
+    />
+
+    <style>
+      #storybook-root[hidden] {
+        display: none !important;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+
+    <script>
+      window["FEATURES"] = {
+        warnOnLegacyHierarchySeparator: true,
+        buildStoriesJson: false,
+        storyStoreV7: true,
+        argTypeTargetsV7: true,
+        legacyDecoratorFileOrder: false,
+        disallowImplicitActionsInRenderV8: false,
+      };
+
+      window["REFS"] = {};
+
+      window["LOGLEVEL"] = "info";
+
+      window["DOCS_OPTIONS"] = {
+        defaultName: "Docs",
+        autodocs: "tag",
+      };
+
+      window["CONFIG_TYPE"] = "PRODUCTION";
+    </script>
+
+    <script type="module">
+      import "./storybook-static/sb-manager/runtime.js";
+
+      import "./storybook-static/sb-addons/links-0/manager-bundle.js";
+
+      import "./storybook-static/sb-addons/essentials-controls-1/manager-bundle.js";
+
+      import "./storybook-static/sb-addons/essentials-actions-2/manager-bundle.js";
+
+      import "./storybook-static/sb-addons/essentials-backgrounds-3/manager-bundle.js";
+
+      import "./storybook-static/sb-addons/essentials-viewport-4/manager-bundle.js";
+
+      import "./storybook-static/sb-addons/essentials-toolbars-5/manager-bundle.js";
+
+      import "./storybook-static/sb-addons/essentials-measure-6/manager-bundle.js";
+
+      import "./storybook-static/sb-addons/essentials-outline-7/manager-bundle.js";
+
+      import "./storybook-static/sb-addons/onboarding-8/manager-bundle.js";
+
+      import "./storybook-static/sb-addons/interactions-9/manager-bundle.js";
+    </script>
+
+    <link
+      href="./storybook-static/sb-preview/runtime.js"
+      rel="prefetch"
+      as="script"
+    />
   </body>
 </html>
