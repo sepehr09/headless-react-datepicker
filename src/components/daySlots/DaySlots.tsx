@@ -1,74 +1,10 @@
 import { Day, isSameDay, isToday, isWithinInterval } from "date-fns";
-import { CSSProperties, ReactNode, useContext } from "react";
+import { useContext } from "react";
 import { bindWeekDayToNumber } from "../../constants/weekdays";
 import { PickerContext } from "../../store/pickerContext";
 import { classJoin } from "../../utils/classJoin";
 import { IsSameMonth } from "../../utils/jalali";
-
-export type TDaySlotsDayRendererArgs = {
-  date: Date;
-  /**
-   * based on calendar config.dayFormat
-   */
-  formattedDay?: string;
-  IsToday: boolean;
-  isSelectable: boolean;
-  isDisabled: boolean;
-  isInSelectedRange: boolean;
-  isStartOfRange: boolean;
-  isEndOfRange: boolean;
-  isInWeekend: boolean;
-  isSelected: boolean;
-  handleClickSlot: (date: Date) => void;
-};
-
-export type TDaySlots = {
-  dayRenderer?: (args: TDaySlotsDayRendererArgs) => ReactNode;
-  slotParentClassName?: string;
-  slotClassName?: string;
-  slotParentStyles?: CSSProperties;
-  slotStyles?: CSSProperties;
-
-  todayStyles?: CSSProperties;
-  todayClassName?: string;
-  todayParentStyles?: CSSProperties;
-  todayParentClassName?: string;
-
-  disableStyles?: CSSProperties;
-  disableClassName?: string;
-  disableParentStyles?: CSSProperties;
-  disableParentClassName?: string;
-
-  weekendStyles?: CSSProperties;
-  weekendClassName?: string;
-  weekendParentStyles?: CSSProperties;
-  weekendParentClassName?: string;
-
-  selectedStyles?: CSSProperties;
-  selectedClassName?: string;
-  selectedParentStyles?: CSSProperties;
-  selectedParentClassName?: string;
-
-  selectableStyles?: CSSProperties;
-  selectableClassName?: string;
-  selectableParentStyles?: CSSProperties;
-  selectableParentClassName?: string;
-
-  inSelectedRangeStyles?: CSSProperties;
-  inSelectedRangeClassName?: string;
-  inSelectedRangeParentStyles?: CSSProperties;
-  inSelectedRangeParentClassName?: string;
-
-  startOfRangeStyles?: CSSProperties;
-  startOfRangeClassName?: string;
-  startOfRangeParentStyles?: CSSProperties;
-  startOfRangeParentClassName?: string;
-
-  endOfRangeStyles?: CSSProperties;
-  endOfRangeClassName?: string;
-  endOfRangeParentStyles?: CSSProperties;
-  endOfRangeParentClassName?: string;
-};
+import { TDaySlots } from "./types";
 
 function DaySlots({
   dayRenderer,
@@ -168,6 +104,7 @@ function DaySlots({
       monthInTheCalendar &&
       calendar &&
       IsSameMonth(date, monthInTheCalendar, calendar);
+
     const isInWeekend = weekends
       ?.map((w) => bindWeekDayToNumber[w])
       .includes(date.getDay() as Day);
@@ -244,7 +181,7 @@ function DaySlots({
           <div
             key={date.toString()}
             className={classJoin([
-              "rhmdp-border rhmdp-border-transparent ",
+              "rhmdp-border rhmdp-border-transparent",
               IsToday &&
                 classJoin(["rhmdp-text-blue-600", todayParentClassName]),
               isSelectable
@@ -281,12 +218,13 @@ function DaySlots({
             <div
               onClick={() => handleClickSlot?.(date)}
               className={classJoin([
-                "rhmdp-p-2 rhmdp-rounded-lg ",
-
-                // *****************************
+                "rhmdp-p-2 rhmdp-rounded-lg",
                 IsToday && classJoin([todayClassName]),
                 isSelectable &&
-                  classJoin(["hover:rhmdp-bg-gray-300", selectableClassName]),
+                  classJoin([
+                    !isSelected && "hover:rhmdp-bg-gray-300",
+                    selectableClassName,
+                  ]),
                 isDisabled && classJoin([disableClassName]),
                 isInSelectedRange && classJoin([inSelectedRangeClassName]),
                 isStartOfRange && classJoin([startOfRangeClassName]),

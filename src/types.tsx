@@ -37,8 +37,16 @@ export type TMonthListItem = {
 };
 
 export type TDatePickerProps = {
-  defaultStartDate?: Date;
+  /**
+   * The initial value of the date picker.
+   */
   initialValue?: Date | Date[];
+
+  /**
+   * The default start date. Useful when you want to be on different month or year despite the initial value.
+   * @default initialValue || new Date()
+   */
+  defaultStartDate?: Date;
 
   /**
    * The configuration for the date picker.
@@ -68,6 +76,7 @@ export type TCalendarConfig = {
   weekStartsOn?: TDay;
 
   /**
+   * The locale to use.
    * @default "en-US"
    */
   locale?: string;
@@ -114,6 +123,9 @@ export type TCalendarConfig = {
    */
   minDate?: Date;
 
+  /**
+   * Specify which days of the week are holidays.
+   */
   weekends?: TDay[];
 
   /**

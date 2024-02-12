@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import DatePickerProvider from "../DatePickerProvider";
-import DaysOfWeekHeader from "../components/DaysOfWeekHeader";
-import Header from "../components/Header";
-import Title from "../components/Title";
 import DaySlots from "../components/daySlots/DaySlots";
+import DaysOfWeekHeader from "../components/daysOfWeekHeader/DaysOfWeekHeader";
+import Header from "../components/header/Header";
+import Title from "../components/title/Title";
 import { TDatePickerProps } from "../types";
 
 const meta = {
@@ -73,7 +73,7 @@ const RenderDatePicker = (props: TDatePickerProps) => {
         <Title />
         <Header />
         <DaysOfWeekHeader />
-        <DaySlots  />
+        <DaySlots />
       </DatePickerProvider>
     </div>
   );
@@ -93,7 +93,7 @@ export const SDP: Story = {
       weekdayFormat: "narrow",
       dayFormat: "numeric",
       weekends: ["saturday", "friday"],
-      weekendSelectable: false,
+      weekendSelectable: true,
       // yearRangeFrom: 1330,
       // yearRangeTo: 1400,
       // minDate: new Date("2024-01-01T00:00:00.000Z"),

@@ -1,10 +1,6 @@
 import { useContext } from "react";
-import { PickerContext } from "../store/pickerContext";
-
-export type TTitleProps = {
-  yearFormat?: "numeric" | "2-digit";
-  monthFormat?: "numeric" | "2-digit" | "long" | "short" | "narrow";
-};
+import { PickerContext } from "../../store/pickerContext";
+import { TTitleProps } from "./types";
 
 function Title({ yearFormat = "numeric", monthFormat = "short" }: TTitleProps) {
   const {

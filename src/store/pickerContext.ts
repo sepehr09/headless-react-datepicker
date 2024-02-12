@@ -13,7 +13,7 @@ export type TPickerContext = {
   goToPrevMonth: () => void;
 
   /**
-   * Function to navigate specific date
+   * Function to navigate to a specific date
    * @param date
    */
   goToDate: (date: Date) => void;
@@ -22,6 +22,20 @@ export type TPickerContext = {
    * Function to navigate to the current month
    */
   goToCurrentMonth: () => void;
+
+  /**
+   * Local month based on desire calendar
+   * @example 1 // means Jan (gregory calendar)
+   * @example 1 // means Farvardin (persian calendar)
+   */
+  goToMonth: (month: number) => void;
+
+  /**
+   * Handle go to year based on desire calendar
+   * @example 2020
+   * @example 1395 // (persian calendar)
+   */
+  goToYear: (year: number) => void;
 
   /**
    * All the dates of the month rendered in the calendar
@@ -105,5 +119,7 @@ export const PickerContext = createContext<TPickerContext>({
   goToPrevMonth: () => {},
   goToDate: () => {},
   goToCurrentMonth: () => {},
+  goToMonth: () => {},
+  goToYear: () => {},
   monthsList: undefined,
 });

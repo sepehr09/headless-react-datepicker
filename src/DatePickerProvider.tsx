@@ -2,6 +2,7 @@ import { addDays, subDays, toDate } from "date-fns";
 import { useMemo, useState } from "react";
 import { PickerContext } from "./store/pickerContext";
 // import "./styles.css";
+import { Temporal } from "@js-temporal/polyfill";
 import { TDatePickerProps } from "./types";
 import { getAllMonths, getMonthSlots } from "./utils/datePicker";
 
@@ -96,6 +97,42 @@ function DatePickerProvider(props: TDatePickerProps) {
     }
   };
 
+  /**
+   * Local month based on desire calendar
+   * @example 1 // means Jan (gregory calendar)
+   * @example 1 // means Farvardin (persian calendar)
+   */
+  const goToMonth = (month: number) => {
+    const newDate = Temporal.PlainDate.from({
+      year: yearInTheCalendar,
+      month: month,
+      day: 1,
+      calendar: calendar,
+    }).getISOFields();
+
+    goToDate?.(
+      toDate(`${newDate.isoYear}-${newDate.isoMonth}-${newDate.isoDay}`)
+    );
+  };
+
+  /**
+   * Handle go to year based on desire calendar
+   * @example 2020
+   * @example 1395 // (persian calendar)
+   */
+  const goToYear = (year: number) => {
+    const newDate = Temporal.PlainDate.from({
+      year: year,
+      month: monthInTheCalendar,
+      day: 1,
+      calendar: calendar,
+    }).getISOFields();
+
+    goToDate?.(
+      toDate(`${newDate.isoYear}-${newDate.isoMonth}-${newDate.isoDay}`)
+    );
+  };
+
   const monthsList = useMemo(
     () => getAllMonths({ locale: locale!, calendar }),
     [calendar, locale]
@@ -128,6 +165,9 @@ function DatePickerProvider(props: TDatePickerProps) {
         goToPrevMonth,
         goToDate,
         goToCurrentMonth,
+        goToMonth,
+        goToYear,
+        onClickSlot,
         monthsList,
         yearsList,
         daysOfMonth,
@@ -136,7 +176,6 @@ function DatePickerProvider(props: TDatePickerProps) {
         firstDayOfMonth,
         lastDayOfMonth,
         selectedDay,
-        onClickSlot: onClickSlot,
         monthInTheCalendar,
         totalDaysInTheCalendar,
         yearInTheCalendar,
