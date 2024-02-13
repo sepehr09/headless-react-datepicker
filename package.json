@@ -1,5 +1,5 @@
 {
-  "name": "react-headless-date-picker",
+  "name": "headless-react-datepicker",
   "private": false,
   "version": "1.0.0",
   "description": "A headless, highly customizable, multi-calendar date picker component for React. It supports various calendars and locales.",
@@ -7,12 +7,12 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git@github.com/sepehr09/react-headless-date-picker.git",
+    "url": "git@github.com/sepehr09/headless-react-datepicker.git",
     "directory": "/"
   },
-  "homepage": "https://sepehr09.github.io/react-headless-date-picker",
+  "homepage": "https://sepehr09.github.io/headless-react-datepicker",
   "bugs": {
-    "url": "https://github.com/sepehr09/react-headless-date-picker/issues"
+    "url": "https://github.com/sepehr09/headless-react-datepicker/issues"
   },
   "license": "MIT",
   "keywords": [
