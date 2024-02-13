@@ -1,8 +1,8 @@
-# React headless date picker
+# Headless React Datepicker
 
-[![NPM](https://img.shields.io/npm/v/react-headless-date-picker.svg)](https://www.npmjs.com/package/react-headless-date-picker)
-[![NPM](https://img.shields.io/npm/dt/react-headless-date-picker.svg)](https://www.npmjs.com/package/react-headless-date-picker)
-[![NPM](https://img.shields.io/bundlephobia/min/react-headless-date-picker)](https://bundlephobia.com/package/react-headless-date-picker)
+[![NPM](https://img.shields.io/npm/v/headless-react-datepicker.svg)](https://www.npmjs.com/package/headless-react-datepicker)
+[![NPM](https://img.shields.io/npm/dt/headless-react-datepicker.svg)](https://www.npmjs.com/package/headless-react-datepicker)
+[![NPM](https://img.shields.io/bundlephobia/min/headless-react-datepicker)](https://bundlephobia.com/package/headless-react-datepicker)
 
 > A headless, highly customizable, multi-calendar date picker component for React. It supports various calendars and locales.
 
@@ -37,15 +37,15 @@ All locales are supported by the [Intl API](https://developer.mozilla.org/en-US/
 ## Installation
 
 ```bash
-npm install react-headless-date-picker
+npm install headless-react-datepicker
 
 # or
 
-yarn add react-headless-date-picker
+yarn add headless-react-datepicker
 
 # or
 
-pnpm add react-headless-date-picker
+pnpm add headless-react-datepicker
 ```
 
 ## Usage
@@ -57,7 +57,7 @@ import DatePickerProvider, {
   Header,
   WeekDays,
   DaySlots,
-} from "react-headless-date-picker";
+} from "headless-react-datepicker";
 
 const MyAwesomeDatePicker = () => {
   return (
@@ -76,7 +76,7 @@ const MyAwesomeDatePicker = () => {
 Must be in place as the parent of the whole calendar component.
 
 ```jsx
-import { DatePickerProvider } from "react-headless-date-picker";
+import { DatePickerProvider } from "headless-react-datepicker";
 ```
 
 ### props
@@ -119,7 +119,7 @@ import { DatePickerProvider } from "react-headless-date-picker";
 The `Title` component is used to display the month and year based on the selected locale and calendar.
 
 ```jsx
-import { Title } from "react-headless-date-picker";
+import { Title } from "headless-react-datepicker";
 ```
 
 ### props
@@ -136,7 +136,7 @@ The `Header` component is used to navigate to the next and previous month and se
 You can customize arrow icons with React Node and the dropdowns with className and CSS stylesheets.
 
 ```jsx
-import { Header } from "react-headless-date-picker";
+import { Header } from "headless-react-datepicker";
 ```
 
 ### props
@@ -163,7 +163,7 @@ import { Header } from "react-headless-date-picker";
 The `WeekDays` component is used to display the weekday header.
 
 ```jsx
-import { WeekDays } from "react-headless-date-picker";
+import { WeekDays } from "headless-react-datepicker";
 ```
 
 ### props
@@ -187,7 +187,7 @@ import { WeekDays } from "react-headless-date-picker";
 The `DaySlots` component is used to display the month and year based on the selected locale and calendar.
 
 ```jsx
-import { DaySlots } from "react-headless-date-picker";
+import { DaySlots } from "headless-react-datepicker";
 ```
 
 ### props
@@ -255,7 +255,7 @@ You can access almost all props and functions of the date picker from the date p
 ### example
 
 ```jsx
-import { useDatePickerContext } from "react-headless-date-picker";
+import { useDatePickerContext } from "headless-react-datepicker";
 
 const MyCustomAwesomeHeader = () => {
   const { goToCurrentMonth, yearInTheCalendar } = useDatePickerContext();
