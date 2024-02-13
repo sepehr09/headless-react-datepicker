@@ -1,7 +1,7 @@
 {
   "name": "react-headless-date-picker",
   "private": false,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A headless, highly customizable, multi-calendar date picker component for React. It supports various calendars and locales.",
   "author": "Sepehr Karimi <karimi.sepehr2@gmail.com>",
   "type": "module",
@@ -10,10 +10,17 @@
     "url": "git@github.com/sepehr09/react-headless-date-picker.git",
     "directory": "/"
   },
+  "homepage": "https://sepehr09.github.io/react-headless-date-picker",
+  "bugs": {
+    "url": "https://github.com/sepehr09/react-headless-date-picker/issues"
+  },
   "license": "MIT",
   "keywords": [
     "react",
     "datepicker",
+    "date picker",
+    "rangepicker",
+    "date",
     "calendar",
     "jalali",
     "persian",
@@ -21,6 +28,7 @@
     "multi-calendar",
     "multi-datepicker",
     "multi-date-picker",
+    "locales",
     "temporal",
     "TC39",
     "Intl",
