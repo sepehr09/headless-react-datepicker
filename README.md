@@ -1,4 +1,4 @@
-# React headless date picker
+# Headless React Datepicker
 
 [![NPM](https://img.shields.io/npm/v/headless-react-datepicker.svg)](https://www.npmjs.com/package/headless-react-datepicker)
 [![NPM](https://img.shields.io/npm/dt/headless-react-datepicker.svg)](https://www.npmjs.com/package/headless-react-datepicker)
