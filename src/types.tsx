@@ -139,4 +139,10 @@ export type TCalendarConfig = {
    * @default true
    */
   weekendSelectable?: boolean;
+
+  /**
+   * If user select a date before the previous selected date, it will be considered as a range or start from beginning.
+   * @default false
+   */
+  allowBackwardRange?: boolean;
 };

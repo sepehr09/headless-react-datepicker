@@ -3,7 +3,18 @@ import { bindWeekDayToNumber } from "../constants/weekdays";
 import { TCalendar, TDay } from "../types";
 
 export function getMonthInfo(date: Date, calendar: TCalendar) {
-  const startDate = new Date(new Date(date).setHours(0, 0, 0, 0));
+  const existingDate = new Date(new Date(date).setHours(0, 0, 0, 0));
+
+  const startDate = Date.UTC(
+    existingDate.getFullYear(),
+    existingDate.getMonth(),
+    existingDate.getDate(),
+    existingDate.getHours(),
+    existingDate.getMinutes(),
+    existingDate.getSeconds(),
+    existingDate.getMilliseconds()
+  );
+
   const locale = "en-US";
   const n = "numeric";
 
