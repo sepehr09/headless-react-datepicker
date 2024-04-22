@@ -6,6 +6,14 @@
 
 > A headless, highly customizable, multi-calendar date picker component for React. It supports various calendars and locales.
 
+## Live demo
+
+https://sepehr09.github.io/headless-react-datepicker/
+
+## Customization
+
+![alt text](documentation/assets/css-help.png "Title")
+
 ## Supported Calendars
 
 All calendars are supported by the ECMAScript's [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/getCalendars#supported_calendar_types):
@@ -32,9 +40,11 @@ All calendars are supported by the ECMAScript's [Intl API](https://developer.moz
 
 ## Supported Locales
 
-All locales are supported by the [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/language). you can see the list of supported locales [here]()
+All locales are supported by the [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/language).
 
 ## Installation
+
+### 1. install the package
 
 ```bash
 npm install headless-react-datepicker
@@ -46,6 +56,12 @@ yarn add headless-react-datepicker
 # or
 
 pnpm add headless-react-datepicker
+```
+
+### 2. import the css file
+
+```jsx
+import "headless-react-datepicker/dist/styles.css";
 ```
 
 ## Usage
@@ -71,6 +87,10 @@ const MyAwesomeDatePicker = () => {
 };
 ```
 
+## Headless!
+
+![Headless React Datepicker structure](documentation/assets/headless.png "Headless React Datepicker structure")
+
 # DatePickerProvider
 
 Must be in place as the parent of the whole calendar component.
@@ -93,20 +113,21 @@ import { DatePickerProvider } from "headless-react-datepicker";
 
 ### TCalendarConfig
 
-| Name                | Type                                       | Description                                                         | Default                       |
-| ------------------- | ------------------------------------------ | ------------------------------------------------------------------- | ----------------------------- |
-| weekStartsOn        | TDay \| undefined                          | The first day of the week.                                          | "monday"                      |
-| locale              | string \| undefined                        | The locale to use.                                                  | "en-US"                       |
-| showOtherDays       | boolean \| undefined                       | Show other days from the previous and next month or not.            | false                         |
-| otherDaysSelectable | boolean \| undefined                       | Allow selecting other days from the previous and next month or not. | false                         |
-| weekdayFormat       | "long" \| "short" \| "narrow" \| undefined |                                                                     | "narrow"                      |
-| dayFormat           | "numeric" \| "2-digit" \| undefined        |                                                                     | "numeric"                     |
-| yearRangeFrom       | number \| undefined                        |                                                                     | last 10 years if not provided |
-| yearRangeTo         | number \| undefined                        |                                                                     | current year if not provided  |
-| maxDate             | Date \| undefined                          | Prevent selecting dates before this date.                           |                               |
-| minDate             | Date \| undefined                          | Prevent selecting dates after this date.                            |                               |
-| weekends            | TDay[] \| undefined                        | Specify which days of the week are holidays.                        | undefined                     |
-| weekendSelectable   | boolean \| undefined                       | Allow selecting weekends or not.                                    | true                          |
+| Name                | Type                                       | Description                                                                                                        | Default                       |
+| ------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ----------------------------- |
+| weekStartsOn        | TDay \| undefined                          | The first day of the week.                                                                                         | "monday"                      |
+| locale              | string \| undefined                        | The locale to use.                                                                                                 | "en-US"                       |
+| showOtherDays       | boolean \| undefined                       | Show other days from the previous and next month or not.                                                           | false                         |
+| otherDaysSelectable | boolean \| undefined                       | Allow selecting other days from the previous and next month or not.                                                | false                         |
+| weekdayFormat       | "long" \| "short" \| "narrow" \| undefined |                                                                                                                    | "narrow"                      |
+| dayFormat           | "numeric" \| "2-digit" \| undefined        |                                                                                                                    | "numeric"                     |
+| yearRangeFrom       | number \| undefined                        |                                                                                                                    | last 10 years if not provided |
+| yearRangeTo         | number \| undefined                        |                                                                                                                    | current year if not provided  |
+| maxDate             | Date \| undefined                          | Prevent selecting dates before this date.                                                                          |                               |
+| minDate             | Date \| undefined                          | Prevent selecting dates after this date.                                                                           |                               |
+| weekends            | TDay[] \| undefined                        | Specify which days of the week are holidays.                                                                       | undefined                     |
+| weekendSelectable   | boolean \| undefined                       | Allow selecting weekends or not.                                                                                   | true                          |
+| allowBackwardRange  | boolean \| undefined                       | If user select a date before the previous selected date, it will be considered as a range or start from beginning. | false                         |
 
 ### TCalendar
 
@@ -196,8 +217,8 @@ import { DaySlots } from "headless-react-datepicker";
 | ------------------------------ | ------------------------------------------------- | --------------- | ------- |
 | dayRenderer                    | (args: **TDaySlotsDayRendererArgs**) => ReactNode | Custom renderer |         |
 | slotParentClassName            | string                                            |                 |         |
-| slotClassName                  | string                                            |                 |         |
 | slotParentStyles               | CSSProperties                                     |                 |         |
+| slotClassName                  | string                                            |                 |         |
 | slotStyles                     | CSSProperties                                     |                 |         |
 | todayStyles                    | CSSProperties                                     |                 |         |
 | todayClassName                 | string                                            |                 |         |
@@ -303,3 +324,7 @@ MIT @ [Sepehr09](https://github.com/sepehr09)
 ## Contributing
 
 We're eagerly welcoming to contributors who want to help build and maintain this repo. PRs are always welcome!
+
+## Change log
+
+you can see the change log [here](/CHANGELOG.md)

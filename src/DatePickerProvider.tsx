@@ -25,6 +25,7 @@ function DatePickerProvider<IsRange extends boolean>(
     dayFormat = "numeric",
     yearRangeFrom,
     yearRangeTo,
+    allowBackwardRange,
   } = config || {};
 
   const [currentDate, setCurrentDate] = useState<Date>(
@@ -71,11 +72,29 @@ function DatePickerProvider<IsRange extends boolean>(
   );
 
   const goToNextMonth = () => {
+    // prevent go to next month if config.yearRangeTo	is reached
+    if (
+      yearRangeTo &&
+      yearInTheCalendar === yearRangeTo &&
+      monthInTheCalendar === 12
+    ) {
+      return;
+    }
+
     const updatedDate = addDays(daysOfMonth[daysOfMonth?.length - 1], 1);
     setCurrentDate(updatedDate);
   };
 
   const goToPrevMonth = () => {
+    // prevent go to previous month if config.yearRangeFrom	is reached
+    if (
+      yearRangeFrom &&
+      yearInTheCalendar === yearRangeFrom &&
+      monthInTheCalendar === 1
+    ) {
+      return;
+    }
+
     const updatedDate = subDays(daysOfMonth[0], 1);
     setCurrentDate(updatedDate);
   };
@@ -92,9 +111,16 @@ function DatePickerProvider<IsRange extends boolean>(
     if (isRange) {
       if (selectedDay !== undefined && !Array.isArray(selectedDay)) return;
 
-      if (!selectedDay?.length || selectedDay.length === 2) {
+      if (
+        !selectedDay?.length ||
+        selectedDay.length === 2 ||
+        (!allowBackwardRange &&
+          new Date(selectedDay[0]).getTime() > new Date(date).getTime())
+      ) {
+        // FROM
         setSelectedDay([date]);
       } else {
+        // To
         setSelectedDay(
           [selectedDay[0], date].sort(
             (a, b) => new Date(a).getTime() - new Date(b).getTime()

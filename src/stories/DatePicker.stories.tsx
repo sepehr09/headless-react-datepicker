@@ -78,6 +78,9 @@ const meta = {
     "config.weekendSelectable": {
       control: "boolean",
     },
+    "config.allowBackwardRange": {
+      control: "boolean",
+    },
   },
 } satisfies Meta<typeof DatePickerProvider>;
 
