@@ -8,6 +8,7 @@ function Title({ yearFormat = "numeric", monthFormat = "short" }: TTitleProps) {
     firstDayOfMonth,
     calendar = "persian",
     config,
+    startDateIncludeOtherDays,
   } = useContext(PickerContext);
 
   const { locale } = config || {};
@@ -17,6 +18,8 @@ function Title({ yearFormat = "numeric", monthFormat = "short" }: TTitleProps) {
     month: monthFormat,
     calendar,
   }).format(firstDayOfMonth);
+
+  console.log({ firstDayOfMonth, startDateIncludeOtherDays });
 
   return (
     <div

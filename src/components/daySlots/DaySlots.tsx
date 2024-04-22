@@ -182,6 +182,7 @@ function DaySlots({
             key={date.toString()}
             className={classJoin([
               "rhmdp-border rhmdp-border-transparent",
+              slotParentClassName,
               IsToday &&
                 classJoin(["rhmdp-text-blue-600", todayParentClassName]),
               isSelectable
@@ -201,7 +202,6 @@ function DaySlots({
               isInWeekend &&
                 classJoin(["rhmdp-text-red-500", weekendParentClassName]),
               isSelected && classJoin([selectedParentClassName]),
-              slotParentClassName,
             ])}
             style={{
               ...(IsToday && todayParentStyles),
