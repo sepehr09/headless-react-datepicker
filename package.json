@@ -47,7 +47,7 @@
     "Islamic-umalqura",
     "Roc"
   ],
-  "main": "./index.js",
+  "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/d/index.d.ts",
   "files": [
@@ -61,8 +61,7 @@
     "storybook": "storybook dev -p 6006",
     "build": "rm -rf dist && yarn build:rollup",
     "build-storybook": "storybook build --output-dir ./docs",
-    "build:rollup": "NODE_ENV=production rollup -c --bundleConfigAsCjs",
-    "build:tailwind": "postcss src/styles/tailwind.css -o dist/css/tailwind.css"
+    "build:rollup": "NODE_ENV=production rollup -c --bundleConfigAsCjs"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17 || ^18",
