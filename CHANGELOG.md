@@ -1,5 +1,9 @@
 # Changelog
 
+### version 1.0.2
+
+- fix: ios converting date issue.
+
 ### version 1.0.1:
 
 - feat: add `allowBackwardRange` to control behavior of backward range selection.

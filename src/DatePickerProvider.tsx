@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { PickerContext } from "./store/pickerContext";
 import { TDatePickerProps } from "./types";
 import { getAllMonths, getMonthSlots } from "./utils/datePicker";
+import { normalizeTemporal } from "./utils/temporal";
 
 function DatePickerProvider<IsRange extends boolean>(
   props: TDatePickerProps<IsRange>
@@ -145,9 +146,7 @@ function DatePickerProvider<IsRange extends boolean>(
       calendar: calendar,
     }).getISOFields();
 
-    goToDate?.(
-      toDate(`${newDate.isoYear}-${newDate.isoMonth}-${newDate.isoDay}`)
-    );
+    goToDate?.(toDate(normalizeTemporal(newDate)));
   };
 
   /**
@@ -163,9 +162,7 @@ function DatePickerProvider<IsRange extends boolean>(
       calendar: calendar,
     }).getISOFields();
 
-    goToDate?.(
-      toDate(`${newDate.isoYear}-${newDate.isoMonth}-${newDate.isoDay}`)
-    );
+    goToDate?.(toDate(normalizeTemporal(newDate)));
   };
 
   const monthsList = useMemo(
