@@ -1,11 +1,10 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { addDays, subDays } from "date-fns";
 import { useEffect, useMemo, useState } from "react";
 import { defaultWeekStartsOn } from "./constants/defaults";
 import { PickerContext } from "./store/pickerContext";
 import { TDatePickerProps } from "./types";
 import { getMonthSlots } from "./utils/datePicker";
-import { getAllMonths } from "./utils/dateUtils";
+import { addDays, getAllMonths, subDays } from "./utils/dateUtils";
 import { normalizeTemporal } from "./utils/temporal";
 
 function DatePickerProvider<IsRange extends boolean>(

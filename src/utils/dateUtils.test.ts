@@ -1,11 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
   LocalToUTCDate,
+  addDays,
   eachDayOfInterval,
   endOfWeek,
   getAllMonths,
   getWeekDayName,
   startOfWeek,
+  subDays,
 } from "./dateUtils";
 
 describe("LocalToUTCDate", () => {
@@ -113,5 +115,51 @@ describe("getWeekDayName", () => {
     expect(getWeekDayName(4, { weekdayFormat: "long" })).toBe("Thursday");
     expect(getWeekDayName(5, { weekdayFormat: "long" })).toBe("Friday");
     expect(getWeekDayName(6, { weekdayFormat: "long" })).toBe("Saturday");
+  });
+});
+
+describe("addDays", () => {
+  it("adds the given number of days", () => {
+    const result = addDays(new Date(2014, 8 /* Sep */, 1), 10);
+    expect(result).toEqual(new Date(2014, 8 /* Sep */, 11));
+  });
+
+  it("accepts a timestamp", () => {
+    const result = addDays(new Date(2014, 8 /* Sep */, 1).getTime(), 10);
+    expect(result).toEqual(new Date(2014, 8 /* Sep */, 11));
+  });
+
+  it("does not mutate the original date", () => {
+    const date = new Date(2014, 8 /* Sep */, 1);
+    addDays(date, 11);
+    expect(date).toEqual(new Date(2014, 8 /* Sep */, 1));
+  });
+
+  it("returns `Invalid Date` if the given date is invalid", () => {
+    const result = addDays(new Date(NaN), 10);
+    expect(result instanceof Date && isNaN(result.getTime())).toBe(true);
+  });
+});
+
+describe("subDays", () => {
+  it("subtracts the given number of days", () => {
+    const result = subDays(new Date(2014, 8 /* Sep */, 1), 10);
+    expect(result).toEqual(new Date(2014, 7 /* Aug */, 22));
+  });
+
+  it("accepts a timestamp", () => {
+    const result = subDays(new Date(2014, 8 /* Sep */, 1).getTime(), 10);
+    expect(result).toEqual(new Date(2014, 7 /* Aug */, 22));
+  });
+
+  it("does not mutate the original date", () => {
+    const date = new Date(2014, 8 /* Sep */, 1);
+    subDays(date, 11);
+    expect(date).toEqual(new Date(2014, 8 /* Sep */, 1));
+  });
+
+  it("returns `Invalid Date` if the given date is invalid", () => {
+    const result = subDays(new Date(NaN), 10);
+    expect(result instanceof Date && isNaN(result.getTime())).toBe(true);
   });
 });

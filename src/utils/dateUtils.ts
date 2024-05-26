@@ -123,3 +123,21 @@ export function getWeekDayName(
 
   return dayName;
 }
+
+export function addDays(date: Date | number | string, amount: number): Date {
+  const _date = new Date(date);
+  if (isNaN(amount)) return new Date(date);
+  if (!amount) {
+    // If 0 days, no-op to avoid changing times in the hour before end of DST
+    return _date;
+  }
+  _date.setDate(_date.getDate() + amount);
+  return _date;
+}
+
+export function subDays<DateType extends Date>(
+  date: DateType | number | string,
+  amount: number
+): Date {
+  return addDays(date, -amount);
+}
