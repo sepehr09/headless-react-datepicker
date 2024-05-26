@@ -31,6 +31,15 @@ export type TDay =
   | "saturday"
   | "sunday";
 
+/**
+ * The day of the week type alias. Unlike the date (the number of days since
+ * the beginning of the month), which begins with 1 and is dynamic (can go up to
+ * 28, 30, or 31), the day starts with 0 and static (always ends at 6). Look at
+ * it as an index in an array where Sunday is the first element and Saturday
+ * is the last.
+ */
+export type Day = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+
 export type TMonthListItem = {
   label: string;
   value: number;

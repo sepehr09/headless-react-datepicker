@@ -1,19 +1,10 @@
-import { eachDayOfInterval, endOfWeek, startOfWeek } from "date-fns";
+import { defaultWeekStartsOn } from "../constants/defaults";
 import { bindWeekDayToNumber } from "../constants/weekdays";
 import { TCalendar, TDay } from "../types";
+import { eachDayOfInterval, endOfWeek, startOfWeek } from "./dateUtils";
 
 export function getMonthInfo(date: Date, calendar: TCalendar) {
-  const existingDate = new Date(new Date(date).setHours(0, 0, 0, 0));
-
-  const startDate = Date.UTC(
-    existingDate.getFullYear(),
-    existingDate.getMonth(),
-    existingDate.getDate(),
-    existingDate.getHours(),
-    existingDate.getMinutes(),
-    existingDate.getSeconds(),
-    existingDate.getMilliseconds()
-  );
+  const startDate = new Date(new Date(date).setHours(0, 0, 0, 0));
 
   const locale = "en-US";
   const n = "numeric";
@@ -29,37 +20,47 @@ export function getMonthInfo(date: Date, calendar: TCalendar) {
       10
     );
 
+    console.log("calendarDays: ", calendarDays);
+
     if (+calendarDays > totalDays) {
       totalDays = calendarDays;
       gregoryDays++;
     } else break;
-    gStartDate = new Date(gStartDate.setUTCDate(gStartDate.getUTCDate() + 1));
+
+    gStartDate = new Date(gStartDate.setDate(gStartDate.getDate() + 1));
   }
 
   const gStartT = new Date(startDate);
-  gStartT.setUTCDate(gStartT.getUTCDate() + gregoryDays - 1);
+  gStartT.setDate(gStartT.getDate() + gregoryDays - 1);
+  gStartT.setDate(gStartT.getDate() - totalDays + 1);
 
   const gEndT = new Date(startDate);
-  gEndT.setUTCDate(gEndT.getUTCDate() + gregoryDays - 1);
+  gEndT.setDate(gEndT.getDate() + gregoryDays - 1);
+
+  console.group("%c getMonthSlots", "background-color:green;");
+  console.log("startDate:          ", startDate);
+  console.log("gStartT:            ", gStartT);
+  console.log("gEndT:              ", gEndT);
+  console.log("totalDays:          ", totalDays);
+  console.log("gregoryDays:        ", gregoryDays);
+  console.groupEnd();
 
   return {
-    totalDaysInTheCalendar: totalDays,
-    gregoryMonthStartsOn: new Date(
-      gStartT.setUTCDate(gStartT.getUTCDate() - totalDays + 1)
-    ),
-    gregoryMonthEndsOn: gEndT,
-    dayInTheCalendar: parseInt(
+    monthLength: totalDays,
+    startOfMonth: gStartT,
+    endOfMonth: gEndT,
+    day: parseInt(
       new Intl.DateTimeFormat(locale, { day: n, calendar }).format(startDate),
       10
     ),
-    monthInTheCalendar: parseInt(
+    month: parseInt(
       new Intl.DateTimeFormat(locale, {
         month: "numeric",
         calendar,
       }).format(startDate),
       10
     ),
-    yearInTheCalendar: parseInt(
+    year: parseInt(
       new Intl.DateTimeFormat(locale, { year: n, calendar })
         .format(startDate)
         .split(" ")[0],
@@ -71,7 +72,7 @@ export function getMonthInfo(date: Date, calendar: TCalendar) {
 export function getMonthSlots({
   currentDate,
   calendar,
-  weekStartsOn = "saturday",
+  weekStartsOn = defaultWeekStartsOn,
 }: {
   currentDate: Date;
   weekStartsOn: TDay;
@@ -87,116 +88,50 @@ export function getMonthSlots({
   yearInTheCalendar: number;
 } {
   const {
-    gregoryMonthStartsOn,
-    gregoryMonthEndsOn,
-    monthInTheCalendar,
-    totalDaysInTheCalendar,
-    yearInTheCalendar,
+    startOfMonth,
+    endOfMonth,
+    month,
+    monthLength,
+    year: yearBasedCalendar,
   } = getMonthInfo(currentDate, calendar);
 
-  const startDateIncludeOtherDays = startOfWeek(gregoryMonthStartsOn, {
-    weekStartsOn: bindWeekDayToNumber[weekStartsOn],
-  });
-  const endDateIncludeOtherDays = endOfWeek(gregoryMonthEndsOn, {
-    weekStartsOn: bindWeekDayToNumber[weekStartsOn],
-  });
+  const startDateIncludeOtherDays = startOfWeek(
+    startOfMonth,
+    bindWeekDayToNumber[weekStartsOn]
+  );
 
-  const daysOfMonth = eachDayOfInterval({
-    start: startDateIncludeOtherDays,
-    end: endDateIncludeOtherDays,
-  });
+  const endDateIncludeOtherDays = endOfWeek(
+    endOfMonth,
+    bindWeekDayToNumber[weekStartsOn]
+  );
+
+  const daysOfMonth = eachDayOfInterval(
+    startDateIncludeOtherDays,
+    endDateIncludeOtherDays
+  );
+
+  // console.group("%c getMonthSlots", "background-color:red;");
+  // console.log("currentDate:              ", currentDate);
+  // console.log("startOfMonth:             ", startOfMonth);
+  // console.log("endOfMonth:               ", endOfMonth);
+  // console.log("startDateIncludeOtherDays:", startDateIncludeOtherDays);
+  // console.log("endDateIncludeOtherDays:  ", endDateIncludeOtherDays);
+  // // console.log("day:              ", day);
+  // // console.log("month:            ", month);
+  // // console.log("yearBasedCalendar:", yearBasedCalendar);
+  // // console.log("monthLength:      ", monthLength);
+  // // console.log("daysOfMonth:      ", daysOfMonth);
+  // console.log("daysOfMonth:              ", daysOfMonth);
+  // console.groupEnd();
 
   return {
     daysOfMonth,
     startDateIncludeOtherDays,
     endDateIncludeOtherDays,
-    firstDayOfMonth: gregoryMonthStartsOn,
-    lastDayOfMonth: gregoryMonthEndsOn,
-    monthInTheCalendar,
-    totalDaysInTheCalendar,
-    yearInTheCalendar,
+    firstDayOfMonth: startOfMonth,
+    lastDayOfMonth: endOfMonth,
+    monthInTheCalendar: month,
+    totalDaysInTheCalendar: monthLength,
+    yearInTheCalendar: yearBasedCalendar,
   };
-}
-
-export function getAllMonths({
-  locale,
-  calendar,
-  monthFormat = "long",
-}: {
-  locale: string;
-  calendar: TCalendar;
-  monthFormat?: "numeric" | "2-digit" | "long" | "short" | "narrow" | undefined;
-}): {
-  label: string;
-  value: number;
-}[] {
-  const format = new Intl.DateTimeFormat(locale, {
-    month: monthFormat,
-    calendar,
-  }).format;
-  const valueFormat = new Intl.DateTimeFormat("en-US", {
-    month: "numeric",
-    calendar,
-  }).format;
-
-  return [...Array(12).keys()]
-    .map((m) => ({
-      label: format(new Date(Date.UTC(2021, (m + 1) % 12))),
-      value: parseInt(valueFormat(new Date(Date.UTC(2021, (m + 1) % 12))), 10),
-    }))
-    .sort((a, b) => a.value - b.value);
-
-  // const months = [];
-  // const startDate = new Date(1970, 0, 1);
-
-  // const month = [Array.from({ length: 12 }, (_, i) => i + 1)].reduce(
-  //   (acc, cur) => {
-  //     const prevValue = acc[acc.length - 1];
-  //     const date = prevValue?.date ? addDays(prevValue.date, 1) : startDate;
-
-  //     const {
-  //       gregoryMonthStartsOn,
-  //       gregoryMonthEndsOn,
-  //       monthInTheCalendar,
-  //       totalDaysInTheCalendar,
-  //       yearInTheCalendar,
-  //     } = getMonthInfo(date, calendar);
-
-  //     cur.forEach((month) => {
-  //       acc.push({
-  //         date: gregoryMonthEndsOn,
-  //         month: monthInTheCalendar,
-  //         monthLabel: new Intl.DateTimeFormat(locale, {
-  //           month: monthFormat,
-  //           calendar,
-  //         }).format(date),
-  //       });
-  //     });
-  //     return acc;
-  //   },
-  //   [] as {
-  //     date: Date;
-  //     month: number;
-  //     monthLabel: string;
-  //   }[]
-  // );
-
-  // console.log(month);
-
-  // for (let month = 0; month < 12; month++) {
-  //   const currentMonth = new Date(addMonths(startDate, month));
-  //   const formatter = new Intl.DateTimeFormat(locale, {
-  //     month: monthFormat,
-  //     calendar,
-  //   });
-  //   const monthNumberFormatter = new Intl.DateTimeFormat("en-US", {
-  //     month: "numeric",
-  //     calendar,
-  //   });
-  //   // monthNames.push(formatter.format(new Date(2000, month, 1)));
-  //   const monthName = formatter.format(currentMonth);
-  //   const monthNumber = monthNumberFormatter.format(currentMonth);
-  //   months.push({ number: parseInt(monthNumber, 10), name: monthName });
-  // }
-  // return months.sort((a, b) => a.number - b.number);
 }

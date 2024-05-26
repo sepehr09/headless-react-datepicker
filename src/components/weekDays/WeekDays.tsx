@@ -1,30 +1,34 @@
-import { addDays } from "date-fns";
 import { useContext } from "react";
+import { defaultWeekStartsOn } from "../../constants/defaults";
+import { bindWeekDayToNumber } from "../../constants/weekdays";
 import { PickerContext } from "../../store/pickerContext";
 import { TDay } from "../../types";
 import { classJoin } from "../../utils/classJoin";
+import { getWeekDayName } from "../../utils/dateUtils";
 import { TWeekDaysProps } from "./types";
 
 function WeekDays({ renderer, className, rootClassName }: TWeekDaysProps) {
-  const { startDateIncludeOtherDays, config } = useContext(PickerContext);
-  const { locale, weekdayFormat } = config || {};
+  const { config } = useContext(PickerContext);
+  const {
+    locale,
+    weekdayFormat,
+    weekStartsOn = defaultWeekStartsOn,
+  } = config || {};
 
   return (
     <div className={classJoin(["rhmdp-grid rhmdp-grid-cols-7", rootClassName])}>
       {Array.from({ length: 7 }).map((_, index) => {
-        const dayOfWeek =
-          startDateIncludeOtherDays &&
-          addDays(startDateIncludeOtherDays, index);
+        const dayIndex = (index + bindWeekDayToNumber[weekStartsOn]) % 7;
 
-        const formattedTitle = new Intl.DateTimeFormat(locale, {
-          weekday: weekdayFormat,
-        }).format(dayOfWeek);
+        const formattedTitle = getWeekDayName(dayIndex, {
+          locale,
+          weekdayFormat: weekdayFormat,
+        });
 
-        const weekDay = new Intl.DateTimeFormat("en-US", {
-          weekday: "long",
-        })
-          .format(dayOfWeek)
-          ?.toLowerCase() as TDay;
+        const weekDay = getWeekDayName(dayIndex, {
+          locale: "en-US",
+          weekdayFormat: "long",
+        })?.toLowerCase() as TDay;
 
         if (renderer !== undefined && typeof renderer === "function") {
           return renderer({

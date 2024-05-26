@@ -99,7 +99,13 @@ const RenderDatePicker = <T extends boolean>(props: TDatePickerProps<T>) => {
         padding: "10px",
       }}
     >
-      <DatePickerProvider {...props}>
+      <DatePickerProvider
+        {...props}
+        onChange={(e) => {
+          props?.onChange?.(e);
+          console.log("onChange: ", e);
+        }}
+      >
         <Title />
         <Header />
         <WeekDays />
@@ -113,14 +119,14 @@ export const SDP: Story = {
   render: RenderDatePicker,
   args: {
     isRange: false,
-    initialValue: new Date("2024-02-06T20:00:00.000Z"),
+    initialValue: new Date(),
     calendar: "gregory",
     config: {
       locale: "en-US",
       weekStartsOn: "monday",
       showOtherDays: false,
       otherDaysSelectable: false,
-      weekdayFormat: "narrow",
+      weekdayFormat: "short",
       dayFormat: "numeric",
       weekends: ["saturday", "sunday"],
       weekendSelectable: true,
@@ -157,8 +163,8 @@ export const RDP: Story = {
 export const SDPPersian: Story = {
   render: RenderDatePicker,
   args: {
-    isRange: true,
-    initialValue: [new Date("2024-02-06"), new Date("2024-02-08")],
+    isRange: false,
+    initialValue: new Date(),
     calendar: "persian",
     config: {
       locale: "fa-IR",
