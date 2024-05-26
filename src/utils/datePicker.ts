@@ -20,8 +20,6 @@ export function getMonthInfo(date: Date, calendar: TCalendar) {
       10
     );
 
-    console.log("calendarDays: ", calendarDays);
-
     if (+calendarDays > totalDays) {
       totalDays = calendarDays;
       gregoryDays++;
@@ -37,13 +35,13 @@ export function getMonthInfo(date: Date, calendar: TCalendar) {
   const gEndT = new Date(startDate);
   gEndT.setDate(gEndT.getDate() + gregoryDays - 1);
 
-  console.group("%c getMonthSlots", "background-color:green;");
-  console.log("startDate:          ", startDate);
-  console.log("gStartT:            ", gStartT);
-  console.log("gEndT:              ", gEndT);
-  console.log("totalDays:          ", totalDays);
-  console.log("gregoryDays:        ", gregoryDays);
-  console.groupEnd();
+  // console.group("%c getMonthSlots", "background-color:green;");
+  // console.log("startDate:          ", startDate);
+  // console.log("gStartT:            ", gStartT);
+  // console.log("gEndT:              ", gEndT);
+  // console.log("totalDays:          ", totalDays);
+  // console.log("gregoryDays:        ", gregoryDays);
+  // console.groupEnd();
 
   return {
     monthLength: totalDays,

@@ -1,5 +1,6 @@
 import { isSameDay, isToday, isWithinInterval } from "date-fns";
-import { useContext } from "react";
+import { ReactNode, useContext } from "react";
+import { defaultWeekStartsOn } from "../../constants/defaults";
 import { bindWeekDayToNumber } from "../../constants/weekdays";
 import { PickerContext } from "../../store/pickerContext";
 import { Day } from "../../types";
@@ -74,7 +75,7 @@ function DaySlots(props: TDaySlots) {
     maxDate,
     weekends,
     weekendSelectable = true,
-    weekStartsOn,
+    weekStartsOn = defaultWeekStartsOn,
   } = config || {};
 
   const dayFormatter = (day: Date) => {
@@ -105,13 +106,6 @@ function DaySlots(props: TDaySlots) {
   };
 
   const onClickSlot = (date: Date) => {
-    const finalDate = date;
-
-    // set hours and minutes and seconds to now
-    finalDate.setHours(new Date().getHours());
-    finalDate.setMinutes(new Date().getMinutes());
-    finalDate.setSeconds(new Date().getSeconds());
-
     const isSameMonth =
       monthInTheCalendar &&
       calendar &&
@@ -133,14 +127,16 @@ function DaySlots(props: TDaySlots) {
   };
 
   const diff =
+    daysOfMonth?.[0]?.getDay() &&
     (daysOfMonth?.[0]?.getDay() - bindWeekDayToNumber[weekStartsOn] + 7) % 7;
 
   return (
     <div className="rhmdp-grid rhmdp-grid-cols-7 *:rhmdp-text-center">
-      {Array.from({ length: diff }, (_, i) => i).reduce(
-        (acc, _) => [...acc, <div key={acc.length} style={{ height: 40 }} />],
-        []
-      )}
+      {diff &&
+        Array.from({ length: diff }, (_, i) => i).reduce<ReactNode[]>(
+          (acc) => [...acc, <div key={acc.length} style={{ height: 42 }} />],
+          []
+        )}
       {daysOfMonth?.map((date) => {
         const IsToday = isToday(date);
 

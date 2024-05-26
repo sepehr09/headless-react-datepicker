@@ -164,7 +164,7 @@ export const SDPPersian: Story = {
   render: RenderDatePicker,
   args: {
     isRange: false,
-    initialValue: new Date(),
+    initialValue: new Date("2025-04-17T00:00:00"),
     calendar: "persian",
     config: {
       locale: "fa-IR",
