@@ -132,7 +132,7 @@ function DaySlots(props: TDaySlots) {
 
   return (
     <div className="rhmdp-grid rhmdp-grid-cols-7 *:rhmdp-text-center">
-      {diff &&
+      {!!diff &&
         Array.from({ length: diff }, (_, i) => i).reduce<ReactNode[]>(
           (acc) => [...acc, <div key={acc.length} style={{ height: 42 }} />],
           []

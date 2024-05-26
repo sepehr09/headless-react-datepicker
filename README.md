@@ -149,6 +149,8 @@ import { Title } from "headless-react-datepicker";
 | ----------- | ------------------- | -------------------------------------------------- | --------- |
 | monthFormat | string \| undefined | "numeric", "2-digit" , "long" , "short" , "narrow" | "short"   |
 | yearFormat  | string \| undefined | "numeric" , "2-digit"                              | "numeric" |
+| className   | string              | ClassName of the title component                   |           |
+| style       | CSSProperties       | css styles of the title component                  |           |
 
 ## Header component
 
@@ -316,6 +318,14 @@ const MyCustomAwesomeHeader = () => {
 ## Dependencies
 
 Using the [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) which is ECMAScript Internationalization API with a very good [browser support](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat#browser_compatibility) and depends on [Temporal](https://www.npmjs.com/package/@js-temporal/polyfill) for converting other calendars into gregory.
+
+## Todo
+
+- [x] remove dependency to date-fns
+- [ ] time picker
+- [ ] rangle picker hover effect
+- [ ] integrate popover for whole calendar
+- [ ] two side by side calendar
 
 ## License
 

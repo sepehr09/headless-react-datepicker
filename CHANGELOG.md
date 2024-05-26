@@ -1,5 +1,12 @@
 # Changelog
 
+### version 1.0.3
+
+- fix: timezone issue causing wrong selection in month and year dropdown.
+- new: add `className` prop to add custom class to the `Title` component.
+- new: add `style` prop to add custom style to the `Title` component.
+- chore: Add Vitest and write some test cases for some utility functions.
+
 ### version 1.0.2
 
 - fix: ios converting date issue.
