@@ -111,7 +111,7 @@ export const RangeSelection: Story = {
   },
 };
 
-export const SingleSelectionPersian: Story = {
+export const Persian: Story = {
   render: RenderDatePicker,
   args: {
     isRange: false,
@@ -134,11 +134,11 @@ export const SingleSelectionPersian: Story = {
   },
 };
 
-export const SingleSelectionIslamic: Story = {
+export const Islamic: Story = {
   render: RenderDatePicker,
   args: {
-    isRange: true,
-    initialValue: [new Date("2024-02-06"), new Date("2024-02-08")],
+    isRange: false,
+    initialValue: new Date("2024-02-06"),
     calendar: "islamic-umalqura",
     config: {
       locale: "ar-EG",
@@ -148,6 +148,47 @@ export const SingleSelectionIslamic: Story = {
       weekdayFormat: "narrow",
       dayFormat: "numeric",
       weekends: ["friday", "saturday"],
+
+      // yearRangeFrom: 1330,
+      // yearRangeTo: 1400,
+      // minDate: new Date("2024-01-01T00:00:00.000Z"),
+      // maxDate: new Date(),
+    },
+  },
+};
+
+export const GregoryInFa_IR: Story = {
+  render: RenderDatePicker,
+  args: {
+    isRange: false,
+    initialValue: new Date("2025-04-17T00:00:00"),
+    calendar: "gregory",
+    config: {
+      locale: "fa-IR",
+      weekStartsOn: "saturday",
+      showOtherDays: false,
+      otherDaysSelectable: false,
+      weekdayFormat: "narrow",
+      dayFormat: "numeric",
+      weekends: ["thursday", "friday"],
+    },
+  },
+};
+
+export const PersianInEn_US: Story = {
+  render: RenderDatePicker,
+  args: {
+    isRange: false,
+    initialValue: new Date("2025-04-17T00:00:00"),
+    calendar: "persian",
+    config: {
+      locale: "en-US",
+      weekStartsOn: "saturday",
+      showOtherDays: false,
+      otherDaysSelectable: false,
+      weekdayFormat: "narrow",
+      dayFormat: "numeric",
+      weekends: ["thursday", "friday"],
 
       // yearRangeFrom: 1330,
       // yearRangeTo: 1400,
