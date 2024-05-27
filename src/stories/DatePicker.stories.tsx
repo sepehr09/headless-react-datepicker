@@ -5,9 +5,10 @@ import Header from "../components/header/Header";
 import Title from "../components/title/Title";
 import WeekDays from "../components/weekDays/WeekDays";
 import { TDatePickerProps } from "../types";
+import { argTypes } from "./constants";
 
 const meta = {
-  title: "Example/DatePicker",
+  title: "Example/Calendar",
   component: DatePickerProvider,
   parameters: {
     // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout
@@ -16,72 +17,7 @@ const meta = {
   },
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ["autodocs"],
-  argTypes: {
-    config: {
-      control: "null",
-    },
-    // @ts-expect-error [values are typed]
-    "config.locale": {
-      control: "select",
-      options: ["fa-IR", "en-US", "ar-EG", "hi-IN"],
-    },
-    "config.weekStartsOn": {
-      control: "select",
-      options: [
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday",
-        "sunday",
-      ],
-    },
-    "config.weekdayFormat": {
-      control: "select",
-      options: ["long", "short", "narrow"],
-    },
-    "config.showOtherDays": {
-      control: "boolean",
-    },
-    "config.otherDaysSelectable": {
-      control: "boolean",
-    },
-    "config.dayFormat": {
-      control: "select",
-      options: ["numeric", "2-digit"],
-    },
-    "config.yearRangeFrom": {
-      control: "number",
-    },
-    "config.yearRangeTo": {
-      control: "number",
-    },
-    "config.minDate": {
-      control: "date",
-    },
-    "config.maxDate": {
-      control: "date",
-    },
-    "config.weekends": {
-      control: "check",
-      options: [
-        "saturday",
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-      ],
-    },
-    "config.weekendSelectable": {
-      control: "boolean",
-    },
-    "config.allowBackwardRange": {
-      control: "boolean",
-    },
-  },
+  argTypes: argTypes,
 } satisfies Meta<typeof DatePickerProvider>;
 
 export default meta;
@@ -92,16 +28,37 @@ const RenderDatePicker = <T extends boolean>(props: TDatePickerProps<T>) => {
     <div
       style={{
         background: "#fff",
-        boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+        boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
         width: "300px",
-        borderRadius: "10px",
+        borderRadius: "0px",
         margin: "30px auto",
         padding: "10px",
       }}
     >
-      <DatePickerProvider {...props}>
+      <DatePickerProvider
+        {...props}
+        onChange={(e) => {
+          props?.onChange?.(e);
+          console.log("onChange: ", e);
+        }}
+      >
         <Title />
-        <Header />
+        <Header
+          monthSelectStyles={{
+            backgroundColor: "#f0f0f0",
+            color: "#000",
+            padding: "5px",
+            borderRadius: "5px",
+            outline: "none",
+          }}
+          yearSelectStyles={{
+            backgroundColor: "#f0f0f0",
+            color: "#000",
+            padding: "5px",
+            borderRadius: "5px",
+            outline: "none",
+          }}
+        />
         <WeekDays />
         <DaySlots />
       </DatePickerProvider>
@@ -109,18 +66,18 @@ const RenderDatePicker = <T extends boolean>(props: TDatePickerProps<T>) => {
   );
 };
 
-export const SDP: Story = {
+export const SingleSelection: Story = {
   render: RenderDatePicker,
   args: {
     isRange: false,
-    initialValue: new Date("2024-02-06T20:00:00.000Z"),
+    initialValue: new Date(),
     calendar: "gregory",
     config: {
       locale: "en-US",
       weekStartsOn: "monday",
       showOtherDays: false,
       otherDaysSelectable: false,
-      weekdayFormat: "narrow",
+      weekdayFormat: "short",
       dayFormat: "numeric",
       weekends: ["saturday", "sunday"],
       weekendSelectable: true,
@@ -132,7 +89,7 @@ export const SDP: Story = {
   },
 };
 
-export const RDP: Story = {
+export const RangeSelection: Story = {
   render: RenderDatePicker,
   args: {
     isRange: true,
@@ -154,11 +111,11 @@ export const RDP: Story = {
   },
 };
 
-export const SDPPersian: Story = {
+export const Persian: Story = {
   render: RenderDatePicker,
   args: {
-    isRange: true,
-    initialValue: [new Date("2024-02-06"), new Date("2024-02-08")],
+    isRange: false,
+    initialValue: new Date("2025-04-17T00:00:00"),
     calendar: "persian",
     config: {
       locale: "fa-IR",
@@ -177,11 +134,11 @@ export const SDPPersian: Story = {
   },
 };
 
-export const SDPIslamic: Story = {
+export const Islamic: Story = {
   render: RenderDatePicker,
   args: {
-    isRange: true,
-    initialValue: [new Date("2024-02-06"), new Date("2024-02-08")],
+    isRange: false,
+    initialValue: new Date("2024-02-06"),
     calendar: "islamic-umalqura",
     config: {
       locale: "ar-EG",
@@ -191,6 +148,47 @@ export const SDPIslamic: Story = {
       weekdayFormat: "narrow",
       dayFormat: "numeric",
       weekends: ["friday", "saturday"],
+
+      // yearRangeFrom: 1330,
+      // yearRangeTo: 1400,
+      // minDate: new Date("2024-01-01T00:00:00.000Z"),
+      // maxDate: new Date(),
+    },
+  },
+};
+
+export const GregoryInFa_IR: Story = {
+  render: RenderDatePicker,
+  args: {
+    isRange: false,
+    initialValue: new Date("2025-04-17T00:00:00"),
+    calendar: "gregory",
+    config: {
+      locale: "fa-IR",
+      weekStartsOn: "saturday",
+      showOtherDays: false,
+      otherDaysSelectable: false,
+      weekdayFormat: "narrow",
+      dayFormat: "numeric",
+      weekends: ["thursday", "friday"],
+    },
+  },
+};
+
+export const PersianInEn_US: Story = {
+  render: RenderDatePicker,
+  args: {
+    isRange: false,
+    initialValue: new Date("2025-04-17T00:00:00"),
+    calendar: "persian",
+    config: {
+      locale: "en-US",
+      weekStartsOn: "saturday",
+      showOtherDays: false,
+      otherDaysSelectable: false,
+      weekdayFormat: "narrow",
+      dayFormat: "numeric",
+      weekends: ["thursday", "friday"],
 
       // yearRangeFrom: 1330,
       // yearRangeTo: 1400,

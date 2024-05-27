@@ -1,58 +1,64 @@
-import { Day, isSameDay, isToday, isWithinInterval } from "date-fns";
-import { useContext } from "react";
+import { ReactNode, useContext } from "react";
+import { defaultWeekStartsOn } from "../../constants/defaults";
 import { bindWeekDayToNumber } from "../../constants/weekdays";
 import { PickerContext } from "../../store/pickerContext";
+import { Day } from "../../types";
 import { classJoin } from "../../utils/classJoin";
+import { isSameDay, isToday, isWithinInterval } from "../../utils/dateUtils";
 import { IsSameMonth } from "../../utils/jalali";
 import { TDaySlots } from "./types";
 
-function DaySlots({
-  dayRenderer,
-  slotParentClassName,
-  slotClassName,
-  slotParentStyles,
-  slotStyles,
+function DaySlots(props: TDaySlots) {
+  const {
+    dayRenderer,
+    parentClassName,
+    parentStyles,
+    slotParentClassName,
+    slotClassName,
+    slotParentStyles,
+    slotStyles,
 
-  todayStyles,
-  todayClassName,
-  todayParentStyles,
-  todayParentClassName,
+    todayStyles,
+    todayClassName,
+    todayParentStyles,
+    todayParentClassName,
 
-  disableStyles,
-  disableClassName,
-  disableParentStyles,
-  disableParentClassName,
+    disableStyles,
+    disableClassName,
+    disableParentStyles,
+    disableParentClassName,
 
-  weekendStyles,
-  weekendClassName,
-  weekendParentStyles,
-  weekendParentClassName,
+    weekendStyles,
+    weekendClassName,
+    weekendParentStyles,
+    weekendParentClassName,
 
-  selectedStyles,
-  selectedClassName,
-  selectedParentStyles,
-  selectedParentClassName,
+    selectedStyles,
+    selectedClassName,
+    selectedParentStyles,
+    selectedParentClassName,
 
-  selectableStyles,
-  selectableClassName,
-  selectableParentStyles,
-  selectableParentClassName,
+    selectableStyles,
+    selectableClassName,
+    selectableParentStyles,
+    selectableParentClassName,
 
-  inSelectedRangeStyles,
-  inSelectedRangeClassName,
-  inSelectedRangeParentStyles,
-  inSelectedRangeParentClassName,
+    inSelectedRangeStyles,
+    inSelectedRangeClassName,
+    inSelectedRangeParentStyles,
+    inSelectedRangeParentClassName,
 
-  startOfRangeStyles,
-  startOfRangeClassName,
-  startOfRangeParentStyles,
-  startOfRangeParentClassName,
+    startOfRangeStyles,
+    startOfRangeClassName,
+    startOfRangeParentStyles,
+    startOfRangeParentClassName,
 
-  endOfRangeStyles,
-  endOfRangeClassName,
-  endOfRangeParentStyles,
-  endOfRangeParentClassName,
-}: TDaySlots) {
+    endOfRangeStyles,
+    endOfRangeClassName,
+    endOfRangeParentStyles,
+    endOfRangeParentClassName,
+  } = props;
+
   const {
     daysOfMonth,
     config,
@@ -61,6 +67,7 @@ function DaySlots({
     calendar,
     monthInTheCalendar,
   } = useContext(PickerContext);
+
   const {
     locale,
     showOtherDays,
@@ -70,6 +77,7 @@ function DaySlots({
     maxDate,
     weekends,
     weekendSelectable = true,
+    weekStartsOn = defaultWeekStartsOn,
   } = config || {};
 
   const dayFormatter = (day: Date) => {
@@ -120,8 +128,23 @@ function DaySlots({
     handleClickSlot?.(date);
   };
 
+  const diff =
+    daysOfMonth?.[0]?.getDay() &&
+    (daysOfMonth?.[0]?.getDay() - bindWeekDayToNumber[weekStartsOn] + 7) % 7;
+
   return (
-    <div className="rhmdp-grid rhmdp-grid-cols-7 *:rhmdp-text-center">
+    <div
+      className={classJoin([
+        "rhmdp-grid rhmdp-grid-cols-7 *:rhmdp-text-center",
+        parentClassName,
+      ])}
+      style={parentStyles}
+    >
+      {!!diff &&
+        Array.from({ length: diff }, (_, i) => i).reduce<ReactNode[]>(
+          (acc) => [...acc, <div key={acc.length} style={{ height: 42 }} />],
+          []
+        )}
       {daysOfMonth?.map((date) => {
         const IsToday = isToday(date);
 
@@ -204,6 +227,7 @@ function DaySlots({
               isSelected && classJoin([selectedParentClassName]),
             ])}
             style={{
+              ...(slotParentStyles && slotParentStyles),
               ...(IsToday && todayParentStyles),
               ...(isDisabled && disableParentStyles),
               ...(isInWeekend && weekendParentStyles),
@@ -212,7 +236,6 @@ function DaySlots({
               ...(isInSelectedRange && inSelectedRangeParentStyles),
               ...(isStartOfRange && startOfRangeParentStyles),
               ...(isEndOfRange && endOfRangeParentStyles),
-              ...(slotParentStyles && slotParentStyles),
             }}
           >
             <div
@@ -232,21 +255,21 @@ function DaySlots({
                 isInWeekend && classJoin([weekendClassName]),
                 isSelected &&
                   classJoin([
-                    "rhmdp-bg-blue-600 hover:rhmdp-bg-blue-600 rhmdp-text-white rhmdp-h-full",
+                    "rhmdp-bg-blue-500 hover:rhmdp-bg-blue-500 rhmdp-text-white rhmdp-h-full",
                     selectedClassName,
                   ]),
                 slotClassName,
               ])}
               style={{
+                ...(slotStyles && slotStyles),
                 ...(IsToday && todayStyles),
                 ...(isDisabled && disableStyles),
                 ...(isInWeekend && weekendStyles),
-                ...(isSelected && selectedStyles),
                 ...(isSelectable && selectableStyles),
-                ...(isInSelectedRange && inSelectedRangeStyles),
                 ...(isStartOfRange && startOfRangeStyles),
                 ...(isEndOfRange && endOfRangeStyles),
-                ...(slotStyles && slotStyles),
+                ...(isSelected && selectedStyles),
+                ...(isInSelectedRange && inSelectedRangeStyles),
               }}
             >
               {formattedDay}

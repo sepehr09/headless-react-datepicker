@@ -12,7 +12,7 @@ https://sepehr09.github.io/headless-react-datepicker/
 
 ## Customization
 
-![alt text](documentation/assets/css-help.png "Title")
+![alt text](documentation/assets/theming1.png "Theming!")
 
 ## Supported Calendars
 
@@ -87,6 +87,10 @@ const MyAwesomeDatePicker = () => {
 };
 ```
 
+## Customization
+
+![Customization of the headless-react-datepicker](documentation/assets/css-help.png "Customization")
+
 ## Headless!
 
 ![Headless React Datepicker structure](documentation/assets/headless.png "Headless React Datepicker structure")
@@ -149,6 +153,8 @@ import { Title } from "headless-react-datepicker";
 | ----------- | ------------------- | -------------------------------------------------- | --------- |
 | monthFormat | string \| undefined | "numeric", "2-digit" , "long" , "short" , "narrow" | "short"   |
 | yearFormat  | string \| undefined | "numeric" , "2-digit"                              | "numeric" |
+| className   | string              | ClassName of the title component                   |           |
+| style       | CSSProperties       | css styles of the title component                  |           |
 
 ## Header component
 
@@ -193,7 +199,9 @@ import { WeekDays } from "headless-react-datepicker";
 | ------------- | ---------------------------------------------- | ----------------------------------------------------------------- |
 | renderer      | (args: **TWeekDaysRendererArgs**) => ReactNode | Custom renderer. If provided, the whole component will be ignored |
 | className     | string                                         | Custom class name for the element                                 |
+| style         | CSSProperties                                  | css styles for the element                                        |
 | rootClassName | string                                         | Custom class name for the parent root element                     |
+| rootStyle     | CSSProperties                                  | css styles for the parent root element                            |
 
 ### TWeekDaysRendererArgs
 
@@ -216,6 +224,8 @@ import { DaySlots } from "headless-react-datepicker";
 | Name                           | Type                                              | Description     | Default |
 | ------------------------------ | ------------------------------------------------- | --------------- | ------- |
 | dayRenderer                    | (args: **TDaySlotsDayRendererArgs**) => ReactNode | Custom renderer |         |
+| parentClassName                | string                                            | parent box      |         |
+| parentStyles                   | CSSProperties                                     | parent box      |         |
 | slotParentClassName            | string                                            |                 |         |
 | slotParentStyles               | CSSProperties                                     |                 |         |
 | slotClassName                  | string                                            |                 |         |
@@ -316,6 +326,14 @@ const MyCustomAwesomeHeader = () => {
 ## Dependencies
 
 Using the [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) which is ECMAScript Internationalization API with a very good [browser support](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat#browser_compatibility) and depends on [Temporal](https://www.npmjs.com/package/@js-temporal/polyfill) for converting other calendars into gregory.
+
+## Todo
+
+- [x] remove dependency to date-fns
+- [ ] time picker
+- [ ] rangle picker hover effect
+- [ ] integrate popover for whole calendar
+- [ ] two side by side calendar
 
 ## License
 

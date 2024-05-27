@@ -1,9 +1,10 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { addDays, subDays, toDate } from "date-fns";
 import { useEffect, useMemo, useState } from "react";
+import { defaultWeekStartsOn } from "./constants/defaults";
 import { PickerContext } from "./store/pickerContext";
 import { TDatePickerProps } from "./types";
-import { getAllMonths, getMonthSlots } from "./utils/datePicker";
+import { getMonthSlots } from "./utils/datePicker";
+import { addDays, getAllMonths, subDays } from "./utils/dateUtils";
 import { normalizeTemporal } from "./utils/temporal";
 
 function DatePickerProvider<IsRange extends boolean>(
@@ -21,7 +22,7 @@ function DatePickerProvider<IsRange extends boolean>(
 
   const {
     weekdayFormat = "narrow",
-    weekStartsOn = "saturday",
+    weekStartsOn = defaultWeekStartsOn,
     locale = "en-US",
     dayFormat = "numeric",
     yearRangeFrom,
@@ -32,18 +33,18 @@ function DatePickerProvider<IsRange extends boolean>(
   const [currentDate, setCurrentDate] = useState<Date>(
     defaultStartDate ||
       (initialValue
-        ? toDate(
+        ? new Date(
             Array.isArray(initialValue)
               ? initialValue?.[0].toISOString()
               : initialValue.toISOString()
           )
-        : toDate(new Date().toISOString()))
+        : new Date(new Date().toISOString()))
   );
   const [selectedDay, setSelectedDay] = useState<Date[] | Date | undefined>(
     initialValue
       ? Array.isArray(initialValue)
-        ? initialValue?.map((v) => toDate(v))
-        : toDate(initialValue)
+        ? initialValue?.map((v) => new Date(v))
+        : new Date(initialValue)
       : undefined
   );
 
@@ -146,7 +147,8 @@ function DatePickerProvider<IsRange extends boolean>(
       calendar: calendar,
     }).getISOFields();
 
-    goToDate?.(toDate(normalizeTemporal(newDate)));
+    const date = new Date(`${normalizeTemporal(newDate)}T00:00:00`);
+    goToDate?.(date);
   };
 
   /**
@@ -162,7 +164,8 @@ function DatePickerProvider<IsRange extends boolean>(
       calendar: calendar,
     }).getISOFields();
 
-    goToDate?.(toDate(normalizeTemporal(newDate)));
+    const date = new Date(`${normalizeTemporal(newDate)}T00:00:00`);
+    goToDate?.(date);
   };
 
   const monthsList = useMemo(
