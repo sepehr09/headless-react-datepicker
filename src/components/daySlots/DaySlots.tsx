@@ -11,6 +11,8 @@ import { TDaySlots } from "./types";
 function DaySlots(props: TDaySlots) {
   const {
     dayRenderer,
+    parentClassName,
+    parentStyles,
     slotParentClassName,
     slotClassName,
     slotParentStyles,
@@ -131,7 +133,13 @@ function DaySlots(props: TDaySlots) {
     (daysOfMonth?.[0]?.getDay() - bindWeekDayToNumber[weekStartsOn] + 7) % 7;
 
   return (
-    <div className="rhmdp-grid rhmdp-grid-cols-7 *:rhmdp-text-center">
+    <div
+      className={classJoin([
+        "rhmdp-grid rhmdp-grid-cols-7 *:rhmdp-text-center",
+        parentClassName,
+      ])}
+      style={parentStyles}
+    >
       {!!diff &&
         Array.from({ length: diff }, (_, i) => i).reduce<ReactNode[]>(
           (acc) => [...acc, <div key={acc.length} style={{ height: 42 }} />],
@@ -247,21 +255,21 @@ function DaySlots(props: TDaySlots) {
                 isInWeekend && classJoin([weekendClassName]),
                 isSelected &&
                   classJoin([
-                    "rhmdp-bg-blue-600 hover:rhmdp-bg-blue-600 rhmdp-text-white rhmdp-h-full",
+                    "rhmdp-bg-blue-500 hover:rhmdp-bg-blue-500 rhmdp-text-white rhmdp-h-full",
                     selectedClassName,
                   ]),
                 slotClassName,
               ])}
               style={{
+                ...(slotStyles && slotStyles),
                 ...(IsToday && todayStyles),
                 ...(isDisabled && disableStyles),
                 ...(isInWeekend && weekendStyles),
-                ...(isSelected && selectedStyles),
                 ...(isSelectable && selectableStyles),
-                ...(isInSelectedRange && inSelectedRangeStyles),
                 ...(isStartOfRange && startOfRangeStyles),
                 ...(isEndOfRange && endOfRangeStyles),
-                ...(slotStyles && slotStyles),
+                ...(isSelected && selectedStyles),
+                ...(isInSelectedRange && inSelectedRangeStyles),
               }}
             >
               {formattedDay}

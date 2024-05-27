@@ -35,14 +35,6 @@ export function getMonthInfo(date: Date, calendar: TCalendar) {
   const gEndT = new Date(startDate);
   gEndT.setDate(gEndT.getDate() + gregoryDays - 1);
 
-  // console.group("%c getMonthSlots", "background-color:green;");
-  // console.log("startDate:          ", startDate);
-  // console.log("gStartT:            ", gStartT);
-  // console.log("gEndT:              ", gEndT);
-  // console.log("totalDays:          ", totalDays);
-  // console.log("gregoryDays:        ", gregoryDays);
-  // console.groupEnd();
-
   return {
     monthLength: totalDays,
     startOfMonth: gStartT,
@@ -107,20 +99,6 @@ export function getMonthSlots({
     startDateIncludeOtherDays,
     endDateIncludeOtherDays
   );
-
-  // console.group("%c getMonthSlots", "background-color:red;");
-  // console.log("currentDate:              ", currentDate);
-  // console.log("startOfMonth:             ", startOfMonth);
-  // console.log("endOfMonth:               ", endOfMonth);
-  // console.log("startDateIncludeOtherDays:", startDateIncludeOtherDays);
-  // console.log("endDateIncludeOtherDays:  ", endDateIncludeOtherDays);
-  // // console.log("day:              ", day);
-  // // console.log("month:            ", month);
-  // // console.log("yearBasedCalendar:", yearBasedCalendar);
-  // // console.log("monthLength:      ", monthLength);
-  // // console.log("daysOfMonth:      ", daysOfMonth);
-  // console.log("daysOfMonth:              ", daysOfMonth);
-  // console.groupEnd();
 
   return {
     daysOfMonth,

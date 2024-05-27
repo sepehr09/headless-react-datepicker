@@ -48,8 +48,6 @@ function DatePickerProvider<IsRange extends boolean>(
       : undefined
   );
 
-  console.log(currentDate.getHours());
-
   useEffect(() => {
     if (selectedDay !== undefined) {
       onChange?.(selectedDay! as IsRange extends true ? Date[] : Date);

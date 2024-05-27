@@ -7,7 +7,13 @@ import { classJoin } from "../../utils/classJoin";
 import { getWeekDayName } from "../../utils/dateUtils";
 import { TWeekDaysProps } from "./types";
 
-function WeekDays({ renderer, className, rootClassName }: TWeekDaysProps) {
+function WeekDays({
+  renderer,
+  className,
+  rootClassName,
+  style,
+  rootStyle,
+}: TWeekDaysProps) {
   const { config } = useContext(PickerContext);
   const {
     locale,
@@ -16,7 +22,10 @@ function WeekDays({ renderer, className, rootClassName }: TWeekDaysProps) {
   } = config || {};
 
   return (
-    <div className={classJoin(["rhmdp-grid rhmdp-grid-cols-7", rootClassName])}>
+    <div
+      className={classJoin(["rhmdp-grid rhmdp-grid-cols-7", rootClassName])}
+      style={rootStyle}
+    >
       {Array.from({ length: 7 }).map((_, index) => {
         const dayIndex = (index + bindWeekDayToNumber[weekStartsOn]) % 7;
 
@@ -45,6 +54,7 @@ function WeekDays({ renderer, className, rootClassName }: TWeekDaysProps) {
               `rhmdp-text-center rhmdp-font-bold`,
               className,
             ])}
+            style={style}
           >
             {formattedTitle}
           </div>

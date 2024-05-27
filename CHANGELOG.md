@@ -5,6 +5,10 @@
 - fix: timezone issue causing wrong selection in month and year dropdown.
 - new: add `className` prop to add custom class to the `Title` component.
 - new: add `style` prop to add custom style to the `Title` component.
+- new: add `rootStyle` prop to add custom style to the `WeekDays` parent component.
+- new: add `style` prop to add custom style to the `WeekDays` component.
+- new: add `parentClassName` prop to add custom class to the `DaySlots` parent component.
+- new: add `parentStyles` prop to add custom style to the `DaySlots` parent component.
 - chore: Add Vitest and write some test cases for some utility functions.
 
 ### version 1.0.2

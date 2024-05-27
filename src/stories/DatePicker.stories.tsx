@@ -5,9 +5,10 @@ import Header from "../components/header/Header";
 import Title from "../components/title/Title";
 import WeekDays from "../components/weekDays/WeekDays";
 import { TDatePickerProps } from "../types";
+import { argTypes } from "./constants";
 
 const meta = {
-  title: "Example/DatePicker",
+  title: "Example/Calendar",
   component: DatePickerProvider,
   parameters: {
     // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout
@@ -16,72 +17,7 @@ const meta = {
   },
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ["autodocs"],
-  argTypes: {
-    config: {
-      control: "null",
-    },
-    // @ts-expect-error [values are typed]
-    "config.locale": {
-      control: "select",
-      options: ["fa-IR", "en-US", "ar-EG", "hi-IN"],
-    },
-    "config.weekStartsOn": {
-      control: "select",
-      options: [
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday",
-        "sunday",
-      ],
-    },
-    "config.weekdayFormat": {
-      control: "select",
-      options: ["long", "short", "narrow"],
-    },
-    "config.showOtherDays": {
-      control: "boolean",
-    },
-    "config.otherDaysSelectable": {
-      control: "boolean",
-    },
-    "config.dayFormat": {
-      control: "select",
-      options: ["numeric", "2-digit"],
-    },
-    "config.yearRangeFrom": {
-      control: "number",
-    },
-    "config.yearRangeTo": {
-      control: "number",
-    },
-    "config.minDate": {
-      control: "date",
-    },
-    "config.maxDate": {
-      control: "date",
-    },
-    "config.weekends": {
-      control: "check",
-      options: [
-        "saturday",
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-      ],
-    },
-    "config.weekendSelectable": {
-      control: "boolean",
-    },
-    "config.allowBackwardRange": {
-      control: "boolean",
-    },
-  },
+  argTypes: argTypes,
 } satisfies Meta<typeof DatePickerProvider>;
 
 export default meta;
@@ -92,9 +28,9 @@ const RenderDatePicker = <T extends boolean>(props: TDatePickerProps<T>) => {
     <div
       style={{
         background: "#fff",
-        boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+        boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
         width: "300px",
-        borderRadius: "10px",
+        borderRadius: "0px",
         margin: "30px auto",
         padding: "10px",
       }}
@@ -107,7 +43,22 @@ const RenderDatePicker = <T extends boolean>(props: TDatePickerProps<T>) => {
         }}
       >
         <Title />
-        <Header />
+        <Header
+          monthSelectStyles={{
+            backgroundColor: "#f0f0f0",
+            color: "#000",
+            padding: "5px",
+            borderRadius: "5px",
+            outline: "none",
+          }}
+          yearSelectStyles={{
+            backgroundColor: "#f0f0f0",
+            color: "#000",
+            padding: "5px",
+            borderRadius: "5px",
+            outline: "none",
+          }}
+        />
         <WeekDays />
         <DaySlots />
       </DatePickerProvider>
@@ -115,7 +66,7 @@ const RenderDatePicker = <T extends boolean>(props: TDatePickerProps<T>) => {
   );
 };
 
-export const SDP: Story = {
+export const SingleSelection: Story = {
   render: RenderDatePicker,
   args: {
     isRange: false,
@@ -138,7 +89,7 @@ export const SDP: Story = {
   },
 };
 
-export const RDP: Story = {
+export const RangeSelection: Story = {
   render: RenderDatePicker,
   args: {
     isRange: true,
@@ -160,7 +111,7 @@ export const RDP: Story = {
   },
 };
 
-export const SDPPersian: Story = {
+export const SingleSelectionPersian: Story = {
   render: RenderDatePicker,
   args: {
     isRange: false,
@@ -183,7 +134,7 @@ export const SDPPersian: Story = {
   },
 };
 
-export const SDPIslamic: Story = {
+export const SingleSelectionIslamic: Story = {
   render: RenderDatePicker,
   args: {
     isRange: true,

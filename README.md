@@ -195,7 +195,9 @@ import { WeekDays } from "headless-react-datepicker";
 | ------------- | ---------------------------------------------- | ----------------------------------------------------------------- |
 | renderer      | (args: **TWeekDaysRendererArgs**) => ReactNode | Custom renderer. If provided, the whole component will be ignored |
 | className     | string                                         | Custom class name for the element                                 |
+| style         | CSSProperties                                  | css styles for the element                                        |
 | rootClassName | string                                         | Custom class name for the parent root element                     |
+| rootStyle     | CSSProperties                                  | css styles for the parent root element                            |
 
 ### TWeekDaysRendererArgs
 
@@ -218,6 +220,8 @@ import { DaySlots } from "headless-react-datepicker";
 | Name                           | Type                                              | Description     | Default |
 | ------------------------------ | ------------------------------------------------- | --------------- | ------- |
 | dayRenderer                    | (args: **TDaySlotsDayRendererArgs**) => ReactNode | Custom renderer |         |
+| parentClassName                | string                                            | parent box      |         |
+| parentStyles                   | CSSProperties                                     | parent box      |         |
 | slotParentClassName            | string                                            |                 |         |
 | slotParentStyles               | CSSProperties                                     |                 |         |
 | slotClassName                  | string                                            |                 |         |
