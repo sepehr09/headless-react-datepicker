@@ -227,6 +227,7 @@ function DaySlots(props: TDaySlots) {
               isSelected && classJoin([selectedParentClassName]),
             ])}
             style={{
+              ...(slotParentStyles && slotParentStyles),
               ...(IsToday && todayParentStyles),
               ...(isDisabled && disableParentStyles),
               ...(isInWeekend && weekendParentStyles),
@@ -235,7 +236,6 @@ function DaySlots(props: TDaySlots) {
               ...(isInSelectedRange && inSelectedRangeParentStyles),
               ...(isStartOfRange && startOfRangeParentStyles),
               ...(isEndOfRange && endOfRangeParentStyles),
-              ...(slotParentStyles && slotParentStyles),
             }}
           >
             <div

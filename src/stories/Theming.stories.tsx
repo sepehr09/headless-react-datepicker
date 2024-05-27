@@ -49,7 +49,8 @@ export const Example1: Story = {
             console.log("onChange: ", e);
           }}
         >
-          <Title />
+          <Title style={{ color: "#443f70", fontWeight: "300" }} />
+
           <Header
             monthSelectStyles={{
               backgroundColor: "#f0f0f0",
@@ -76,6 +77,7 @@ export const Example1: Story = {
               borderRadius: "50%",
               backgroundColor: "#783aeb",
               fontWeight: "500",
+              color: "#fff",
             }}
             selectedParentStyles={{
               borderRadius: "50%",
@@ -253,6 +255,191 @@ export const Example3: Story = {
             }}
             inSelectedRangeStyles={{
               color: "#fff",
+            }}
+          />
+        </DatePickerProvider>
+      </div>
+    );
+  },
+};
+
+export const Example4: Story = {
+  render: (props) => {
+    return (
+      <div
+        style={{
+          background: "#333333",
+          boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+          width: "360px",
+          borderRadius: "12px",
+          margin: "30px auto",
+          padding: "17px",
+        }}
+      >
+        <DatePickerProvider
+          {...{
+            isRange: true,
+            initialValue: [new Date("2024-05-15"), new Date("2024-05-18")],
+            calendar: "gregory",
+            config: {
+              weekStartsOn: "monday",
+              weekdayFormat: "short",
+              weekends: ["saturday", "sunday"],
+            },
+          }}
+          {...props}
+          onChange={(e) => {
+            console.log("onChange: ", e);
+          }}
+        >
+          <Title style={{ color: "#fff" }} />
+          <Header
+            monthSelectStyles={{
+              backgroundColor: "#636363",
+              color: "#fff",
+              padding: "4px",
+              borderRadius: "5px",
+              outline: "none",
+            }}
+            yearSelectStyles={{
+              backgroundColor: "#636363",
+              color: "#fff",
+              padding: "4px",
+              borderRadius: "5px",
+              outline: "none",
+            }}
+          />
+          <WeekDays
+            style={{
+              fontWeight: 300,
+              marginBottom: "4px",
+              color: "#7a7a7a",
+            }}
+          />
+          <DaySlots
+            slotStyles={{
+              color: "#fff",
+              fontWeight: "300",
+            }}
+            slotParentStyles={{
+              border: "0",
+              padding: "4px",
+            }}
+            weekendStyles={{
+              color: "#ff4794",
+            }}
+            selectedStyles={{
+              backgroundColor: "#ff4794",
+              fontWeight: "500",
+            }}
+            endOfRangeStyles={{
+              color: "#ffffff",
+            }}
+            startOfRangeStyles={{
+              color: "#ffffff",
+            }}
+            inSelectedRangeParentStyles={{
+              backgroundColor: "#6b6b6b",
+            }}
+          />
+        </DatePickerProvider>
+      </div>
+    );
+  },
+};
+
+export const Example5: Story = {
+  render: (props) => {
+    return (
+      <div
+        style={{
+          background: "#fff",
+          boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+          width: "300px",
+          borderRadius: "0px",
+          margin: "30px auto",
+          padding: "10px",
+          border: "1px solid #acb5be",
+        }}
+      >
+        <DatePickerProvider
+          {...{
+            isRange: true,
+            initialValue: [new Date("2024-05-15"), new Date("2024-05-18")],
+            calendar: "gregory",
+            config: {
+              weekStartsOn: "monday",
+              weekdayFormat: "short",
+              weekends: ["saturday", "sunday"],
+              showOtherDays: true,
+            },
+          }}
+          {...props}
+          onChange={(e) => {
+            console.log("onChange: ", e);
+          }}
+        >
+          <Title style={{ fontWeight: 400 }} />
+          <Header
+            monthSelectStyles={{
+              backgroundColor: "#f0f0f0",
+              color: "#000",
+              padding: "4px",
+              borderRadius: "5px",
+              outline: "none",
+            }}
+            yearSelectStyles={{
+              backgroundColor: "#f0f0f0",
+              color: "#000",
+              padding: "4px",
+              borderRadius: "5px",
+              outline: "none",
+            }}
+          />
+          <WeekDays
+            style={{
+              fontWeight: 300,
+              marginBottom: "4px",
+              color: "#7a7a7a",
+            }}
+          />
+          <DaySlots
+            parentStyles={{
+              gap: "1px",
+              backgroundColor: "#d6dadf",
+              border: "1px solid #d6dadf",
+            }}
+            slotParentStyles={{
+              // border: "1px solid #c7cbcf",
+              backgroundColor: "#fff",
+              border: 0,
+            }}
+            slotStyles={{
+              fontWeight: "300",
+              borderRadius: 0,
+              color: "#494949",
+            }}
+            selectedStyles={{
+              backgroundColor: "#1dfc00",
+              fontWeight: "500",
+            }}
+            weekendStyles={{
+              color: "#ff0000",
+            }}
+            // selectedParentStyles={{
+            //   borderColor: "#303030",
+            // }}
+            startOfRangeParentStyles={{
+              borderRadius: 0,
+            }}
+            endOfRangeParentStyles={{
+              borderRadius: 0,
+            }}
+            inSelectedRangeParentStyles={{
+              backgroundColor: "#d5f8d5",
+            }}
+            inSelectedRangeStyles={{
+              color: "#000000",
             }}
           />
         </DatePickerProvider>

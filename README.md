@@ -12,7 +12,7 @@ https://sepehr09.github.io/headless-react-datepicker/
 
 ## Customization
 
-![alt text](documentation/assets/css-help.png "Title")
+![alt text](documentation/assets/theming1.png "Theming!")
 
 ## Supported Calendars
 
@@ -86,6 +86,10 @@ const MyAwesomeDatePicker = () => {
   );
 };
 ```
+
+## Customization
+
+![Customization of the headless-react-datepicker](documentation/assets/css-help.png "Customization")
 
 ## Headless!
 
