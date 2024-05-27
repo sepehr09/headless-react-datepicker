@@ -1,14 +1,19 @@
 import { useContext } from "react";
 import { PickerContext } from "../../store/pickerContext";
+import { classJoin } from "../../utils/classJoin";
 import { TTitleProps } from "./types";
 
-function Title({ yearFormat = "numeric", monthFormat = "short" }: TTitleProps) {
+function Title({
+  yearFormat = "numeric",
+  monthFormat = "short",
+  className,
+  style,
+}: TTitleProps) {
   const {
     goToCurrentMonth,
     firstDayOfMonth,
     calendar = "persian",
     config,
-    startDateIncludeOtherDays,
   } = useContext(PickerContext);
 
   const { locale } = config || {};
@@ -19,12 +24,14 @@ function Title({ yearFormat = "numeric", monthFormat = "short" }: TTitleProps) {
     calendar,
   }).format(firstDayOfMonth);
 
-  console.log({ firstDayOfMonth, startDateIncludeOtherDays });
-
   return (
     <div
-      className="rhmdp-text-2xl rhmdp-font-bold rhmdp-mb-4 rhmdp-cursor-pointer"
+      className={classJoin([
+        "rhmdp-text-2xl rhmdp-font-bold rhmdp-cursor-pointer",
+        className,
+      ])}
       onClick={goToCurrentMonth}
+      style={style}
     >
       {formattedDate}
     </div>

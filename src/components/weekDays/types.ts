@@ -14,4 +14,6 @@ export type TWeekDaysProps = {
   renderer?: (args: TWeekDaysRendererArgs) => ReactNode;
   className?: string;
   rootClassName?: string;
+  style?: React.CSSProperties;
+  rootStyle?: React.CSSProperties;
 };

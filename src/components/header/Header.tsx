@@ -33,7 +33,7 @@ function Header({
   } = useContext(PickerContext);
 
   return (
-    <div className="rhmdp-flex rhmdp-items-center rhmdp-justify-between rhmdp-p-4 rhmdp-select-none">
+    <div className="rhmdp-flex rhmdp-items-center rhmdp-justify-between rhmdp-py-4 rhmdp-select-none">
       <div className="rhmdp-cursor-pointer" onClick={() => goToPrevMonth?.()}>
         {leftIcon || <ChevronLeft />}
       </div>
