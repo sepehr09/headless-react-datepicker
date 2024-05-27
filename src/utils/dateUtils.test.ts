@@ -6,6 +6,8 @@ import {
   endOfWeek,
   getAllMonths,
   getWeekDayName,
+  isSameDay,
+  startOfDay,
   startOfWeek,
   subDays,
 } from "./dateUtils";
@@ -161,5 +163,112 @@ describe("subDays", () => {
   it("returns `Invalid Date` if the given date is invalid", () => {
     const result = subDays(new Date(NaN), 10);
     expect(result instanceof Date && isNaN(result.getTime())).toBe(true);
+  });
+});
+
+describe("startOfDay", () => {
+  it("returns the date with the time set to 00:00:00", () => {
+    const date = new Date(2014, 8 /* Sep */, 2, 11, 55, 0);
+    const result = startOfDay(date);
+    expect(result).toEqual(new Date(2014, 8 /* Sep */, 2, 0, 0, 0, 0));
+  });
+
+  it("accepts a timestamp", () => {
+    const date = new Date(2014, 8 /* Sep */, 2, 11, 55, 0).getTime();
+    const result = startOfDay(date);
+    expect(result).toEqual(new Date(2014, 8 /* Sep */, 2, 0, 0, 0, 0));
+  });
+
+  it("does not mutate the original date", () => {
+    const date = new Date(2014, 8 /* Sep */, 2, 11, 55, 0);
+    startOfDay(date);
+    expect(date).toEqual(new Date(2014, 8 /* Sep */, 2, 11, 55, 0));
+  });
+
+  it("returns `Invalid Date` if the given date is invalid", () => {
+    const result = startOfDay(new Date(NaN));
+    expect(result instanceof Date && isNaN(result.getTime())).toBe(true);
+  });
+});
+
+describe("isSameDay", () => {
+  it("returns true if the given dates have the same day", () => {
+    const result = isSameDay(
+      new Date(2014, 8 /* Sep */, 4, 6, 0),
+      new Date(2014, 8 /* Sep */, 4, 18, 0)
+    );
+    expect(result).toBe(true);
+  });
+
+  it("returns false if the given dates have different days", () => {
+    const result = isSameDay(
+      new Date(2014, 8 /* Sep */, 4, 23, 59),
+      new Date(2014, 8 /* Sep */, 5, 0, 0)
+    );
+    expect(result).toBe(false);
+  });
+
+  it("accepts a timestamp", () => {
+    const result = isSameDay(
+      new Date(2014, 8 /* Sep */, 4, 6, 0).getTime(),
+      new Date(2014, 8 /* Sep */, 4, 18, 0).getTime()
+    );
+    expect(result).toBe(true);
+  });
+
+  it("returns false if the first date is `Invalid Date`", () => {
+    const result = isSameDay(new Date(NaN), new Date(1989, 6 /* Jul */, 10));
+    expect(result).toBe(false);
+  });
+
+  it("returns false if the second date is `Invalid Date`", () => {
+    const result = isSameDay(new Date(1987, 1 /* Feb */, 11), new Date(NaN));
+    expect(result).toBe(false);
+  });
+
+  it("returns false if the both dates are `Invalid Date`", () => {
+    const result = isSameDay(new Date(NaN), new Date(NaN));
+    expect(result).toBe(false);
+  });
+});
+
+describe("isSameDay", () => {
+  it("returns true if the given dates have the same day", () => {
+    const result = isSameDay(
+      new Date(2014, 8 /* Sep */, 4, 6, 0),
+      new Date(2014, 8 /* Sep */, 4, 18, 0)
+    );
+    expect(result).toBe(true);
+  });
+
+  it("returns false if the given dates have different days", () => {
+    const result = isSameDay(
+      new Date(2014, 8 /* Sep */, 4, 23, 59),
+      new Date(2014, 8 /* Sep */, 5, 0, 0)
+    );
+    expect(result).toBe(false);
+  });
+
+  it("accepts a timestamp", () => {
+    const result = isSameDay(
+      new Date(2014, 8 /* Sep */, 4, 6, 0).getTime(),
+      new Date(2014, 8 /* Sep */, 4, 18, 0).getTime()
+    );
+    expect(result).toBe(true);
+  });
+
+  it("returns false if the first date is `Invalid Date`", () => {
+    const result = isSameDay(new Date(NaN), new Date(1989, 6 /* Jul */, 10));
+    expect(result).toBe(false);
+  });
+
+  it("returns false if the second date is `Invalid Date`", () => {
+    const result = isSameDay(new Date(1987, 1 /* Feb */, 11), new Date(NaN));
+    expect(result).toBe(false);
+  });
+
+  it("returns false if the both dates are `Invalid Date`", () => {
+    const result = isSameDay(new Date(NaN), new Date(NaN));
+    expect(result).toBe(false);
   });
 });

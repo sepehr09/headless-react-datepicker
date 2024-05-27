@@ -1,10 +1,10 @@
-import { isSameDay, isToday, isWithinInterval } from "date-fns";
 import { ReactNode, useContext } from "react";
 import { defaultWeekStartsOn } from "../../constants/defaults";
 import { bindWeekDayToNumber } from "../../constants/weekdays";
 import { PickerContext } from "../../store/pickerContext";
 import { Day } from "../../types";
 import { classJoin } from "../../utils/classJoin";
+import { isSameDay, isToday, isWithinInterval } from "../../utils/dateUtils";
 import { IsSameMonth } from "../../utils/jalali";
 import { TDaySlots } from "./types";
 

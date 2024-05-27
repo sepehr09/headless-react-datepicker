@@ -124,6 +124,27 @@ export function getWeekDayName(
   return dayName;
 }
 
+/**
+ * @package https://github.com/date-fns/date-fns
+ * @name addDays
+ * @category Day Helpers
+ * @summary Add the specified number of days to the given date.
+ *
+ * @description
+ * Add the specified number of days to the given date.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param date - The date to be changed
+ * @param amount - The amount of days to be added.
+ *
+ * @returns The new date with the days added
+ *
+ * @example
+ * // Add 10 days to 1 September 2014:
+ * const result = addDays(new Date(2014, 8, 1), 10)
+ * //=> Thu Sep 11 2014 00:00:00
+ */
 export function addDays(date: Date | number | string, amount: number): Date {
   const _date = new Date(date);
   if (isNaN(amount)) return new Date(date);
@@ -140,4 +161,163 @@ export function subDays<DateType extends Date>(
   amount: number
 ): Date {
   return addDays(date, -amount);
+}
+
+/**
+ * @package https://github.com/date-fns/date-fns
+ * @name startOfDay
+ * @category Day Helpers
+ * @summary Return the start of a day for the given date.
+ *
+ * @description
+ * Return the start of a day for the given date.
+ * The result will be in the local timezone.
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param date - The original date
+ *
+ * @returns The start of a day
+ *
+ * @example
+ * // The start of a day for 2 September 2014 11:55:00:
+ * const result = startOfDay(new Date(2014, 8, 2, 11, 55, 0))
+ * //=> Tue Sep 02 2014 00:00:00
+ */
+export function startOfDay<DateType extends Date>(
+  date: DateType | number | string
+): Date {
+  const _date = new Date(date);
+  _date.setHours(0, 0, 0, 0);
+  return _date;
+}
+
+/**
+ * @package https://github.com/date-fns/date-fns
+ * @name isSameDay
+ * @category Day Helpers
+ * @summary Are the given dates in the same day (and year and month)?
+ *
+ * @description
+ * Are the given dates in the same day (and year and month)?
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param dateLeft - The first date to check
+ * @param dateRight - The second date to check
+
+ * @returns The dates are in the same day (and year and month)
+ *
+ * @example
+ * // Are 4 September 06:00:00 and 4 September 18:00:00 in the same day?
+ * const result = isSameDay(new Date(2014, 8, 4, 6, 0), new Date(2014, 8, 4, 18, 0))
+ * //=> true
+ *
+ * @example
+ * // Are 4 September and 4 October in the same day?
+ * const result = isSameDay(new Date(2014, 8, 4), new Date(2014, 9, 4))
+ * //=> false
+ *
+ * @example
+ * // Are 4 September, 2014 and 4 September, 2015 in the same day?
+ * const result = isSameDay(new Date(2014, 8, 4), new Date(2015, 8, 4))
+ * //=> false
+ */
+export function isSameDay<DateType extends Date>(
+  dateLeft: DateType | number | string,
+  dateRight: DateType | number | string
+): boolean {
+  const dateLeftStartOfDay = startOfDay(dateLeft);
+  const dateRightStartOfDay = startOfDay(dateRight);
+
+  return +dateLeftStartOfDay === +dateRightStartOfDay;
+}
+
+/**
+ * @package https://github.com/date-fns/date-fns
+ * @name isToday
+ * @category Day Helpers
+ * @summary Is the given date today?
+ * @pure false
+ *
+ * @description
+ * Is the given date today?
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param date - The date to check
+ *
+ * @returns The date is today
+ *
+ * @example
+ * // If today is 6 October 2014, is 6 October 14:00:00 today?
+ * const result = isToday(new Date(2014, 9, 6, 14, 0))
+ * //=> true
+ */
+export function isToday<DateType extends Date>(
+  date: DateType | number | string
+): boolean {
+  return isSameDay(date, new Date());
+}
+
+export interface Interval<DateType extends Date = Date> {
+  /** The start of the interval. */
+  start: DateType | number | string;
+  /** The end of the interval. */
+  end: DateType | number | string;
+}
+
+/**
+ * @package https://github.com/date-fns/date-fns
+ * @name isWithinInterval
+ * @category Interval Helpers
+ * @summary Is the given date within the interval?
+ *
+ * @description
+ * Is the given date within the interval? (Including start and end.)
+ *
+ * @typeParam DateType - The `Date` type, the function operates on. Gets inferred from passed arguments. Allows to use extensions like [`UTCDate`](https://github.com/date-fns/utc).
+ *
+ * @param date - The date to check
+ * @param interval - The interval to check
+ *
+ * @returns The date is within the interval
+ *
+ * @example
+ * // For the date within the interval:
+ * isWithinInterval(new Date(2014, 0, 3), {
+ *   start: new Date(2014, 0, 1),
+ *   end: new Date(2014, 0, 7)
+ * })
+ * //=> true
+ *
+ * @example
+ * // For the date outside of the interval:
+ * isWithinInterval(new Date(2014, 0, 10), {
+ *   start: new Date(2014, 0, 1),
+ *   end: new Date(2014, 0, 7)
+ * })
+ * //=> false
+ *
+ * @example
+ * // For date equal to interval start:
+ * isWithinInterval(date, { start, end: date })
+ * // => true
+ *
+ * @example
+ * // For date equal to interval end:
+ * isWithinInterval(date, { start: date, end })
+ * // => true
+ */
+export function isWithinInterval<DateType extends Date>(
+  date: DateType | number | string,
+  interval: Interval<Date>
+): boolean {
+  const time = +new Date(date);
+  const [startTime, endTime] = [
+    +new Date(interval.start),
+    +new Date(interval.end),
+  ].sort((a, b) => a - b);
+
+  return time >= startTime && time <= endTime;
 }
