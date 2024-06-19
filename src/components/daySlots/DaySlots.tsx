@@ -11,6 +11,7 @@ import { TDaySlots } from "./types";
 function DaySlots(props: TDaySlots) {
   const {
     dayRenderer,
+    onClickSlot: onClickSlotProp,
     parentClassName,
     parentStyles,
     slotParentClassName,
@@ -126,6 +127,7 @@ function DaySlots(props: TDaySlots) {
     if (isInWeekend && !weekendSelectable) return;
 
     handleClickSlot?.(date);
+    onClickSlotProp?.(date);
   };
 
   const diff =
