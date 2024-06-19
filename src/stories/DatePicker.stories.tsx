@@ -86,7 +86,7 @@ const RenderControlledDatePicker = <T extends boolean>(
         <DatePickerProvider
           {...props}
           initialValue={value}
-          value={value}
+          // value={value}
           onChange={onChange}
         >
           <Title />
@@ -109,7 +109,7 @@ const RenderControlledDatePicker = <T extends boolean>(
           <WeekDays />
           <DaySlots
             onClickSlot={(v) => {
-              console.log("onClickSlot", v);
+              // console.log("onClickSlot", v);
             }}
           />
         </DatePickerProvider>

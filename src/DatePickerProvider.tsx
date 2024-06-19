@@ -41,6 +41,7 @@ function DatePickerProvider<IsRange extends boolean>(
           )
         : new Date(new Date().toISOString()))
   );
+
   const [selectedDay, setSelectedDay] = useState<Date[] | Date | undefined>(
     initialValue
       ? Array.isArray(initialValue)
@@ -58,14 +59,14 @@ function DatePickerProvider<IsRange extends boolean>(
   /**
    * call onChange event
    */
-  useEffect(() => {
-    if (selectedDay !== undefined) {
-      onChange?.(selectedDay! as IsRange extends true ? Date[] : Date);
-    }
-  }, [onChange, selectedDay]);
+  // useEffect(() => {
+  //   if (selectedDay !== undefined) {
+  //     onChange?.(selectedDay! as IsRange extends true ? Date[] : Date);
+  //   }
+  // }, [onChange, selectedDay]);
 
   /**
-   * Update selectedDay if `value` prop is changed (controlled component)
+   * Update internalValue if `value` prop is changed (controlled component)
    */
   useEffect(() => {
     if (value) {
@@ -112,7 +113,7 @@ function DatePickerProvider<IsRange extends boolean>(
   } = useMemo(
     () =>
       getMonthSlots({
-        currentDate,
+        currentDate: currentDate,
         weekStartsOn,
         calendar,
       }),
@@ -155,8 +156,18 @@ function DatePickerProvider<IsRange extends boolean>(
     setCurrentDate(new Date(new Date().setHours(0, 0, 0, 0)));
   };
 
-  const handleClickSlot = (date: Date) => {
-    if (isRange) {
+  const getFinalValue = (date: Date) => {
+    let finalValue: Date | Date[] = date;
+
+    if (isRange && date !== undefined && !Array.isArray(date)) {
+      return;
+    }
+
+    console.log(selectedDay, date);
+
+    if (!isRange) {
+      finalValue = date;
+    } else {
       if (selectedDay !== undefined && !Array.isArray(selectedDay)) return;
 
       if (
@@ -166,18 +177,29 @@ function DatePickerProvider<IsRange extends boolean>(
           new Date(selectedDay[0]).getTime() > new Date(date).getTime())
       ) {
         // FROM
-        setSelectedDay([date]);
+        finalValue = [date];
       } else {
         // To
-        setSelectedDay(
-          [selectedDay[0], date].sort(
-            (a, b) => new Date(a).getTime() - new Date(b).getTime()
-          )
+        finalValue = [selectedDay[0], date].sort(
+          (a, b) => new Date(a).getTime() - new Date(b).getTime()
         );
       }
-    } else {
-      setSelectedDay(date);
     }
+
+    return finalValue;
+  };
+
+  const handleClickSlot = (date: Date) => {
+    const finalValue = getFinalValue(date);
+
+    console.log(finalValue);
+
+    if (finalValue === undefined) {
+      return;
+    }
+
+    setSelectedDay(finalValue);
+    onChange?.(finalValue! as IsRange extends true ? Date[] : Date);
   };
 
   /**
