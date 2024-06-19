@@ -65,7 +65,7 @@ function DatePickerProvider<IsRange extends boolean>(
   }, [onChange, selectedDay]);
 
   /**
-   * Update selectedDay if value prop is changed (controlled component)
+   * Update selectedDay if `value` prop is changed (controlled component)
    */
   useEffect(() => {
     if (value) {

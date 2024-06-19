@@ -6,6 +6,7 @@
 - new: add `TDatePickerOnChange` type to handle onChange event.
 - new: add `TDatePickerValue` type.
 - new: add `onClickSlot` prop to handle click event in `DaySlots` component.
+- chore: use `useCallback` to memoize `onChange` function internally for better performance.
 
 ### version 1.0.3
 
