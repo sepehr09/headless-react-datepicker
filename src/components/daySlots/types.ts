@@ -19,6 +19,7 @@ export type TDaySlotsDayRendererArgs = {
 
 export type TDaySlots = {
   dayRenderer?: (args: TDaySlotsDayRendererArgs) => ReactNode;
+  onClickSlot?: (date: Date) => void;
 
   parentClassName?: string;
   parentStyles?: CSSProperties;

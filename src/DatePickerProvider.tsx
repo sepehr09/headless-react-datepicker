@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { defaultWeekStartsOn } from "./constants/defaults";
 import { PickerContext } from "./store/pickerContext";
 import { TDatePickerProps } from "./types";
@@ -11,13 +11,14 @@ function DatePickerProvider<IsRange extends boolean>(
   props: TDatePickerProps<IsRange>
 ) {
   const {
+    value,
     initialValue,
     defaultStartDate,
     config,
     isRange,
     calendar = "gregory",
     children,
-    onChange,
+    onChange: onChangeProp,
   } = props;
 
   const {
@@ -48,11 +49,56 @@ function DatePickerProvider<IsRange extends boolean>(
       : undefined
   );
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const onChange = useCallback(
+    (onChangeProp as TDatePickerProps<IsRange>["onChange"]) || (() => {}),
+    []
+  ); // Memoize the onChange function
+
+  /**
+   * call onChange event
+   */
   useEffect(() => {
     if (selectedDay !== undefined) {
       onChange?.(selectedDay! as IsRange extends true ? Date[] : Date);
     }
   }, [onChange, selectedDay]);
+
+  /**
+   * Update selectedDay if value prop is changed (controlled component)
+   */
+  useEffect(() => {
+    if (value) {
+      // prevent loop if value is same as selectedDay
+      if (
+        selectedDay &&
+        (Array.isArray(selectedDay)
+          ? selectedDay?.[0]?.toISOString() ===
+              (value as Date[])?.[0].toISOString() &&
+            selectedDay?.[1]?.toISOString() ===
+              (value as Date[])?.[1]?.toISOString()
+          : selectedDay?.toISOString() === (value as Date)?.toISOString())
+      ) {
+        return;
+      }
+
+      const finalValue = value
+        ? Array.isArray(value)
+          ? value?.map((v) => new Date(v))
+          : new Date(value)
+        : undefined;
+
+      setSelectedDay(finalValue);
+
+      setCurrentDate(
+        finalValue
+          ? Array.isArray(finalValue)
+            ? finalValue[0]
+            : finalValue
+          : new Date(new Date().toISOString())
+      );
+    }
+  }, [value]);
 
   const {
     startDateIncludeOtherDays,

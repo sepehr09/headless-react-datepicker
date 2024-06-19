@@ -107,6 +107,7 @@ import { DatePickerProvider } from "headless-react-datepicker";
 
 | Name             | Type                            | Description                                                                                                |
 | ---------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| value            | Date \| Date[]                  | The value of the date picker (Controlled component).                                                       |
 | initialValue     | Date \| Date[]                  | The initial value of the date picker.                                                                      |
 | defaultStartDate | Date                            | The default start date. Useful when you want to be on a different month or year despite the initial value. |
 | config           | TCalendarConfig                 | The configuration for the date picker.                                                                     |
@@ -221,47 +222,48 @@ import { DaySlots } from "headless-react-datepicker";
 
 ### props
 
-| Name                           | Type                                              | Description     | Default |
-| ------------------------------ | ------------------------------------------------- | --------------- | ------- |
-| dayRenderer                    | (args: **TDaySlotsDayRendererArgs**) => ReactNode | Custom renderer |         |
-| parentClassName                | string                                            | parent box      |         |
-| parentStyles                   | CSSProperties                                     | parent box      |         |
-| slotParentClassName            | string                                            |                 |         |
-| slotParentStyles               | CSSProperties                                     |                 |         |
-| slotClassName                  | string                                            |                 |         |
-| slotStyles                     | CSSProperties                                     |                 |         |
-| todayStyles                    | CSSProperties                                     |                 |         |
-| todayClassName                 | string                                            |                 |         |
-| todayParentStyles              | CSSProperties                                     |                 |         |
-| todayParentClassName           | string                                            |                 |         |
-| disableStyles                  | CSSProperties                                     |                 |         |
-| disableClassName               | string                                            |                 |         |
-| disableParentStyles            | CSSProperties                                     |                 |         |
-| disableParentClassName         | string                                            |                 |         |
-| weekendStyles                  | CSSProperties                                     |                 |         |
-| weekendClassName               | string                                            |                 |         |
-| weekendParentStyles            | CSSProperties                                     |                 |         |
-| weekendParentClassName         | string                                            |                 |         |
-| selectedStyles                 | CSSProperties                                     |                 |         |
-| selectedClassName              | string                                            |                 |         |
-| selectedParentStyles           | CSSProperties                                     |                 |         |
-| selectedParentClassName        | string                                            |                 |         |
-| selectableStyles               | CSSProperties                                     |                 |         |
-| selectableClassName            | string                                            |                 |         |
-| selectableParentStyles         | CSSProperties                                     |                 |         |
-| selectableParentClassName      | string                                            |                 |         |
-| inSelectedRangeStyles          | CSSProperties                                     |                 |         |
-| inSelectedRangeClassName       | string                                            |                 |         |
-| inSelectedRangeParentStyles    | CSSProperties                                     |                 |         |
-| inSelectedRangeParentClassName | string                                            |                 |         |
-| startOfRangeStyles             | CSSProperties                                     |                 |         |
-| startOfRangeClassName          | string                                            |                 |         |
-| startOfRangeParentStyles       | CSSProperties                                     |                 |         |
-| startOfRangeParentClassName    | string                                            |                 |         |
-| endOfRangeStyles               | CSSProperties                                     |                 |         |
-| endOfRangeClassName            | string                                            |                 |         |
-| endOfRangeParentStyles         | CSSProperties                                     |                 |         |
-| endOfRangeParentClassName      | string                                            |                 |         |
+| Name                           | Type                                              | Description        | Default |
+| ------------------------------ | ------------------------------------------------- | ------------------ | ------- |
+| dayRenderer                    | (args: **TDaySlotsDayRendererArgs**) => ReactNode | Custom renderer    |         |
+| onClickSlot                    | (date: **Date**) => void                          | when click on slot |         |
+| parentClassName                | string                                            | parent box         |         |
+| parentStyles                   | CSSProperties                                     | parent box         |         |
+| slotParentClassName            | string                                            |                    |         |
+| slotParentStyles               | CSSProperties                                     |                    |         |
+| slotClassName                  | string                                            |                    |         |
+| slotStyles                     | CSSProperties                                     |                    |         |
+| todayStyles                    | CSSProperties                                     |                    |         |
+| todayClassName                 | string                                            |                    |         |
+| todayParentStyles              | CSSProperties                                     |                    |         |
+| todayParentClassName           | string                                            |                    |         |
+| disableStyles                  | CSSProperties                                     |                    |         |
+| disableClassName               | string                                            |                    |         |
+| disableParentStyles            | CSSProperties                                     |                    |         |
+| disableParentClassName         | string                                            |                    |         |
+| weekendStyles                  | CSSProperties                                     |                    |         |
+| weekendClassName               | string                                            |                    |         |
+| weekendParentStyles            | CSSProperties                                     |                    |         |
+| weekendParentClassName         | string                                            |                    |         |
+| selectedStyles                 | CSSProperties                                     |                    |         |
+| selectedClassName              | string                                            |                    |         |
+| selectedParentStyles           | CSSProperties                                     |                    |         |
+| selectedParentClassName        | string                                            |                    |         |
+| selectableStyles               | CSSProperties                                     |                    |         |
+| selectableClassName            | string                                            |                    |         |
+| selectableParentStyles         | CSSProperties                                     |                    |         |
+| selectableParentClassName      | string                                            |                    |         |
+| inSelectedRangeStyles          | CSSProperties                                     |                    |         |
+| inSelectedRangeClassName       | string                                            |                    |         |
+| inSelectedRangeParentStyles    | CSSProperties                                     |                    |         |
+| inSelectedRangeParentClassName | string                                            |                    |         |
+| startOfRangeStyles             | CSSProperties                                     |                    |         |
+| startOfRangeClassName          | string                                            |                    |         |
+| startOfRangeParentStyles       | CSSProperties                                     |                    |         |
+| startOfRangeParentClassName    | string                                            |                    |         |
+| endOfRangeStyles               | CSSProperties                                     |                    |         |
+| endOfRangeClassName            | string                                            |                    |         |
+| endOfRangeParentStyles         | CSSProperties                                     |                    |         |
+| endOfRangeParentClassName      | string                                            |                    |         |
 
 ### TDaySlotsDayRendererArgs props
 

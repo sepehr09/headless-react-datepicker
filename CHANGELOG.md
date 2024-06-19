@@ -1,5 +1,12 @@
 # Changelog
 
+### version 1.1.0
+
+- new: add `value` prop to support controlled component.
+- new: add `TDatePickerOnChange` type to handle onChange event.
+- new: add `TDatePickerValue` type.
+- new: add `onClickSlot` prop to handle click event in `DaySlots` component.
+
 ### version 1.0.3
 
 - fix: timezone issue causing wrong selection in month and year dropdown.
