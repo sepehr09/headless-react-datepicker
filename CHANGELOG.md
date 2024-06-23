@@ -6,7 +6,7 @@
 - new: add keyboard events for better accessibility.
 - new: add keyboard arrow navigation for better accessibility so that user can navigate through the calendar using arrow keys.
 - chore: refactor some codes to improve performance.
-- fix: duplicate classNames will be removed now.
+- fix: duplicate classNames will be removed now on elements.
 
 ### version 1.1.0
 
