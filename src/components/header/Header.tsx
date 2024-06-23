@@ -34,7 +34,16 @@ function Header({
 
   return (
     <div className="rhmdp-flex rhmdp-items-center rhmdp-justify-between rhmdp-py-4 rhmdp-select-none">
-      <div className="rhmdp-cursor-pointer" onClick={() => goToPrevMonth?.()}>
+      <div
+        className="rhmdp-cursor-pointer"
+        role="button"
+        tabIndex={0}
+        aria-label="Previous Month"
+        onClick={() => goToPrevMonth?.()}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") goToPrevMonth?.();
+        }}
+      >
         {leftIcon || <ChevronLeft />}
       </div>
       <select
@@ -94,7 +103,16 @@ function Header({
           );
         })}
       </select>
-      <div className="rhmdp-cursor-pointer" onClick={() => goToNextMonth?.()}>
+      <div
+        className="rhmdp-cursor-pointer"
+        aria-label="Previous Month"
+        role="button"
+        tabIndex={0}
+        onClick={() => goToNextMonth?.()}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") goToNextMonth?.();
+        }}
+      >
         {rightIcon || <ChevronRight />}
       </div>
     </div>

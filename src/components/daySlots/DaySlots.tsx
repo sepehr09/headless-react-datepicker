@@ -1,4 +1,10 @@
-import { ReactNode, useContext } from "react";
+import {
+  CSSProperties,
+  KeyboardEvent,
+  ReactNode,
+  useContext,
+  useRef,
+} from "react";
 import { defaultWeekStartsOn } from "../../constants/defaults";
 import { bindWeekDayToNumber } from "../../constants/weekdays";
 import { PickerContext } from "../../store/pickerContext";
@@ -81,8 +87,19 @@ function DaySlots(props: TDaySlots) {
     weekStartsOn = defaultWeekStartsOn,
   } = config || {};
 
+  const gridRef = useRef<HTMLDivElement>(null);
+
   const dayFormatter = (day: Date) => {
     return new Intl.DateTimeFormat(locale, {
+      day: dayFormat,
+      calendar,
+    }).format(day);
+  };
+
+  const ariaDayFormatter = (day: Date) => {
+    return new Intl.DateTimeFormat(locale, {
+      year: "numeric",
+      month: "long",
       day: dayFormat,
       calendar,
     }).format(day);
@@ -130,6 +147,45 @@ function DaySlots(props: TDaySlots) {
     onClickSlotProp?.(date);
   };
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>, date?: Date) => {
+    if (event.key === "Enter" && date) onClickSlot?.(date);
+
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    const activeElement = document.activeElement as HTMLElement;
+    if (!activeElement || !grid.contains(activeElement)) return;
+
+    const items = Array.from(
+      grid.querySelectorAll("[role='button']")
+    ) as HTMLElement[];
+    const currentIndex = items.indexOf(activeElement);
+
+    const columns = 7;
+
+    let nextIndex;
+    switch (event.key) {
+      case "ArrowRight":
+        nextIndex = (currentIndex + 1) % items.length;
+        break;
+      case "ArrowLeft":
+        nextIndex = (currentIndex - 1 + items.length) % items.length;
+        break;
+      case "ArrowDown":
+        nextIndex = (currentIndex + columns) % items.length;
+        if (nextIndex >= items.length) nextIndex -= items.length;
+        break;
+      case "ArrowUp":
+        nextIndex = (currentIndex - columns + items.length) % items.length;
+        if (nextIndex < 0) nextIndex += items.length;
+        break;
+      default:
+        return;
+    }
+
+    items[nextIndex]?.focus();
+  };
+
   const diff =
     daysOfMonth?.[0]?.getDay() &&
     (daysOfMonth?.[0]?.getDay() - bindWeekDayToNumber[weekStartsOn] + 7) % 7;
@@ -140,13 +196,16 @@ function DaySlots(props: TDaySlots) {
         "rhmdp-grid rhmdp-grid-cols-7 *:rhmdp-text-center",
         parentClassName,
       ])}
+      role="presentation"
       style={parentStyles}
+      ref={gridRef}
     >
       {!!diff &&
         Array.from({ length: diff }, (_, i) => i).reduce<ReactNode[]>(
           (acc) => [...acc, <div key={acc.length} style={{ height: 42 }} />],
           []
         )}
+
       {daysOfMonth?.map((date) => {
         const IsToday = isToday(date);
 
@@ -176,6 +235,9 @@ function DaySlots(props: TDaySlots) {
           ?.map((w) => bindWeekDayToNumber[w])
           .includes(date.getDay() as Day);
 
+        /**
+         * (otherDays and weekends) can be Enabled but NOT Selectable
+         */
         const isSelectable = !!(isInWeekend
           ? weekendSelectable
           : isOtherMonth
@@ -183,9 +245,13 @@ function DaySlots(props: TDaySlots) {
           : !isDisabled);
 
         const formattedDay = dayFormatter(date);
+        const ariaFormattedDay = ariaDayFormatter(date);
 
         if (!showOtherDays && isOtherMonth) return <div />;
 
+        /* -------------------------------------------------------------------------- */
+        /*                     render custom component if provided                    */
+        /* -------------------------------------------------------------------------- */
         if (dayRenderer !== undefined && typeof dayRenderer === "function") {
           return dayRenderer({
             date,
@@ -202,77 +268,83 @@ function DaySlots(props: TDaySlots) {
           });
         }
 
+        const parentStyles: CSSProperties = {
+          ...(slotParentStyles && slotParentStyles),
+          ...(IsToday && todayParentStyles),
+          ...(isDisabled && disableParentStyles),
+          ...(isInWeekend && weekendParentStyles),
+          ...(isSelected && selectedParentStyles),
+          ...(isSelectable && selectableParentStyles),
+          ...(isInSelectedRange && inSelectedRangeParentStyles),
+          ...(isStartOfRange && startOfRangeParentStyles),
+          ...(isEndOfRange && endOfRangeParentStyles),
+        };
+
+        const dayStyles: CSSProperties = {
+          ...(slotStyles && slotStyles),
+          ...(IsToday && todayStyles),
+          ...(isDisabled && disableStyles),
+          ...(isInWeekend && weekendStyles),
+          ...(isSelectable && selectableStyles),
+          ...(isStartOfRange && startOfRangeStyles),
+          ...(isEndOfRange && endOfRangeStyles),
+          ...(isSelected && selectedStyles),
+          ...(isInSelectedRange && inSelectedRangeStyles),
+        };
+
+        const parentClassNames = classJoin([
+          "rhmdp-border rhmdp-border-transparent",
+          slotParentClassName,
+          IsToday && "rhmdp-text-blue-600",
+          IsToday && todayParentClassName,
+          isSelectable ? "rhmdp-cursor-pointer" : "rhmdp-cursor-default",
+          isSelectable && selectableParentClassName,
+          isDisabled && "rhmdp-text-gray-400",
+          isDisabled && disableParentClassName,
+          isInSelectedRange && "rhmdp-bg-[#EAEAEC]",
+          isInSelectedRange && inSelectedRangeParentClassName,
+          isStartOfRange && "rhmdp-rounded-s-lg",
+          isStartOfRange && startOfRangeParentClassName,
+          isEndOfRange && "rhmdp-rounded-e-lg",
+          isEndOfRange && endOfRangeParentClassName,
+          isInWeekend && "rhmdp-text-red-500",
+          isInWeekend && weekendParentClassName,
+          isSelected && selectedParentClassName,
+        ]);
+
+        const dayClassNames = classJoin([
+          "rhmdp-p-2 rhmdp-rounded-lg",
+          IsToday && todayClassName,
+          isSelectable && !isSelected && "hover:rhmdp-bg-gray-300",
+          isSelectable && selectableClassName,
+          isDisabled && disableClassName,
+          isInSelectedRange && inSelectedRangeClassName,
+          isStartOfRange && startOfRangeClassName,
+          isEndOfRange && endOfRangeClassName,
+          isInWeekend && weekendClassName,
+          isSelected &&
+            "rhmdp-bg-blue-500 hover:rhmdp-bg-blue-500 rhmdp-text-white rhmdp-h-full",
+          isSelected && selectedClassName,
+          slotClassName,
+        ]);
+
         return (
           <div
             key={date.toString()}
-            className={classJoin([
-              "rhmdp-border rhmdp-border-transparent",
-              slotParentClassName,
-              IsToday &&
-                classJoin(["rhmdp-text-blue-600", todayParentClassName]),
-              isSelectable
-                ? classJoin(["rhmdp-cursor-pointer", selectableParentClassName])
-                : "rhmdp-cursor-default",
-              isDisabled &&
-                classJoin(["rhmdp-text-gray-400", disableParentClassName]),
-              isInSelectedRange &&
-                classJoin([
-                  "rhmdp-bg-[#EAEAEC]",
-                  inSelectedRangeParentClassName,
-                ]),
-              isStartOfRange &&
-                classJoin(["rhmdp-rounded-s-lg", startOfRangeParentClassName]),
-              isEndOfRange &&
-                classJoin(["rhmdp-rounded-e-lg", endOfRangeParentClassName]),
-              isInWeekend &&
-                classJoin(["rhmdp-text-red-500", weekendParentClassName]),
-              isSelected && classJoin([selectedParentClassName]),
-            ])}
-            style={{
-              ...(slotParentStyles && slotParentStyles),
-              ...(IsToday && todayParentStyles),
-              ...(isDisabled && disableParentStyles),
-              ...(isInWeekend && weekendParentStyles),
-              ...(isSelected && selectedParentStyles),
-              ...(isSelectable && selectableParentStyles),
-              ...(isInSelectedRange && inSelectedRangeParentStyles),
-              ...(isStartOfRange && startOfRangeParentStyles),
-              ...(isEndOfRange && endOfRangeParentStyles),
-            }}
+            className={parentClassNames}
+            style={parentStyles}
           >
             <div
+              role="button"
+              tabIndex={IsToday || isSelected ? 0 : -1}
+              aria-disabled={isDisabled || !isSelectable}
+              aria-label={`${ariaFormattedDay}`}
               onClick={() => onClickSlot?.(date)}
-              className={classJoin([
-                "rhmdp-p-2 rhmdp-rounded-lg",
-                IsToday && classJoin([todayClassName]),
-                isSelectable &&
-                  classJoin([
-                    !isSelected && "hover:rhmdp-bg-gray-300",
-                    selectableClassName,
-                  ]),
-                isDisabled && classJoin([disableClassName]),
-                isInSelectedRange && classJoin([inSelectedRangeClassName]),
-                isStartOfRange && classJoin([startOfRangeClassName]),
-                isEndOfRange && classJoin([endOfRangeClassName]),
-                isInWeekend && classJoin([weekendClassName]),
-                isSelected &&
-                  classJoin([
-                    "rhmdp-bg-blue-500 hover:rhmdp-bg-blue-500 rhmdp-text-white rhmdp-h-full",
-                    selectedClassName,
-                  ]),
-                slotClassName,
-              ])}
-              style={{
-                ...(slotStyles && slotStyles),
-                ...(IsToday && todayStyles),
-                ...(isDisabled && disableStyles),
-                ...(isInWeekend && weekendStyles),
-                ...(isSelectable && selectableStyles),
-                ...(isStartOfRange && startOfRangeStyles),
-                ...(isEndOfRange && endOfRangeStyles),
-                ...(isSelected && selectedStyles),
-                ...(isInSelectedRange && inSelectedRangeStyles),
+              onKeyDown={(e) => {
+                handleKeyDown(e, date);
               }}
+              className={dayClassNames}
+              style={dayStyles}
             >
               {formattedDay}
             </div>

@@ -31,23 +31,42 @@ function DatePickerProvider<IsRange extends boolean>(
     allowBackwardRange,
   } = config || {};
 
-  const [currentDate, setCurrentDate] = useState<Date>(
-    defaultStartDate ||
-      (initialValue
-        ? new Date(
-            Array.isArray(initialValue)
-              ? initialValue?.[0].toISOString()
-              : initialValue.toISOString()
-          )
-        : new Date(new Date().toISOString()))
+  const finalInitialValue = useMemo(() => {
+    if (initialValue) {
+      return Array.isArray(initialValue)
+        ? initialValue.map((v) => new Date(v))
+        : new Date(initialValue);
+    }
+    return undefined;
+  }, [initialValue]);
+
+  const finalInitialDate = useMemo(() => {
+    if (defaultStartDate) {
+      return new Date(defaultStartDate);
+    }
+
+    if (initialValue) {
+      return Array.isArray(initialValue)
+        ? new Date(initialValue?.[0].toISOString())
+        : new Date(initialValue.toISOString());
+    }
+
+    return new Date(new Date().toISOString());
+  }, [defaultStartDate, initialValue]);
+
+  /**
+   * used to show the month in the calendar
+   */
+  const [currentDate, setCurrentDate] = useState<Date>(finalInitialDate);
+
+  /**
+   * internal value (selected day or range of days)
+   */
+  const [internalValue, setInternalValue] = useState<Date[] | Date | undefined>(
+    finalInitialValue
   );
-  const [selectedDay, setSelectedDay] = useState<Date[] | Date | undefined>(
-    initialValue
-      ? Array.isArray(initialValue)
-        ? initialValue?.map((v) => new Date(v))
-        : new Date(initialValue)
-      : undefined
-  );
+
+  const finalValue = value || internalValue;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onChange = useCallback(
@@ -56,28 +75,19 @@ function DatePickerProvider<IsRange extends boolean>(
   ); // Memoize the onChange function
 
   /**
-   * call onChange event
-   */
-  useEffect(() => {
-    if (selectedDay !== undefined) {
-      onChange?.(selectedDay! as IsRange extends true ? Date[] : Date);
-    }
-  }, [onChange, selectedDay]);
-
-  /**
-   * Update selectedDay if `value` prop is changed (controlled component)
+   * Update internalValue if `value` prop is changed (controlled component)
    */
   useEffect(() => {
     if (value) {
       // prevent loop if value is same as selectedDay
       if (
-        selectedDay &&
-        (Array.isArray(selectedDay)
-          ? selectedDay?.[0]?.toISOString() ===
+        internalValue &&
+        (Array.isArray(internalValue)
+          ? internalValue?.[0]?.toISOString() ===
               (value as Date[])?.[0].toISOString() &&
-            selectedDay?.[1]?.toISOString() ===
+            internalValue?.[1]?.toISOString() ===
               (value as Date[])?.[1]?.toISOString()
-          : selectedDay?.toISOString() === (value as Date)?.toISOString())
+          : internalValue?.toISOString() === (value as Date)?.toISOString())
       ) {
         return;
       }
@@ -88,7 +98,7 @@ function DatePickerProvider<IsRange extends boolean>(
           : new Date(value)
         : undefined;
 
-      setSelectedDay(finalValue);
+      setInternalValue(finalValue);
 
       setCurrentDate(
         finalValue
@@ -155,29 +165,51 @@ function DatePickerProvider<IsRange extends boolean>(
     setCurrentDate(new Date(new Date().setHours(0, 0, 0, 0)));
   };
 
-  const handleClickSlot = (date: Date) => {
-    if (isRange) {
-      if (selectedDay !== undefined && !Array.isArray(selectedDay)) return;
+  const getSingleSelectionValue = (date: Date) => {
+    return date;
+  };
 
-      if (
-        !selectedDay?.length ||
-        selectedDay.length === 2 ||
-        (!allowBackwardRange &&
-          new Date(selectedDay[0]).getTime() > new Date(date).getTime())
-      ) {
-        // FROM
-        setSelectedDay([date]);
-      } else {
-        // To
-        setSelectedDay(
-          [selectedDay[0], date].sort(
-            (a, b) => new Date(a).getTime() - new Date(b).getTime()
-          )
-        );
-      }
-    } else {
-      setSelectedDay(date);
+  const getRangeSelectionValue = (date: Date) => {
+    if (internalValue !== undefined && !Array.isArray(internalValue)) return;
+
+    // Range (from)
+    if (
+      !internalValue?.length ||
+      internalValue.length === 2 ||
+      (!allowBackwardRange &&
+        new Date(internalValue[0]).getTime() > new Date(date).getTime())
+    ) {
+      return [date];
     }
+
+    // Range (To)
+    return [internalValue[0], date].sort(
+      (a, b) => new Date(a).getTime() - new Date(b).getTime()
+    );
+  };
+
+  const getFinalValue = (date: Date) => {
+    if (!isRange) {
+      return getSingleSelectionValue(date);
+    }
+
+    return getRangeSelectionValue(date);
+  };
+
+  /**
+   * Handle click on a day slot
+   */
+  const handleClickSlot = (date: Date) => {
+    const finalValue = getFinalValue(date);
+
+    if (finalValue === undefined) return;
+
+    setInternalValue(finalValue);
+
+    /**
+     * call onChange event
+     */
+    onChange?.(finalValue! as IsRange extends true ? Date[] : Date);
   };
 
   /**
@@ -257,7 +289,7 @@ function DatePickerProvider<IsRange extends boolean>(
         endDateIncludeOtherDays,
         firstDayOfMonth,
         lastDayOfMonth,
-        selectedDay,
+        selectedDay: finalValue,
         monthInTheCalendar,
         totalDaysInTheCalendar,
         yearInTheCalendar,
