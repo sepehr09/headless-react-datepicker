@@ -86,7 +86,7 @@ const RenderControlledDatePicker = <T extends boolean>(
         <DatePickerProvider
           {...props}
           initialValue={value}
-          // value={value}
+          value={value}
           onChange={onChange}
         >
           <Title />
@@ -109,7 +109,7 @@ const RenderControlledDatePicker = <T extends boolean>(
           <WeekDays />
           <DaySlots
             onClickSlot={(v) => {
-              // console.log("onClickSlot", v);
+              console.log("onClickSlot", v);
             }}
           />
         </DatePickerProvider>
@@ -119,7 +119,7 @@ const RenderControlledDatePicker = <T extends boolean>(
           onClick={() =>
             setValue(
               (props.isRange
-                ? [new Date("2024-06-24")]
+                ? [new Date("2024-06-24"), new Date("2024-06-28")]
                 : new Date("2024-06-24")) as TDatePickerProps<T>["value"]
             )
           }
@@ -268,7 +268,7 @@ export const ControlledComponent: Story = {
   render: RenderControlledDatePicker,
   args: {
     isRange: false,
-    initialValue: new Date(),
+    initialValue: new Date("2024-02-06"),
     calendar: "gregory",
     config: {
       locale: "en-US",
