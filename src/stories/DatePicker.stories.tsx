@@ -107,9 +107,6 @@ const RenderControlledDatePicker = <T extends boolean>(
             onClickSlot={(v) => {
               console.log("onClickSlot", v);
             }}
-            slotClassName="hover:rhmdp-bg-red-300"
-            endOfRangeClassName="hover:!rhmdp-bg-green-300"
-            startOfRangeClassName="hover:!rhmdp-bg-green-300"
           />
         </DatePickerProvider>
       </Card>
@@ -267,8 +264,8 @@ export const PersianInEn_US: Story = {
 export const ControlledComponent: Story = {
   render: RenderControlledDatePicker,
   args: {
-    isRange: true,
-    // initialValue: new Date("2024-02-06"),
+    isRange: false,
+    initialValue: new Date("2024-02-06"),
     calendar: "gregory",
     config: {
       locale: "en-US",
