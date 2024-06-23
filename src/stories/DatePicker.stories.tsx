@@ -52,14 +52,12 @@ const RenderDatePicker = <T extends boolean>(props: TDatePickerProps<T>) => {
             color: "#000",
             padding: "5px",
             borderRadius: "5px",
-            outline: "none",
           }}
           yearSelectStyles={{
             backgroundColor: "#f0f0f0",
             color: "#000",
             padding: "5px",
             borderRadius: "5px",
-            outline: "none",
           }}
         />
         <WeekDays />
@@ -96,14 +94,12 @@ const RenderControlledDatePicker = <T extends boolean>(
               color: "#000",
               padding: "5px",
               borderRadius: "5px",
-              outline: "none",
             }}
             yearSelectStyles={{
               backgroundColor: "#f0f0f0",
               color: "#000",
               padding: "5px",
               borderRadius: "5px",
-              outline: "none",
             }}
           />
           <WeekDays />
@@ -111,6 +107,9 @@ const RenderControlledDatePicker = <T extends boolean>(
             onClickSlot={(v) => {
               console.log("onClickSlot", v);
             }}
+            slotClassName="hover:rhmdp-bg-red-300"
+            endOfRangeClassName="hover:!rhmdp-bg-green-300"
+            startOfRangeClassName="hover:!rhmdp-bg-green-300"
           />
         </DatePickerProvider>
       </Card>
@@ -147,6 +146,7 @@ export const SingleSelection: Story = {
       dayFormat: "numeric",
       weekends: ["saturday", "sunday"],
       weekendSelectable: true,
+
       // yearRangeFrom: 1330,
       // yearRangeTo: 1400,
       // minDate: new Date("2024-01-01T00:00:00.000Z"),
@@ -267,8 +267,8 @@ export const PersianInEn_US: Story = {
 export const ControlledComponent: Story = {
   render: RenderControlledDatePicker,
   args: {
-    isRange: false,
-    initialValue: new Date("2024-02-06"),
+    isRange: true,
+    // initialValue: new Date("2024-02-06"),
     calendar: "gregory",
     config: {
       locale: "en-US",

@@ -122,7 +122,7 @@ function DatePickerProvider<IsRange extends boolean>(
   } = useMemo(
     () =>
       getMonthSlots({
-        currentDate: currentDate,
+        currentDate,
         weekStartsOn,
         calendar,
       }),
@@ -165,33 +165,40 @@ function DatePickerProvider<IsRange extends boolean>(
     setCurrentDate(new Date(new Date().setHours(0, 0, 0, 0)));
   };
 
-  const getFinalValue = (date: Date) => {
-    let finalValue: Date | Date[] = date;
-
-    if (!isRange) {
-      finalValue = date;
-    } else {
-      if (internalValue !== undefined && !Array.isArray(internalValue)) return;
-
-      if (
-        !internalValue?.length ||
-        internalValue.length === 2 ||
-        (!allowBackwardRange &&
-          new Date(internalValue[0]).getTime() > new Date(date).getTime())
-      ) {
-        // FROM
-        finalValue = [date];
-      } else {
-        // To
-        finalValue = [internalValue[0], date].sort(
-          (a, b) => new Date(a).getTime() - new Date(b).getTime()
-        );
-      }
-    }
-
-    return finalValue;
+  const getSingleSelectionValue = (date: Date) => {
+    return date;
   };
 
+  const getRangeSelectionValue = (date: Date) => {
+    if (internalValue !== undefined && !Array.isArray(internalValue)) return;
+
+    // Range (from)
+    if (
+      !internalValue?.length ||
+      internalValue.length === 2 ||
+      (!allowBackwardRange &&
+        new Date(internalValue[0]).getTime() > new Date(date).getTime())
+    ) {
+      return [date];
+    }
+
+    // Range (To)
+    return [internalValue[0], date].sort(
+      (a, b) => new Date(a).getTime() - new Date(b).getTime()
+    );
+  };
+
+  const getFinalValue = (date: Date) => {
+    if (!isRange) {
+      return getSingleSelectionValue(date);
+    }
+
+    return getRangeSelectionValue(date);
+  };
+
+  /**
+   * Handle click on a day slot
+   */
   const handleClickSlot = (date: Date) => {
     const finalValue = getFinalValue(date);
 

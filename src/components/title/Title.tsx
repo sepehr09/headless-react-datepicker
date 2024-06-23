@@ -30,8 +30,15 @@ function Title({
         "rhmdp-text-2xl rhmdp-font-bold rhmdp-cursor-pointer",
         className,
       ])}
-      onClick={goToCurrentMonth}
       style={style}
+      tabIndex={0}
+      onClick={goToCurrentMonth}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          goToCurrentMonth();
+        }
+      }}
+      aria-label="Go to current month"
     >
       {formattedDate}
     </div>
