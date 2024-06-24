@@ -204,12 +204,14 @@ function DatePickerProvider<IsRange extends boolean>(
 
     if (finalValue === undefined) return;
 
-    setInternalValue(finalValue);
-
     /**
      * call onChange event
      */
     onChange?.(finalValue! as IsRange extends true ? Date[] : Date);
+
+    if (!value) {
+      setInternalValue(finalValue);
+    }
   };
 
   /**

@@ -1,6 +1,10 @@
 # Changelog
 
-## version 1.1.1
+### version 1.1.2
+
+- fix: minor fix onChange wont return range if value is provided and value was not changed.
+
+### version 1.1.1
 
 - new: add aria-label and role for better accessibility.
 - new: add keyboard events for better accessibility.
