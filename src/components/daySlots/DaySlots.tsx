@@ -265,31 +265,32 @@ function DaySlots(props: TDaySlots) {
             isInWeekend,
             isSelected,
             handleClickSlot: onClickSlot,
+            handleKeyDown,
           });
         }
 
         const parentStyles: CSSProperties = {
           ...(slotParentStyles && slotParentStyles),
           ...(IsToday && todayParentStyles),
-          ...(isDisabled && disableParentStyles),
-          ...(isInWeekend && weekendParentStyles),
-          ...(isSelected && selectedParentStyles),
           ...(isSelectable && selectableParentStyles),
+          ...(isSelected && selectedParentStyles),
           ...(isInSelectedRange && inSelectedRangeParentStyles),
           ...(isStartOfRange && startOfRangeParentStyles),
           ...(isEndOfRange && endOfRangeParentStyles),
+          ...(isInWeekend && weekendParentStyles),
+          ...(isDisabled && disableParentStyles),
         };
 
         const dayStyles: CSSProperties = {
           ...(slotStyles && slotStyles),
           ...(IsToday && todayStyles),
-          ...(isDisabled && disableStyles),
-          ...(isInWeekend && weekendStyles),
           ...(isSelectable && selectableStyles),
-          ...(isStartOfRange && startOfRangeStyles),
-          ...(isEndOfRange && endOfRangeStyles),
           ...(isSelected && selectedStyles),
           ...(isInSelectedRange && inSelectedRangeStyles),
+          ...(isStartOfRange && startOfRangeStyles),
+          ...(isEndOfRange && endOfRangeStyles),
+          ...(isInWeekend && weekendStyles),
+          ...(isDisabled && disableStyles),
         };
 
         const parentClassNames = classJoin(
@@ -299,8 +300,7 @@ function DaySlots(props: TDaySlots) {
           IsToday && todayParentClassName,
           isSelectable ? "rhmdp-cursor-pointer" : "rhmdp-cursor-default",
           isSelectable && selectableParentClassName,
-          isDisabled && "rhmdp-text-gray-400",
-          isDisabled && disableParentClassName,
+          isSelected && selectedParentClassName,
           isInSelectedRange && "rhmdp-bg-[#EAEAEC]",
           isInSelectedRange && inSelectedRangeParentClassName,
           isStartOfRange && "rhmdp-rounded-s-lg",
@@ -309,23 +309,24 @@ function DaySlots(props: TDaySlots) {
           isEndOfRange && endOfRangeParentClassName,
           isInWeekend && "rhmdp-text-red-500",
           isInWeekend && weekendParentClassName,
-          isSelected && selectedParentClassName
+          isDisabled && "rhmdp-text-gray-400",
+          isDisabled && disableParentClassName
         );
 
         const dayClassNames = classJoin(
           "rhmdp-p-2 rhmdp-rounded-lg",
+          slotClassName,
           IsToday && todayClassName,
           isSelectable && !isSelected && "hover:rhmdp-bg-gray-300",
           isSelectable && selectableClassName,
-          isDisabled && disableClassName,
+          isSelected &&
+            "rhmdp-bg-blue-500 hover:rhmdp-bg-blue-500 rhmdp-text-white rhmdp-h-full",
+          isSelected && selectedClassName,
           isInSelectedRange && inSelectedRangeClassName,
           isStartOfRange && startOfRangeClassName,
           isEndOfRange && endOfRangeClassName,
           isInWeekend && weekendClassName,
-          isSelected &&
-            "rhmdp-bg-blue-500 hover:rhmdp-bg-blue-500 rhmdp-text-white rhmdp-h-full",
-          isSelected && selectedClassName,
-          slotClassName
+          isDisabled && disableClassName
         );
 
         return (
