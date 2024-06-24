@@ -15,6 +15,7 @@ export type TDaySlotsDayRendererArgs = {
   isInWeekend: boolean;
   isSelected: boolean;
   handleClickSlot: (date: Date) => void;
+  handleKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, date: Date) => void;
 };
 
 export type TDaySlots = {
