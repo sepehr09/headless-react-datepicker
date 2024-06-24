@@ -192,10 +192,10 @@ function DaySlots(props: TDaySlots) {
 
   return (
     <div
-      className={classJoin([
+      className={classJoin(
         "rhmdp-grid rhmdp-grid-cols-7 *:rhmdp-text-center",
-        parentClassName,
-      ])}
+        parentClassName
+      )}
       role="presentation"
       style={parentStyles}
       ref={gridRef}
@@ -292,7 +292,7 @@ function DaySlots(props: TDaySlots) {
           ...(isInSelectedRange && inSelectedRangeStyles),
         };
 
-        const parentClassNames = classJoin([
+        const parentClassNames = classJoin(
           "rhmdp-border rhmdp-border-transparent",
           slotParentClassName,
           IsToday && "rhmdp-text-blue-600",
@@ -309,10 +309,10 @@ function DaySlots(props: TDaySlots) {
           isEndOfRange && endOfRangeParentClassName,
           isInWeekend && "rhmdp-text-red-500",
           isInWeekend && weekendParentClassName,
-          isSelected && selectedParentClassName,
-        ]);
+          isSelected && selectedParentClassName
+        );
 
-        const dayClassNames = classJoin([
+        const dayClassNames = classJoin(
           "rhmdp-p-2 rhmdp-rounded-lg",
           IsToday && todayClassName,
           isSelectable && !isSelected && "hover:rhmdp-bg-gray-300",
@@ -325,8 +325,8 @@ function DaySlots(props: TDaySlots) {
           isSelected &&
             "rhmdp-bg-blue-500 hover:rhmdp-bg-blue-500 rhmdp-text-white rhmdp-h-full",
           isSelected && selectedClassName,
-          slotClassName,
-        ]);
+          slotClassName
+        );
 
         return (
           <div

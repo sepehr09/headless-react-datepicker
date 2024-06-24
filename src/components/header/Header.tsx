@@ -64,12 +64,12 @@ function Header({
                 ? monthSelectedOptionStyles
                 : {}),
             }}
-            className={classJoin([
+            className={classJoin(
               monthOptionClassName,
               month.value === monthInTheCalendar
                 ? monthSelectedOptionClassName
-                : "",
-            ])}
+                : ""
+            )}
           >
             {month.label}
           </option>
@@ -93,10 +93,10 @@ function Header({
                 ...yearOptionStyles,
                 ...(year === yearInTheCalendar ? yearSelectedOptionStyles : {}),
               }}
-              className={classJoin([
+              className={classJoin(
                 yearOptionClassName,
-                year === yearInTheCalendar ? yearSelectedOptionClassName : "",
-              ])}
+                year === yearInTheCalendar ? yearSelectedOptionClassName : ""
+              )}
             >
               {year}
             </option>
