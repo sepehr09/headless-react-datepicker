@@ -13,11 +13,13 @@ const prefixesList = [
 
 /** used for concatenating multiple classNames */
 export const classJoin = (
-  classes: (string | false | undefined | null)[]
+  ...classes: (string | false | undefined | null)[]
 ): string => {
   const classMap: { [key: string]: string } = {};
 
-  classes.filter(Boolean).forEach((className) => {
+  const splitClasses = classes.map((c) => c && c?.split(" ")).flat();
+
+  splitClasses.filter(Boolean).forEach((className) => {
     if (!className) return;
 
     const prefix = prefixesList.find(
