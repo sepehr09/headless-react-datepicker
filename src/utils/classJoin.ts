@@ -1,4 +1,4 @@
-const prefixes = [
+const prefixesList = [
   "hover:",
   "p-",
   "bg-",
@@ -19,7 +19,15 @@ export const classJoin = (
 
   classes.filter(Boolean).forEach((className) => {
     if (!className) return;
-    const prefix = prefixes.find((p) => className.startsWith(p));
+
+    const prefix = prefixesList.find(
+      (p) => className.startsWith(p) || className.startsWith(`rhmdp-${p}`)
+      // we also check for rhmdp- prefix
+      // because we use custom tailwind prefix (rhmdp-)
+      // so if user uses the default tailwind prefix (e.g. bg-)
+      // we should also remove the rhmdp-bg- to avoid duplication
+    );
+
     if (prefix) {
       classMap[prefix] = className;
     } else {

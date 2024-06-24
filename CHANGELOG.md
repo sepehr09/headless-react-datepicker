@@ -3,6 +3,7 @@
 ### version 1.1.2
 
 - fix: minor fix onChange wont return range if value is provided and value was not changed.
+- fix: duplicate classNames fixed for able to use tailwindcss classes.
 
 ### version 1.1.1
 
