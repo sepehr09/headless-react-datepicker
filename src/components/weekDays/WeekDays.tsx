@@ -23,7 +23,7 @@ function WeekDays({
 
   return (
     <div
-      className={classJoin(["rhmdp-grid rhmdp-grid-cols-7", rootClassName])}
+      className={classJoin("rhmdp-grid rhmdp-grid-cols-7", rootClassName)}
       style={rootStyle}
     >
       {Array.from({ length: 7 }).map((_, index) => {
@@ -50,10 +50,10 @@ function WeekDays({
         return (
           <div
             key={index}
-            className={classJoin([
+            className={classJoin(
               `rhmdp-text-center rhmdp-font-bold`,
-              className,
-            ])}
+              className
+            )}
             style={style}
           >
             {formattedTitle}

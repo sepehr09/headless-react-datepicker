@@ -26,10 +26,10 @@ function Title({
 
   return (
     <div
-      className={classJoin([
+      className={classJoin(
         "rhmdp-text-2xl rhmdp-font-bold rhmdp-cursor-pointer",
-        className,
-      ])}
+        className
+      )}
       style={style}
       tabIndex={0}
       onClick={goToCurrentMonth}
