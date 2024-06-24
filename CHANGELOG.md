@@ -1,5 +1,12 @@
 # Changelog
 
+### version 1.1.4
+
+_(and version 1.1.3)_
+
+- fix: classNames orders fixed by priority
+- new: expose `handleKeyDown` in `dayRenderer` component to be able to handle keyboard events.
+
 ### version 1.1.2
 
 - fix: minor fix onChange wont return range if value is provided and value was not changed.
