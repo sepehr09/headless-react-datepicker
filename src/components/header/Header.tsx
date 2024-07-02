@@ -6,6 +6,9 @@ import ChevronRight from "../icons/ChevronRight";
 import { THeaderProps } from "./types";
 
 function Header({
+  rootClassName,
+  prevButtonClassName,
+  nextButtonClassName,
   leftIcon,
   rightIcon,
   monthSelectClassName,
@@ -33,9 +36,14 @@ function Header({
   } = useContext(PickerContext);
 
   return (
-    <div className="rhmdp-flex rhmdp-items-center rhmdp-justify-between rhmdp-py-4 rhmdp-select-none">
+    <div
+      className={classJoin(
+        "rhmdp-flex rhmdp-items-center rhmdp-justify-between rhmdp-py-4 rhmdp-select-none",
+        rootClassName
+      )}
+    >
       <div
-        className="rhmdp-cursor-pointer"
+        className={classJoin("rhmdp-cursor-pointer", prevButtonClassName)}
         role="button"
         tabIndex={0}
         aria-label="Previous Month"
@@ -104,8 +112,8 @@ function Header({
         })}
       </select>
       <div
-        className="rhmdp-cursor-pointer"
-        aria-label="Previous Month"
+        className={classJoin("rhmdp-cursor-pointer", nextButtonClassName)}
+        aria-label="Next Month"
         role="button"
         tabIndex={0}
         onClick={() => goToNextMonth?.()}

@@ -99,7 +99,7 @@ export type TDatePickerProps<IsRange extends boolean = false> = {
 export type TCalendarConfig = {
   /**
    * The first day of the week.
-   * @default "monday"
+   * @default "Saturday"
    */
   weekStartsOn?: TDay;
 
