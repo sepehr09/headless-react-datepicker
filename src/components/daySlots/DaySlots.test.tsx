@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import DatePickerProvider from "../../DatePickerProvider";
 import DaySlots from "./DaySlots";
 
@@ -211,6 +211,39 @@ describe("DaySlots component", () => {
     ]);
   });
 
+  it("should className and styles to be applied on slots and parents", () => {
+    const mockOnChange = vitest.fn();
+
+    const { container } = render(
+      <DatePickerProvider
+        defaultStartDate={new Date("2024-08-01T00:00:00.000Z")}
+        onChange={mockOnChange}
+      >
+        <DaySlots
+          parentStyles={{ backgroundColor: "#e0e0e0" }}
+          slotParentClassName="slotParentClassName"
+          slotParentStyles={{ backgroundColor: "#e1e1e1" }}
+          slotClassName="slotClassName"
+          slotStyles={{ backgroundColor: "#e2e2e2" }}
+        />
+      </DatePickerProvider>
+    );
+
+    const slotParentElements = container.querySelectorAll(
+      ".slotParentClassName"
+    );
+
+    slotParentElements.forEach((slotParent) => {
+      // parent element
+      expect(slotParent).toHaveClass("slotParentClassName");
+      expect(slotParent).toHaveStyle("background-color: #e1e1e1"); // slotParentStyles
+
+      // slot element
+      expect(slotParent.firstChild).toHaveClass("slotClassName");
+      expect(slotParent.firstChild).toHaveStyle("background-color: #e2e2e2"); // slotStyles
+    });
+  });
+
   it("should className and styles to be applied on selected day (single picker)", () => {
     const mockOnChange = vitest.fn();
 
@@ -258,10 +291,7 @@ describe("DaySlots component", () => {
         isRange
       >
         <DaySlots
-          parentClassName="parentClassName"
-          parentStyles={{ backgroundColor: "#e0e0e0" }}
           slotParentClassName="slotParentClassName"
-          slotParentStyles={{ textAlign: "center" }}
           selectedClassName="selectedClassName"
           selectedStyles={{ backgroundColor: "#e1e1e1" }}
           startOfRangeClassName="startOfRangeClassName"
@@ -278,7 +308,6 @@ describe("DaySlots component", () => {
       </DatePickerProvider>
     );
 
-    const parentElement = container.querySelector(".parentClassName");
     const slotParentElements = container.querySelectorAll(
       ".slotParentClassName"
     );
@@ -296,18 +325,6 @@ describe("DaySlots component", () => {
 
     fireEvent.click(startOfRange!);
     fireEvent.click(endOfRange!);
-
-    screen.debug();
-
-    /* ------------------------------- classNames ------------------------------- */
-    // parent element
-    expect(parentElement).toHaveStyle("background-color: #e0e0e0");
-
-    // slotParents
-    slotParentElements.forEach((slotParent) => {
-      expect(slotParent).toHaveClass("slotParentClassName");
-      expect(slotParent).toHaveStyle("text-align: center");
-    });
 
     // startOfRange
     expect(startOfRange.parentElement).toHaveClass("selectedParentClassName");
@@ -333,6 +350,57 @@ describe("DaySlots component", () => {
       // slot element
       expect(middle.firstChild).toHaveClass("inSelectedRangeClassName");
       expect(middle.firstChild).toHaveStyle("border-style: dashed"); // inSelectedRangeStyles
+    });
+  });
+
+  it("should className and styles to be applied on weekends", () => {
+    const mockOnChange = vitest.fn();
+
+    const { container } = render(
+      <DatePickerProvider
+        defaultStartDate={new Date("2024-08-01T00:00:00.000Z")}
+        onChange={mockOnChange}
+        config={{
+          weekendSelectable: false,
+          weekends: ["saturday", "sunday"],
+        }}
+      >
+        <DaySlots
+          parentStyles={{ backgroundColor: "#e0e0e0" }}
+          slotParentClassName="slotParentClassName"
+          weekendParentClassName="weekendParentClassName"
+          disableParentClassName="disableParentClassName"
+          weekendParentStyles={{ backgroundColor: "#e1e1e1" }}
+          weekendClassName="weekendClassName"
+          weekendStyles={{ backgroundColor: "#e2e2e2" }}
+        />
+      </DatePickerProvider>
+    );
+
+    const slotParentElements = container.querySelectorAll(
+      ".slotParentClassName"
+    );
+
+    const weekends = [
+      slotParentElements[2], // August 3, 2024 (Saturday)
+      slotParentElements[3], // August 4, 2024 (Sunday)
+      slotParentElements[9], // August 10, 2024 (Saturday)
+      slotParentElements[10], // August 11, 2024 (Sunday)
+      slotParentElements[16], // August 17, 2024 (Saturday)
+      slotParentElements[17], // August 18, 2024 (Sunday)
+      slotParentElements[23], // August 24, 2024 (Saturday)
+      slotParentElements[24], // August 25, 2024 (Sunday)
+      slotParentElements[30], // August 31, 2024 (Saturday)
+    ];
+
+    weekends.forEach((weekend) => {
+      // parent element
+      expect(weekend).toHaveClass("weekendParentClassName");
+      expect(weekend).toHaveStyle("background-color: #e1e1e1"); // weekendParentStyles
+
+      // slot element
+      expect(weekend.firstChild).toHaveClass("weekendClassName");
+      expect(weekend.firstChild).toHaveStyle("background-color: #e2e2e2"); // weekendStyles
     });
   });
 });
