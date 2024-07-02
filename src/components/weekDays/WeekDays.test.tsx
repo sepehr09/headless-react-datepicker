@@ -76,8 +76,8 @@ describe("WeekDays component", () => {
             <div
               key={formattedTitle}
               className="custom-renderer"
-              data-weekday={weekDay}
-              data-weekIndex={weekIndex}
+              data-test-weekday={weekDay}
+              data-test-week-index={weekIndex}
             >
               {formattedTitle}
             </div>
@@ -97,10 +97,10 @@ describe("WeekDays component", () => {
     Array.from(elements).forEach((element, index) => {
       expect(element).toHaveTextContent(mockWeeDays[index]);
       expect(element).toHaveAttribute(
-        "data-weekday",
+        "data-test-weekday",
         element.textContent?.toLowerCase()
       );
-      expect(element).toHaveAttribute("data-weekIndex", index.toString());
+      expect(element).toHaveAttribute("data-test-week-index", index.toString());
     });
   });
 });
