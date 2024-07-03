@@ -294,7 +294,7 @@ function DaySlots(props: TDaySlots) {
         };
 
         const parentClassNames = classJoin(
-          "rhmdp-border rhmdp-border-transparent",
+          "rhmdp-border rhmdp-border-transparent rhmdp-h-max",
           slotParentClassName,
           IsToday && "rhmdp-text-blue-600",
           IsToday && todayParentClassName,
@@ -314,13 +314,13 @@ function DaySlots(props: TDaySlots) {
         );
 
         const dayClassNames = classJoin(
-          "rhmdp-p-2 rhmdp-rounded-lg",
+          "rhmdp-p-2 rhmdp-rounded-lg rhmdp-h-full",
           slotClassName,
           IsToday && todayClassName,
           isSelectable && !isSelected && "hover:rhmdp-bg-gray-300",
           isSelectable && selectableClassName,
           isSelected &&
-            "rhmdp-bg-blue-500 hover:rhmdp-bg-blue-500 rhmdp-text-white rhmdp-h-full",
+            "rhmdp-bg-blue-500 hover:rhmdp-bg-blue-500 rhmdp-text-white",
           isSelected && selectedClassName,
           isInSelectedRange && inSelectedRangeClassName,
           isStartOfRange && startOfRangeClassName,
