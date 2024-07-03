@@ -14,5 +14,12 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: ["test/setup.ts"],
+    coverage: {
+      all: true,
+      include: ["src"],
+      exclude: ["src/stories", "src/store"],
+      provider: "istanbul",
+      reporter: ["json", "lcov", "text", "clover", "html"],
+    },
   },
 });
