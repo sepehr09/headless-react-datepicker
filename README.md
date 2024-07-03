@@ -3,6 +3,7 @@
 [![NPM](https://img.shields.io/npm/v/headless-react-datepicker.svg)](https://www.npmjs.com/package/headless-react-datepicker)
 [![NPM](https://img.shields.io/npm/dt/headless-react-datepicker.svg)](https://www.npmjs.com/package/headless-react-datepicker)
 [![NPM](https://img.shields.io/bundlephobia/min/headless-react-datepicker)](https://bundlephobia.com/package/headless-react-datepicker)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/sepehr09/headless-react-datepicker/.github%2Fworkflows%2Fvitest.yml?label=Tests)
 
 > A headless, highly customizable, multi-calendar date picker component for React. It supports various calendars and locales.
 
