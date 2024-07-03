@@ -11,6 +11,8 @@
 
 https://sepehr09.github.io/headless-react-datepicker/
 
+[![Edit headless-react-datepicker](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/headless-react-datepicker-kxjnlr)
+
 ## Customization
 
 ![alt text](documentation/assets/theming1.png "Theming!")
