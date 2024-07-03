@@ -56,6 +56,28 @@ describe("DaySlots component", () => {
     expect(parentElement?.children).toHaveLength(42);
   });
 
+  it("August 2024 should have 31 + 11 days if showOtherDays is true", () => {
+    const { container } = render(
+      <DatePickerProvider
+        initialValue={new Date("2024-08-01T00:00:00.000Z")}
+        config={{ showOtherDays: true }}
+      >
+        <DaySlots
+          parentClassName="parentClassName"
+          slotClassName="slotClassName"
+        />
+      </DatePickerProvider>
+    );
+
+    const parentElement = container.querySelector(".parentClassName");
+    const slotElements = container.querySelectorAll(".slotClassName");
+
+    expect(parentElement).toBeInTheDocument();
+
+    // August 2024 should have 31 days + 5 days before the month starts + 6 days after the month ends
+    expect(slotElements).toHaveLength(42);
+  });
+
   it("should onChange have been called when click on days", () => {
     const mockOnChange = vitest.fn();
 
@@ -401,6 +423,156 @@ describe("DaySlots component", () => {
       // slot element
       expect(weekend.firstChild).toHaveClass("weekendClassName");
       expect(weekend.firstChild).toHaveStyle("background-color: #e2e2e2"); // weekendStyles
+    });
+  });
+
+  it("should minDate and maxDate classNames applied", () => {
+    const mockOnChange = vitest.fn();
+
+    const { container } = render(
+      <DatePickerProvider
+        defaultStartDate={new Date("2024-08-01T00:00:00.000Z")}
+        onChange={mockOnChange}
+        config={{
+          minDate: new Date("2024-08-05T00:00:00.000Z"),
+          maxDate: new Date("2024-08-25T00:00:00.000Z"),
+        }}
+      >
+        <DaySlots
+          parentStyles={{ backgroundColor: "#e0e0e0" }}
+          slotParentClassName="slotParentClassName"
+          disableParentClassName="disableParentClassName"
+          disableClassName="disableClassName"
+          disableParentStyles={{ backgroundColor: "#e1e1e1" }}
+          disableStyles={{ color: "#e2e2e2" }}
+        />
+      </DatePickerProvider>
+    );
+
+    const slotParentElements = container.querySelectorAll(
+      ".slotParentClassName"
+    );
+
+    const disableDays = [
+      slotParentElements[0], // August 1, 2024
+      slotParentElements[1], // August 2, 2024
+      slotParentElements[2], // August 3, 2024
+      slotParentElements[3], // August 4, 2024
+      slotParentElements[26], // August 27, 2024
+      slotParentElements[27], // August 28, 2024
+      slotParentElements[28], // August 29, 2024
+      slotParentElements[29], // August 30, 2024
+      slotParentElements[30], // August 31, 2024
+    ];
+
+    disableDays.forEach((disableDay) => {
+      // parent element
+      expect(disableDay).toHaveClass("disableParentClassName");
+      expect(disableDay).toHaveStyle("background-color: #e1e1e1"); // disableParentStyles
+
+      // slot element
+      expect(disableDay.firstChild).toHaveClass("disableClassName");
+      expect(disableDay.firstChild).toHaveStyle("color: #e2e2e2"); // disableStyles
+    });
+  });
+
+  it("should minDate and maxDate click disabled", () => {
+    const mockOnChange = vitest.fn();
+
+    const { container } = render(
+      <DatePickerProvider
+        defaultStartDate={new Date("2024-08-01T00:00:00.000Z")}
+        onChange={mockOnChange}
+        config={{
+          minDate: new Date("2024-08-05T00:00:00.000Z"),
+          maxDate: new Date("2024-08-25T00:00:00.000Z"),
+        }}
+      >
+        <DaySlots
+          parentStyles={{ backgroundColor: "#e0e0e0" }}
+          slotParentClassName="slotParentClassName"
+          disableParentClassName="disableParentClassName"
+          disableClassName="disableClassName"
+        />
+      </DatePickerProvider>
+    );
+
+    const slotParentElements = container.querySelectorAll(
+      ".slotParentClassName"
+    );
+
+    const disableDays = [
+      slotParentElements[0], // August 1, 2024
+      slotParentElements[1], // August 2, 2024
+      slotParentElements[2], // August 3, 2024
+      slotParentElements[3], // August 4, 2024
+      slotParentElements[26], // August 27, 2024
+      slotParentElements[27], // August 28, 2024
+      slotParentElements[28], // August 29, 2024
+      slotParentElements[29], // August 30, 2024
+      slotParentElements[30], // August 31, 2024
+    ];
+
+    disableDays.forEach((disableDay) => {
+      // slot element
+      expect(disableDay.firstChild).toHaveClass("disableClassName");
+      fireEvent.click(disableDay.firstChild!);
+
+      // expect the onchange prop to NOT been called
+      expect(mockOnChange).not.toHaveBeenCalled();
+    });
+  });
+
+  it("should otherDays has disabled className and click disabled if otherDaysSelectable is false", () => {
+    const mockOnChange = vitest.fn();
+
+    const { container } = render(
+      <DatePickerProvider
+        initialValue={new Date("2024-08-01T00:00:00.000Z")}
+        config={{ showOtherDays: true, otherDaysSelectable: false }}
+        onChange={mockOnChange}
+      >
+        <DaySlots
+          slotClassName="slotClassName"
+          slotParentClassName="slotParentClassName"
+          disableParentClassName="disableParentClassName"
+          disableClassName="disableClassName"
+          disableParentStyles={{ backgroundColor: "#e0e0e0" }}
+          disableStyles={{ color: "#e1e1e1" }}
+        />
+      </DatePickerProvider>
+    );
+
+    const slotParentElements = container.querySelectorAll(
+      ".slotParentClassName"
+    );
+
+    const otherDays = [
+      slotParentElements[0], // July 27, 2024
+      slotParentElements[1], // July 28, 2024
+      slotParentElements[2], // July 29, 2024
+      slotParentElements[3], // July 30, 2024
+      slotParentElements[4], // July 31, 2024
+      slotParentElements[36], // September 1, 2024
+      slotParentElements[37], // September 2, 2024
+      slotParentElements[38], // September 3, 2024
+      slotParentElements[39], // September 4, 2024
+      slotParentElements[40], // September 5, 2024
+      slotParentElements[41], // September 6, 2024
+    ];
+
+    otherDays.forEach((otherDay) => {
+      // slot parent element
+      expect(otherDay).toHaveClass("disableParentClassName");
+      expect(otherDay).toHaveStyle("background-color: #e0e0e0"); // disableParentStyles
+
+      // slot element
+      expect(otherDay.firstChild).toHaveClass("disableClassName");
+      expect(otherDay.firstChild).toHaveStyle("color: #e1e1e1"); // disableStyles
+      fireEvent.click(otherDay.firstChild!);
+
+      // expect the onchange prop to NOT been called
+      expect(mockOnChange).not.toHaveBeenCalled();
     });
   });
 });
