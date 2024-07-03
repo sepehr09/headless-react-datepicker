@@ -1,4 +1,19 @@
 export type THeaderProps = {
+  /**
+   * the root className of the header
+   */
+  rootClassName?: string;
+
+  /**
+   * className of the previous button (left button)
+   */
+  prevButtonClassName?: string;
+
+  /**
+   * className of the next button (right button)
+   */
+  nextButtonClassName?: string;
+
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
 

@@ -1,5 +1,12 @@
 # Changelog
 
+### version 1.1.5
+
+- new: add `rootClassName` prop to `Header` component.
+- new: add `prevButtonClassName` prop to `Header` component.
+- new: add `nextButtonClassName` prop to `Header` component.
+- fix: header next button aria-label wording fixed.
+
 ### version 1.1.4
 
 _(and version 1.1.3)_
