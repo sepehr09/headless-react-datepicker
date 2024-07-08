@@ -19,7 +19,7 @@
     "removeComments": false,
     "jsx": "react-jsx",
     "downlevelIteration": true,
-    "types": ["node", "jsdom", "vitest/globals", "@testing-library/jest-dom"]
+    "types": ["vitest/globals", "@testing-library/jest-dom"]
   },
   "include": ["src", "./test/setup.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
