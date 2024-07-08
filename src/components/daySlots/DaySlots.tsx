@@ -224,6 +224,7 @@ function DaySlots(props: TDaySlots) {
 
         const isEndOfRange =
           Array.isArray(selectedDay) &&
+          selectedDay.length === 2 &&
           isSameDay(date, selectedDay?.[selectedDay?.length - 1]);
 
         const isDisabled =
