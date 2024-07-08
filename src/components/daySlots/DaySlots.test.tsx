@@ -1,4 +1,4 @@
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, getByLabelText, render } from "@testing-library/react";
 import DatePickerProvider from "../../DatePickerProvider";
 import DaySlots from "./DaySlots";
 
@@ -574,5 +574,88 @@ describe("DaySlots component", () => {
       // expect the onchange prop to NOT been called
       expect(mockOnChange).not.toHaveBeenCalled();
     });
+  });
+
+  it("should dayRenderer be called and props works", () => {
+    const mockDayRenderer = vitest.fn();
+
+    render(
+      <DatePickerProvider
+        initialValue={new Date("2024-08-01T00:00:00.000Z")}
+        config={{ showOtherDays: true, otherDaysSelectable: false }}
+      >
+        <DaySlots dayRenderer={mockDayRenderer} />
+      </DatePickerProvider>
+    );
+
+    expect(mockDayRenderer).toHaveBeenCalledTimes(42);
+    expect(mockDayRenderer).toHaveBeenNthCalledWith(42, {
+      IsToday: false,
+      date: new Date("2024-09-06T00:00:00.000Z"),
+      formattedDay: "6",
+      handleClickSlot: expect.any(Function),
+      handleKeyDown: expect.any(Function),
+      isDisabled: true,
+      isEndOfRange: false,
+      isInSelectedRange: false,
+      isInWeekend: false,
+      isSelectable: false,
+      isSelected: false,
+      isStartOfRange: false,
+    });
+  });
+
+  it("should up, down, left, right arrow keys works when focus on selected slot", () => {
+    const mockOnChange = vitest.fn();
+
+    const { container } = render(
+      <DatePickerProvider
+        initialValue={new Date("2024-08-01T00:00:00.000Z")}
+        config={{ showOtherDays: true, otherDaysSelectable: false }}
+        onChange={mockOnChange}
+      >
+        <DaySlots
+          slotClassName="slotClassName"
+          selectedClassName="selectedClassName"
+          slotParentClassName="slotParentClassName"
+        />
+      </DatePickerProvider>
+    );
+
+    const selectedSlot = getByLabelText(container, "August 1, 2024");
+
+    selectedSlot.focus();
+    expect(selectedSlot).toHaveFocus();
+
+    /* ------------------------------- arrow right ------------------------------ */
+    fireEvent.keyDown(selectedSlot, { key: "ArrowRight" });
+
+    const nextSlot = getByLabelText(container, "August 2, 2024");
+    expect(nextSlot).toHaveFocus();
+
+    /* -------------------------------- hit enter ------------------------------- */
+    fireEvent.keyDown(document.activeElement!, { key: "Enter" });
+
+    expect(mockOnChange).toHaveBeenCalledWith(
+      new Date("2024-08-02T00:00:00.000Z")
+    );
+
+    /* ------------------------------- arrow left ------------------------------- */
+    fireEvent.keyDown(nextSlot, { key: "ArrowLeft" });
+
+    const previousSlot = getByLabelText(container, "August 1, 2024");
+    expect(previousSlot).toHaveFocus();
+
+    /* ------------------------------- arrow down ------------------------------- */
+    fireEvent.keyDown(previousSlot, { key: "ArrowDown" });
+
+    const downSlot = getByLabelText(container, "August 8, 2024");
+    expect(downSlot).toHaveFocus();
+
+    /* -------------------------------- arrow up -------------------------------- */
+    fireEvent.keyDown(downSlot, { key: "ArrowUp" });
+
+    const upSlot = getByLabelText(container, "August 1, 2024");
+    expect(upSlot).toHaveFocus();
   });
 });

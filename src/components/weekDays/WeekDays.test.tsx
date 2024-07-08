@@ -64,6 +64,8 @@ describe("WeekDays component", () => {
   });
 
   it("renderer prop", () => {
+    const mockRenderer = vitest.fn();
+
     const { container } = render(
       <DatePickerProvider
         initialValue={new Date("2024-08-01T00:00:00.000Z")}
@@ -72,16 +74,7 @@ describe("WeekDays component", () => {
         <WeekDays
           rootClassName="root"
           className="elements"
-          renderer={({ formattedTitle, weekDay, weekIndex }) => (
-            <div
-              key={formattedTitle}
-              className="custom-renderer"
-              data-test-weekday={weekDay}
-              data-test-week-index={weekIndex}
-            >
-              {formattedTitle}
-            </div>
-          )}
+          renderer={mockRenderer}
         />
       </DatePickerProvider>
     );
@@ -90,17 +83,17 @@ describe("WeekDays component", () => {
 
     expect(rootElement).toBeInTheDocument();
 
-    const elements = container.querySelectorAll(".custom-renderer");
-    expect(elements).toHaveLength(7);
+    expect(mockRenderer).toHaveBeenCalledTimes(7);
 
-    // testing the renderer returning props
-    Array.from(elements).forEach((element, index) => {
-      expect(element).toHaveTextContent(mockWeeDays[index]);
-      expect(element).toHaveAttribute(
-        "data-test-weekday",
-        element.textContent?.toLowerCase()
-      );
-      expect(element).toHaveAttribute("data-test-week-index", index.toString());
+    // test each mockRenderer call
+    Array.from(mockRenderer.mock.calls).forEach((call, index) => {
+      expect(call).toEqual([
+        {
+          formattedTitle: mockWeeDays[index],
+          weekDay: mockWeeDays[index].toLowerCase(),
+          weekIndex: index,
+        },
+      ]);
     });
   });
 });
