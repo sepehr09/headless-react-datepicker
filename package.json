@@ -1,7 +1,7 @@
 {
   "name": "headless-react-datepicker",
   "private": false,
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "A headless, highly customizable, multi-calendar date picker component for React. It supports various calendars and locales.",
   "author": "Sepehr Karimi <karimi.sepehr2@gmail.com>",
   "type": "module",

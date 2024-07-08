@@ -6,6 +6,7 @@
 - new: add `prevButtonClassName` prop to `Header` component.
 - new: add `nextButtonClassName` prop to `Header` component.
 - fix: header next button aria-label wording fixed.
+- fix: in range picker, when not selecting the second date, the end of range class and styles should not be applied.
 
 ### version 1.1.4
 
