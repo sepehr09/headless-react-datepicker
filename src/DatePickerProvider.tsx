@@ -100,13 +100,15 @@ function DatePickerProvider<IsRange extends boolean>(
 
       setInternalValue(finalValue);
 
-      setCurrentDate(
-        finalValue
-          ? Array.isArray(finalValue)
-            ? finalValue[0]
-            : finalValue
-          : new Date(new Date().toISOString())
-      );
+      if (!defaultStartDate) {
+        setCurrentDate(
+          finalValue
+            ? Array.isArray(finalValue)
+              ? finalValue[1]
+              : finalValue
+            : new Date(new Date().toISOString())
+        );
+      }
     }
   }, [value]);
 

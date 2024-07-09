@@ -1,6 +1,10 @@
 # Changelog
 
-### version 1.1.5
+### version 1.1.7
+
+- fix: on value change, the calendar should respect the defaultSelectedDate if it is provided.
+
+### version 1.1.6
 
 - new: add `rootClassName` prop to `Header` component.
 - new: add `prevButtonClassName` prop to `Header` component.
@@ -9,8 +13,6 @@
 - fix: in range picker, when not selecting the second date, the end of range class and styles should not be applied.
 
 ### version 1.1.4
-
-_(and version 1.1.3)_
 
 - fix: classNames orders fixed by priority
 - new: expose `handleKeyDown` in `dayRenderer` component to be able to handle keyboard events.
