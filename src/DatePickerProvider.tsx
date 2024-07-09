@@ -104,7 +104,7 @@ function DatePickerProvider<IsRange extends boolean>(
         setCurrentDate(
           finalValue
             ? Array.isArray(finalValue)
-              ? finalValue[1]
+              ? finalValue[1] || finalValue[0]
               : finalValue
             : new Date(new Date().toISOString())
         );
