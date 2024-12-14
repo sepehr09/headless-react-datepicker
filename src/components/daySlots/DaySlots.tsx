@@ -73,6 +73,7 @@ function DaySlots(props: TDaySlots) {
     handleClickSlot,
     calendar,
     monthInTheCalendar,
+    firstDayOfMonth,
   } = useContext(PickerContext);
 
   const {
@@ -245,6 +246,9 @@ function DaySlots(props: TDaySlots) {
           ? otherDaysSelectable
           : !isDisabled);
 
+        const isFirstDayOfMonth =
+          firstDayOfMonth && isSameDay(date, firstDayOfMonth);
+
         const formattedDay = dayFormatter(date);
         const ariaFormattedDay = ariaDayFormatter(date);
 
@@ -338,7 +342,7 @@ function DaySlots(props: TDaySlots) {
           >
             <div
               role="button"
-              tabIndex={IsToday || isSelected ? 0 : -1}
+              tabIndex={IsToday || isSelected || isFirstDayOfMonth ? 0 : -1}
               aria-disabled={isDisabled || !isSelectable}
               aria-label={`${ariaFormattedDay}`}
               onClick={() => onClickSlot?.(date)}
