@@ -1,14 +1,24 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { renderHook } from "@testing-library/react";
 import DatePickerProvider from "../DatePickerProvider";
 import { useDatePickerContext } from "./useDatePickerContext";
 
+const createWrapper = (Wrapper: any, props: any) => {
+  return function CreatedWrapper({ children }: any) {
+    return <Wrapper {...props}>{children}</Wrapper>;
+  };
+};
+
 describe("useDatePickerContext", () => {
   it("should return the context value", () => {
     const { result } = renderHook(() => useDatePickerContext(), {
-      wrapper: DatePickerProvider,
-      initialProps: {
-        defaultStartDate: new Date("2024-08-01T00:00:00.000Z"),
-      },
+      wrapper: createWrapper(DatePickerProvider, {
+        defaultStartDate: new Date("2024-07-01T00:00:00.000Z"),
+        config: {
+          yearRangeFrom: 2004,
+          yearRangeTo: 2024,
+        },
+      }),
     });
 
     expect(result.current.yearsList).toEqual([
