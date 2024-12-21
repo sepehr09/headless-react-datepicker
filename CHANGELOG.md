@@ -1,6 +1,6 @@
 # Changelog
 
-### version 1.1.8
+### version 1.1.9
 
 - new: add `isInHoveredRange` prop to `DaySlots` component to be able to style the hovered range..
 - new: add `inHoveredRangeStyles` prop to `DaySlots` component to be able to style the hovered range.
