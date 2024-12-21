@@ -7,6 +7,9 @@ import { THeaderProps } from "./types";
 
 function Header({
   rootClassName,
+  rootStyles,
+  prevButtonStyles,
+  nextButtonStyles,
   prevButtonClassName,
   nextButtonClassName,
   leftIcon,
@@ -41,9 +44,11 @@ function Header({
         "rhmdp-flex rhmdp-items-center rhmdp-justify-between rhmdp-py-4 rhmdp-select-none",
         rootClassName
       )}
+      style={rootStyles}
     >
       <div
         className={classJoin("rhmdp-cursor-pointer", prevButtonClassName)}
+        style={prevButtonStyles}
         role="button"
         tabIndex={0}
         aria-label="Previous Month"
@@ -113,6 +118,7 @@ function Header({
       </select>
       <div
         className={classJoin("rhmdp-cursor-pointer", nextButtonClassName)}
+        style={nextButtonStyles}
         aria-label="Next Month"
         role="button"
         tabIndex={0}

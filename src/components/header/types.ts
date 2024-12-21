@@ -1,13 +1,28 @@
 export type THeaderProps = {
   /**
+   * the root css styles of the header
+   */
+  rootStyles?: React.CSSProperties;
+
+  /**
    * the root className of the header
    */
   rootClassName?: string;
 
   /**
+   * css styles of the previous button (left button)
+   */
+  prevButtonStyles?: React.CSSProperties;
+
+  /**
    * className of the previous button (left button)
    */
   prevButtonClassName?: string;
+
+  /**
+   * css styles of the next button (right button)
+   */
+  nextButtonStyles?: React.CSSProperties;
 
   /**
    * className of the next button (right button)

@@ -375,9 +375,9 @@ function DaySlots(props: TDaySlots) {
           ...(isSelected && selectedStyles),
           ...(isInSelectedRange && inSelectedRangeStyles),
           ...(isInHoveredRange && inHoveredRangeStyles),
+          ...(isInWeekend && weekendStyles),
           ...(isStartOfRange && startOfRangeStyles),
           ...(isEndOfRange && endOfRangeStyles),
-          ...(isInWeekend && weekendStyles),
           ...(isDisabled && disableStyles),
         };
 

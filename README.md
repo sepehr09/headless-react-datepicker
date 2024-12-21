@@ -176,6 +176,8 @@ import { Header } from "headless-react-datepicker";
 | ---------------------------- | ------------- | ---------------------------------------------------- |
 | leftIcon                     | ReactNode     |                                                      |
 | rightIcon                    | ReactNode     |                                                      |
+| rootClassName                | string        | the root className of the header                     |
+| rootStyles                   | CSSProperties | the root css styles of the header                    |
 | monthSelectClassName         | string        | Class name of the month select dropdown              |
 | monthSelectStyles            | CSSProperties | css styles of the month select dropdown              |
 | monthOptionClassName         | string        | className of the month Options in the dropdown       |
@@ -188,6 +190,10 @@ import { Header } from "headless-react-datepicker";
 | yearOptionStyles             | CSSProperties | css styles of the year Options in the dropdown       |
 | yearSelectedOptionClassName  | string        | className the selected option in the year dropdown   |
 | yearSelectedOptionStyles     | CSSProperties | css styles the selected option in the year dropdown  |
+| prevButtonClassName          | string        | className of the previous button (left button)       |
+| prevButtonStyles             | CSSProperties | css styles of the previous button (left button)      |
+| nextButtonClassName          | string        | className of the next button (right button)          |
+| nextButtonStyles             | CSSProperties | css style of the next button (right button)          |
 
 ## WeekDays component
 

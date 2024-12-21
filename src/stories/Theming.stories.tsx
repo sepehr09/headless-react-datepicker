@@ -308,6 +308,12 @@ export const Example4: Story = {
               borderRadius: "5px",
               outline: "none",
             }}
+            prevButtonStyles={{
+              color: "#fff",
+            }}
+            nextButtonStyles={{
+              color: "#fff",
+            }}
           />
           <WeekDays
             style={{
@@ -340,6 +346,9 @@ export const Example4: Story = {
             }}
             inSelectedRangeParentStyles={{
               backgroundColor: "#6b6b6b",
+            }}
+            inHoveredRangeParentStyles={{
+              backgroundColor: "#525252",
             }}
           />
         </DatePickerProvider>
@@ -379,7 +388,18 @@ export const Example5: Story = {
             console.log("onChange: ", e);
           }}
         >
-          <Title style={{ fontWeight: 400 }} />
+          <Title
+            style={{
+              fontWeight: 200,
+              fontSize: "1.2em",
+              marginBottom: "10px",
+              textAlign: "center",
+              borderRadius: "7px",
+              letterSpacing: "16px",
+              textTransform: "uppercase",
+              color: "#5c5c5c",
+            }}
+          />
           <Header
             monthSelectStyles={{
               backgroundColor: "#f0f0f0",
@@ -394,6 +414,13 @@ export const Example5: Story = {
               padding: "4px",
               borderRadius: "5px",
               outline: "none",
+            }}
+            rootStyles={{
+              boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1) inset",
+              borderRadius: "7px",
+              marginBottom: "10px",
+              padding: "10px",
+              backgroundColor: "#fdfdfd",
             }}
           />
           <WeekDays
@@ -420,7 +447,7 @@ export const Example5: Story = {
               color: "#494949",
             }}
             selectedStyles={{
-              backgroundColor: "#1dfc00",
+              backgroundColor: "#a4fc00",
               fontWeight: "500",
             }}
             weekendStyles={{
@@ -435,8 +462,17 @@ export const Example5: Story = {
             endOfRangeParentStyles={{
               borderRadius: 0,
             }}
+            startOfRangeStyles={{
+              color: "#288f00",
+            }}
+            endOfRangeStyles={{
+              color: "#288f00",
+            }}
             inSelectedRangeParentStyles={{
-              backgroundColor: "#d5f8d5",
+              backgroundColor: "#e7ffb9",
+            }}
+            inHoveredRangeParentStyles={{
+              backgroundColor: "#ecf8d5",
             }}
             inSelectedRangeStyles={{
               color: "#000000",
