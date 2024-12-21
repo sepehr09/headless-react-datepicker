@@ -60,12 +60,12 @@ function Header({
         }}
         style={monthSelectStyles}
         className={monthSelectClassName}
+        value={monthInTheCalendar}
       >
         {monthsList?.map((month) => (
           <option
             key={month.value}
             value={month.value}
-            selected={month.value === monthInTheCalendar}
             style={{
               ...monthOptionStyles,
               ...(month.value === monthInTheCalendar
@@ -90,13 +90,13 @@ function Header({
         }}
         className={yearSelectClassName}
         style={yearSelectStyles}
+        value={yearInTheCalendar}
       >
         {yearsList?.map((year) => {
           return (
             <option
               key={year}
               value={year}
-              selected={year === yearInTheCalendar}
               style={{
                 ...yearOptionStyles,
                 ...(year === yearInTheCalendar ? yearSelectedOptionStyles : {}),

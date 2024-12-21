@@ -10,6 +10,7 @@ export type TDaySlotsDayRendererArgs = {
   isSelectable: boolean;
   isDisabled: boolean;
   isInSelectedRange: boolean;
+  isInHoveredRange: boolean;
   isStartOfRange: boolean;
   isEndOfRange: boolean;
   isInWeekend: boolean;
@@ -59,6 +60,11 @@ export type TDaySlots = {
   inSelectedRangeClassName?: string;
   inSelectedRangeParentStyles?: CSSProperties;
   inSelectedRangeParentClassName?: string;
+
+  inHoveredRangeStyles?: CSSProperties;
+  inHoveredRangeClassName?: string;
+  inHoveredRangeParentStyles?: CSSProperties;
+  inHoveredRangeParentClassName?: string;
 
   startOfRangeStyles?: CSSProperties;
   startOfRangeClassName?: string;

@@ -259,6 +259,10 @@ import { DaySlots } from "headless-react-datepicker";
 | inSelectedRangeClassName       | string                                            |                    |         |
 | inSelectedRangeParentStyles    | CSSProperties                                     |                    |         |
 | inSelectedRangeParentClassName | string                                            |                    |         |
+| inHoveredRangeStyles           | CSSProperties                                     |                    |         |
+| inHoveredRangeClassName        | string                                            |                    |         |
+| inHoveredRangeParentStyles     | CSSProperties                                     |                    |         |
+| inHoveredRangeParentClassName  | string                                            |                    |         |
 | startOfRangeStyles             | CSSProperties                                     |                    |         |
 | startOfRangeClassName          | string                                            |                    |         |
 | startOfRangeParentStyles       | CSSProperties                                     |                    |         |
@@ -278,6 +282,7 @@ import { DaySlots } from "headless-react-datepicker";
 | isSelectable      | boolean                                                      | Is the day can be selected or not.                                               |         |
 | isDisabled        | boolean                                                      | Is the day is disabled or not.                                                   |         |
 | isInSelectedRange | boolean                                                      | Is in the selected range (if calendar type is range) or not.                     |         |
+| isInHoveredRange  | boolean                                                      | Is in the hovered range (if calendar type is range) or not.                      |         |
 | isStartOfRange    | boolean                                                      |                                                                                  |         |
 | isEndOfRange      | boolean                                                      |                                                                                  |         |
 | isInWeekend       | boolean                                                      |                                                                                  |         |
