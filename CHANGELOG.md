@@ -1,5 +1,19 @@
 # Changelog
 
+### version 1.1.9
+
+- new: add `isInHoveredRange` prop to `DaySlots` component to be able to style the hovered range..
+- new: add `inHoveredRangeStyles` prop to `DaySlots` component to be able to style the hovered range.
+- new: add `inHoveredRangeClassName` prop to `DaySlots` component to be able to style the hovered range.
+- new: add `inHoveredRangeParentStyles` prop to `DaySlots` component to be able to style the hovered range.
+- new: add `inHoveredRangeParentClassName` prop to `DaySlots` component to be able to style the hovered range.
+- new: add `prevButtonClassName` prop to `Header` component.
+- new: add `nextButtonClassName` prop to `Header` component.
+- new: add `prevButtonStyles` prop to `Header` component.
+- new: add `nextButtonStyles` prop to `Header` component.
+- new: add `rootStyles` prop to `Header` component.
+- chore: remove warning for `unique "key" prop` and `defaultValue for select component`.
+
 ### version 1.1.7
 
 - fix: on value change, the calendar should respect the defaultSelectedDate if it is provided.

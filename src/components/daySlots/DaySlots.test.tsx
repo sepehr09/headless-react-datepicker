@@ -597,6 +597,7 @@ describe("DaySlots component", () => {
       handleKeyDown: expect.any(Function),
       isDisabled: true,
       isEndOfRange: false,
+      isInHoveredRange: false,
       isInSelectedRange: false,
       isInWeekend: false,
       isSelectable: false,

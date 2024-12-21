@@ -7,6 +7,9 @@ import { THeaderProps } from "./types";
 
 function Header({
   rootClassName,
+  rootStyles,
+  prevButtonStyles,
+  nextButtonStyles,
   prevButtonClassName,
   nextButtonClassName,
   leftIcon,
@@ -41,9 +44,11 @@ function Header({
         "rhmdp-flex rhmdp-items-center rhmdp-justify-between rhmdp-py-4 rhmdp-select-none",
         rootClassName
       )}
+      style={rootStyles}
     >
       <div
         className={classJoin("rhmdp-cursor-pointer", prevButtonClassName)}
+        style={prevButtonStyles}
         role="button"
         tabIndex={0}
         aria-label="Previous Month"
@@ -60,12 +65,12 @@ function Header({
         }}
         style={monthSelectStyles}
         className={monthSelectClassName}
+        value={monthInTheCalendar}
       >
         {monthsList?.map((month) => (
           <option
             key={month.value}
             value={month.value}
-            selected={month.value === monthInTheCalendar}
             style={{
               ...monthOptionStyles,
               ...(month.value === monthInTheCalendar
@@ -90,13 +95,13 @@ function Header({
         }}
         className={yearSelectClassName}
         style={yearSelectStyles}
+        value={yearInTheCalendar}
       >
         {yearsList?.map((year) => {
           return (
             <option
               key={year}
               value={year}
-              selected={year === yearInTheCalendar}
               style={{
                 ...yearOptionStyles,
                 ...(year === yearInTheCalendar ? yearSelectedOptionStyles : {}),
@@ -113,6 +118,7 @@ function Header({
       </select>
       <div
         className={classJoin("rhmdp-cursor-pointer", nextButtonClassName)}
+        style={nextButtonStyles}
         aria-label="Next Month"
         role="button"
         tabIndex={0}
