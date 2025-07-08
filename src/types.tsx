@@ -152,15 +152,26 @@ export type TCalendarConfig = {
   minDate?: Date;
 
   /**
-   * Specify which days of the week are holidays.
+   * Specify which days of the week are weekend.
    */
   weekends?: TDay[];
+
+  /**
+   * Specify which days of the month are holidays.
+   */
+  holidays?: Date[];
 
   /**
    * Allow selecting weekends or not.
    * @default true
    */
   weekendSelectable?: boolean;
+
+  /**
+   * Allow selecting holidays or not.
+   * @default false
+   */
+  holidaySelectable?: boolean;
 
   /**
    * If user select a date before the previous selected date, it will be considered as a range or start from beginning.

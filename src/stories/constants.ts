@@ -59,6 +59,9 @@ export const argTypes = {
   "config.weekendSelectable": {
     control: "boolean",
   },
+  "config.holidaySelectable": {
+    control: "boolean",
+  },
   "config.allowBackwardRange": {
     control: "boolean",
   },

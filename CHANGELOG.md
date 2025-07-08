@@ -1,5 +1,12 @@
 # Changelog
 
+### version 1.2.0
+
+- new: add `holidays` prop so you can set array of holidays to show them differently or prevent user to be able to select them or not.
+- new: add `isInHoliday` props to `dayRenderer` method.
+- new: add `holidaySelectable` props to be able to prevent user from selecting holidays or not.
+- new: add `holidayStyles`, `holidayClassName`, `holidayParentStyles`, `holidayParentClassName`.
+
 ### version 1.1.9
 
 - new: add `isInHoveredRange` prop to `DaySlots` component to be able to style the hovered range..

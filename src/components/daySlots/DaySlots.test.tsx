@@ -600,6 +600,7 @@ describe("DaySlots component", () => {
       isInHoveredRange: false,
       isInSelectedRange: false,
       isInWeekend: false,
+      isInHoliday: false,
       isSelectable: false,
       isSelected: false,
       isStartOfRange: false,
