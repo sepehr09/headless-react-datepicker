@@ -133,8 +133,10 @@ import { DatePickerProvider } from "headless-react-datepicker";
 | yearRangeTo         | number \| undefined                        |                                                                                                                    | current year if not provided  |
 | maxDate             | Date \| undefined                          | Prevent selecting dates before this date.                                                                          |                               |
 | minDate             | Date \| undefined                          | Prevent selecting dates after this date.                                                                           |                               |
-| weekends            | TDay[] \| undefined                        | Specify which days of the week are holidays.                                                                       | undefined                     |
+| weekends            | TDay[] \| undefined                        | Specify which days of the week are weekend.                                                                        | undefined                     |
 | weekendSelectable   | boolean \| undefined                       | Allow selecting weekends or not.                                                                                   | true                          |
+| holidays            | TDay[] \| undefined                        | Specify which days of the week are holidays.                                                                       | undefined                     |
+| holidaySelectable   | boolean \| undefined                       | Allow selecting holidays or not.                                                                                   | false                         |
 | allowBackwardRange  | boolean \| undefined                       | If user select a date before the previous selected date, it will be considered as a range or start from beginning. | false                         |
 
 ### TCalendar
@@ -253,6 +255,10 @@ import { DaySlots } from "headless-react-datepicker";
 | weekendClassName               | string                                            |                    |         |
 | weekendParentStyles            | CSSProperties                                     |                    |         |
 | weekendParentClassName         | string                                            |                    |         |
+| holidayStyles                  | CSSProperties                                     |                    |         |
+| holidayClassName               | string                                            |                    |         |
+| holidayParentStyles            | CSSProperties                                     |                    |         |
+| holidayParentClassName         | string                                            |                    |         |
 | selectedStyles                 | CSSProperties                                     |                    |         |
 | selectedClassName              | string                                            |                    |         |
 | selectedParentStyles           | CSSProperties                                     |                    |         |
@@ -292,6 +298,7 @@ import { DaySlots } from "headless-react-datepicker";
 | isStartOfRange    | boolean                                                      |                                                                                  |         |
 | isEndOfRange      | boolean                                                      |                                                                                  |         |
 | isInWeekend       | boolean                                                      |                                                                                  |         |
+| isInHoliday       | boolean                                                      |                                                                                  |         |
 | isSelected        | boolean                                                      |                                                                                  |         |
 | handleClickSlot   | (date: Date) => void                                         |                                                                                  |         |
 | handleKeyDown     | (e: React.KeyboardEvent<HTMLDivElement>, date: Date) => void | onKeyDown event                                                                  |         |

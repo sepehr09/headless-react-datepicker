@@ -14,6 +14,7 @@ export type TDaySlotsDayRendererArgs = {
   isStartOfRange: boolean;
   isEndOfRange: boolean;
   isInWeekend: boolean;
+  isInHoliday: boolean;
   isSelected: boolean;
   handleClickSlot: (date: Date) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, date: Date) => void;
@@ -45,6 +46,11 @@ export type TDaySlots = {
   weekendClassName?: string;
   weekendParentStyles?: CSSProperties;
   weekendParentClassName?: string;
+
+  holidayStyles?: CSSProperties;
+  holidayClassName?: string;
+  holidayParentStyles?: CSSProperties;
+  holidayParentClassName?: string;
 
   selectedStyles?: CSSProperties;
   selectedClassName?: string;

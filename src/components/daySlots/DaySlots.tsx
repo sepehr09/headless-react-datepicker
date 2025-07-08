@@ -41,6 +41,11 @@ function DaySlots(props: TDaySlots) {
     weekendParentStyles,
     weekendParentClassName,
 
+    holidayStyles,
+    holidayClassName,
+    holidayParentStyles,
+    holidayParentClassName,
+
     selectedStyles,
     selectedClassName,
     selectedParentStyles,
@@ -92,7 +97,9 @@ function DaySlots(props: TDaySlots) {
     minDate,
     maxDate,
     weekends,
+    holidays,
     weekendSelectable = true,
+    holidaySelectable = false,
     weekStartsOn = defaultWeekStartsOn,
     allowBackwardRange,
   } = config || {};
@@ -166,18 +173,26 @@ function DaySlots(props: TDaySlots) {
    */
   const IsSelectable = ({
     isInWeekend,
+    isInHoliday,
     isOtherMonth,
     isDisabled,
   }: {
     isInWeekend: boolean;
+    isInHoliday: boolean;
     isOtherMonth: boolean;
     isDisabled: boolean;
   }): boolean => {
     if (isOtherMonth) {
+      if (isInHoliday) {
+        return holidaySelectable;
+      }
       if (isInWeekend) {
         return weekendSelectable;
       }
       return otherDaysSelectable || false;
+    }
+    if (isInHoliday) {
+      return holidaySelectable;
     }
     if (isInWeekend) {
       return weekendSelectable;
@@ -189,6 +204,10 @@ function DaySlots(props: TDaySlots) {
     return !!weekends
       ?.map((w) => bindWeekDayToNumber[w])
       .includes(date.getDay() as Day);
+  };
+
+  const IsInHoliday = (date: Date) => {
+    return !!holidays?.some((a) => isSameDay(date, a));
   };
 
   const IsFirstDayOfMonth = (date: Date) => {
@@ -220,17 +239,14 @@ function DaySlots(props: TDaySlots) {
       calendar &&
       IsSameMonth(date, monthInTheCalendar, calendar);
 
-    const isInWeekend = weekends
-      ?.map((w) => bindWeekDayToNumber[w])
-      .includes(date.getDay() as Day);
+    const isInWeekend = IsInWeekend(date);
+    const isInHoliday = IsInHoliday(date);
 
     if (!isSameMonth && !otherDaysSelectable) return;
-
     if (minDate && date < minDate) return;
-
     if (maxDate && date > maxDate) return;
-
     if (isInWeekend && !weekendSelectable) return;
+    if (isInHoliday && !holidaySelectable) return;
 
     handleClickSlot?.(date);
     onClickSlotProp?.(date);
@@ -322,9 +338,11 @@ function DaySlots(props: TDaySlots) {
         const isEndOfRange = IsEndOfRange(date);
         const isDisabled = IsDisabled(date, isOtherMonth);
         const isInWeekend = IsInWeekend(date);
+        const isInHoliday = IsInHoliday(date);
         const isFirstDayOfMonth = IsFirstDayOfMonth(date);
         const isSelectable = IsSelectable({
           isInWeekend,
+          isInHoliday,
           isOtherMonth,
           isDisabled,
         });
@@ -349,6 +367,7 @@ function DaySlots(props: TDaySlots) {
             isStartOfRange,
             isEndOfRange,
             isInWeekend,
+            isInHoliday,
             isSelected,
             handleClickSlot: onClickSlot,
             handleKeyDown,
@@ -365,6 +384,7 @@ function DaySlots(props: TDaySlots) {
           ...(isStartOfRange && startOfRangeParentStyles),
           ...(isEndOfRange && endOfRangeParentStyles),
           ...(isInWeekend && weekendParentStyles),
+          ...(isInHoliday && holidayParentStyles),
           ...(isDisabled && disableParentStyles),
         };
 
@@ -376,6 +396,7 @@ function DaySlots(props: TDaySlots) {
           ...(isInSelectedRange && inSelectedRangeStyles),
           ...(isInHoveredRange && inHoveredRangeStyles),
           ...(isInWeekend && weekendStyles),
+          ...(isInHoliday && holidayStyles),
           ...(isStartOfRange && startOfRangeStyles),
           ...(isEndOfRange && endOfRangeStyles),
           ...(isDisabled && disableStyles),
@@ -398,6 +419,8 @@ function DaySlots(props: TDaySlots) {
           isEndOfRange && endOfRangeParentClassName,
           isInWeekend && "rhmdp-text-red-500",
           isInWeekend && weekendParentClassName,
+          isInHoliday && "rhmdp-text-red-500",
+          isInHoliday && holidayParentClassName,
           isDisabled && "rhmdp-text-gray-400",
           isDisabled && disableParentClassName
         );
@@ -417,6 +440,7 @@ function DaySlots(props: TDaySlots) {
           isStartOfRange && startOfRangeClassName,
           isEndOfRange && endOfRangeClassName,
           isInWeekend && weekendClassName,
+          isInHoliday && holidayClassName,
           isDisabled && disableClassName
         );
 

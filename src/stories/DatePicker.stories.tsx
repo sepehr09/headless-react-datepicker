@@ -283,3 +283,34 @@ export const ControlledComponent: Story = {
     },
   },
 };
+export const Holidays: Story = {
+  render: RenderDatePicker,
+  args: {
+    isRange: false,
+    initialValue: new Date("2024-02-06"),
+    calendar: "gregory",
+    config: {
+      locale: "en-US",
+      weekStartsOn: "monday",
+      showOtherDays: false,
+      otherDaysSelectable: false,
+      weekdayFormat: "short",
+      dayFormat: "numeric",
+      weekends: ["saturday", "sunday"],
+      weekendSelectable: true,
+      holidays: [
+        new Date("2024-02-08"),
+        new Date("2024-02-09"),
+        new Date("2024-02-10"),
+        new Date("2024-02-12"),
+        new Date("2024-02-21"),
+        new Date("2024-02-27"),
+      ],
+      holidaySelectable: false,
+      // yearRangeFrom: 1330,
+      // yearRangeTo: 1400,
+      // minDate: new Date("2024-01-01T00:00:00.000Z"),
+      // maxDate: new Date(),
+    },
+  },
+};
