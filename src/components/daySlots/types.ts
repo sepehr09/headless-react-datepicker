@@ -6,7 +6,8 @@ export type TDaySlotsDayRendererArgs = {
    * based on calendar config.dayFormat
    */
   formattedDay: string;
-  IsToday: boolean;
+  IsToday: boolean; // For backwards compatibility
+  isToday: boolean;
   isSelectable: boolean;
   isDisabled: boolean;
   isInSelectedRange: boolean;
@@ -16,6 +17,7 @@ export type TDaySlotsDayRendererArgs = {
   isInWeekend: boolean;
   isInHoliday: boolean;
   isSelected: boolean;
+  isOtherMonth: boolean;
   handleClickSlot: (date: Date) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, date: Date) => void;
 };
