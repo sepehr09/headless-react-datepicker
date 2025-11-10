@@ -290,7 +290,8 @@ import { DaySlots } from "headless-react-datepicker";
 | ----------------- | ------------------------------------------------------------ | -------------------------------------------------------------------------------- | ------- |
 | date              | Date                                                         | based on calendar `config.dayFormat` which follows `locale` and `calendar`.      |         |
 | formattedDay      | string                                                       | Formatted date based on `locale` and `calendar` which is in the calendar config. |         |
-| IsToday           | boolean                                                      | Indicate that is the day is today or not.                                        |         |
+| isToday           | boolean                                                      | Indicate that is the day is today or not.                                        |         |
+| IsToday           | boolean                                                      | Indicate that is the day is today or not. (For backwards compatibility)          |         |
 | isSelectable      | boolean                                                      | Is the day can be selected or not.                                               |         |
 | isDisabled        | boolean                                                      | Is the day is disabled or not.                                                   |         |
 | isInSelectedRange | boolean                                                      | Is in the selected range (if calendar type is range) or not.                     |         |
@@ -300,6 +301,7 @@ import { DaySlots } from "headless-react-datepicker";
 | isInWeekend       | boolean                                                      |                                                                                  |         |
 | isInHoliday       | boolean                                                      |                                                                                  |         |
 | isSelected        | boolean                                                      |                                                                                  |         |
+| isOtherMonth      | boolean                                                      | Indicate whether a day is in the current month or not                            |         |
 | handleClickSlot   | (date: Date) => void                                         |                                                                                  |         |
 | handleKeyDown     | (e: React.KeyboardEvent<HTMLDivElement>, date: Date) => void | onKeyDown event                                                                  |         |
 
