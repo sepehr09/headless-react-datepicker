@@ -359,7 +359,8 @@ function DaySlots(props: TDaySlots) {
           return dayRenderer({
             date,
             formattedDay,
-            IsToday,
+            IsToday, // For backwards compatibility
+            isToday: IsToday,
             isSelectable,
             isDisabled,
             isInSelectedRange,
@@ -369,6 +370,7 @@ function DaySlots(props: TDaySlots) {
             isInWeekend,
             isInHoliday,
             isSelected,
+            isOtherMonth,
             handleClickSlot: onClickSlot,
             handleKeyDown,
           });

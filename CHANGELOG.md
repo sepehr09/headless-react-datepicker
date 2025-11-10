@@ -1,5 +1,10 @@
 # Changelog
 
+### version 1.3.0
+
+- new: In `dayRenderer`, the `isOtherMonth` prop is now exposed to indicate whether a day is in the current month or not.
+- chore: Add the `isToday` prop in dayRenderer to be consistent with other props. Keep the `IsToday` prop for backward compatibility.
+  
 ### version 1.2.0
 
 - new: add `holidays` prop so you can set array of holidays to show them differently or prevent user to be able to select them or not.
