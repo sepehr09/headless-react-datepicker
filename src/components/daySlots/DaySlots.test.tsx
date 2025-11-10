@@ -591,6 +591,7 @@ describe("DaySlots component", () => {
     expect(mockDayRenderer).toHaveBeenCalledTimes(42);
     expect(mockDayRenderer).toHaveBeenNthCalledWith(42, {
       IsToday: false,
+      isToday: false,
       date: new Date("2024-09-06T00:00:00.000Z"),
       formattedDay: "6",
       handleClickSlot: expect.any(Function),
@@ -604,6 +605,7 @@ describe("DaySlots component", () => {
       isSelectable: false,
       isSelected: false,
       isStartOfRange: false,
+      isOtherMonth: true,
     });
   });
 
