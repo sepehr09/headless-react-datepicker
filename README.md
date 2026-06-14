@@ -90,6 +90,48 @@ const MyAwesomeDatePicker = () => {
 };
 ```
 
+## Two side-by-side calendars
+
+Render two (or more) months at once by passing a `monthOffset` to `Title` and
+`DaySlots`. A single `DatePickerProvider` drives all of them, so navigation moves
+every month together and range selection / hover spans across the calendars.
+
+Set `navigationStep={2}` on the `Header` so the prev/next arrows move both months at once.
+
+```jsx
+import DatePickerProvider, {
+  Title,
+  Header,
+  WeekDays,
+  DaySlots,
+} from "headless-react-datepicker";
+
+const DualCalendar = () => {
+  return (
+    <DatePickerProvider isRange>
+      {/* one header navigates both months (2 months per click) */}
+      <Header navigationStep={2} />
+
+      <div style={{ display: "flex", gap: 24 }}>
+        {/* current month */}
+        <div>
+          <Title />
+          <WeekDays />
+          <DaySlots />
+        </div>
+
+        {/* next month */}
+        <div>
+          <Title monthOffset={1} />
+          <WeekDays />
+          <DaySlots monthOffset={1} />
+        </div>
+      </div>
+    </DatePickerProvider>
+  );
+};
+```
+
 ## Customization
 
 ![Customization of the headless-react-datepicker](documentation/assets/css-help.png "Customization")
@@ -155,12 +197,13 @@ import { Title } from "headless-react-datepicker";
 
 ### props
 
-| Name        | Type                | Options                                            | Default   |
-| ----------- | ------------------- | -------------------------------------------------- | --------- |
-| monthFormat | string \| undefined | "numeric", "2-digit" , "long" , "short" , "narrow" | "short"   |
-| yearFormat  | string \| undefined | "numeric" , "2-digit"                              | "numeric" |
-| className   | string              | ClassName of the title component                   |           |
-| style       | CSSProperties       | css styles of the title component                  |           |
+| Name        | Type                | Options                                                                                                                 | Default   |
+| ----------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------- | --------- |
+| monthFormat | string \| undefined | "numeric", "2-digit" , "long" , "short" , "narrow"                                                                      | "short"   |
+| yearFormat  | string \| undefined | "numeric" , "2-digit"                                                                                                   | "numeric" |
+| monthOffset | number \| undefined | Show the title of a month offset from the current one (e.g. `1` for the next month). Useful for side-by-side calendars. | 0         |
+| className   | string              | ClassName of the title component                                                                                        |           |
+| style       | CSSProperties       | css styles of the title component                                                                                       |           |
 
 ## Header component
 
@@ -176,6 +219,7 @@ import { Header } from "headless-react-datepicker";
 
 | Name                         | Type          | Description                                          |
 | ---------------------------- | ------------- | ---------------------------------------------------- |
+| navigationStep               | number        | Number of months the prev/next arrows move per click (default `1`). Set to `2` for side-by-side calendars. |
 | leftIcon                     | ReactNode     |                                                      |
 | rightIcon                    | ReactNode     |                                                      |
 | rootClassName                | string        | the root className of the header                     |
@@ -196,6 +240,52 @@ import { Header } from "headless-react-datepicker";
 | prevButtonStyles             | CSSProperties | css styles of the previous button (left button)      |
 | nextButtonClassName          | string        | className of the next button (right button)          |
 | nextButtonStyles             | CSSProperties | css style of the next button (right button)          |
+
+## PanelHeader component
+
+The `PanelHeader` component is a self-contained alternative to `Header`. Instead of `<select>` dropdowns, it shows the month and year pickers **inside the calendar area**: clicking the month opens a grid of all 12 months, and clicking the year opens a paginated grid of years with prev/next page arrows.
+
+Wrap your day-view content (`WeekDays` / `DaySlots`) as its children — it swaps them for the month/year grids while navigating and restores them on selection. It works across all calendars and locales out of the box.
+
+```jsx
+import DatePickerProvider, {
+  PanelHeader,
+  WeekDays,
+  DaySlots,
+} from "headless-react-datepicker";
+
+const MyDatePicker = () => (
+  <DatePickerProvider>
+    <PanelHeader>
+      <WeekDays />
+      <DaySlots />
+    </PanelHeader>
+  </DatePickerProvider>
+);
+```
+
+### props
+
+| Name                  | Type          | Description                                                                     | Default |
+| --------------------- | ------------- | ------------------------------------------------------------------------------- | ------- |
+| children              | ReactNode     | The day-view content, shown in the `"days"` view (e.g. WeekDays/DaySlots)       |         |
+| yearsPerPage          | number        | Number of years shown per page in the year grid; arrows move by this amount     | 12      |
+| leftIcon              | ReactNode     | Replace the previous (left) arrow icon                                          |         |
+| rightIcon             | ReactNode     | Replace the next (right) arrow icon                                             |         |
+| rootClassName         | string        | className of the panel header root row                                          |         |
+| rootStyles            | CSSProperties | css styles of the panel header root row                                         |         |
+| prevButtonClassName   | string        | className of the previous button (left button)                                  |         |
+| prevButtonStyles      | CSSProperties | css styles of the previous button (left button)                                 |         |
+| nextButtonClassName   | string        | className of the next button (right button)                                     |         |
+| nextButtonStyles      | CSSProperties | css styles of the next button (right button)                                    |         |
+| labelClassName        | string        | className of the center label(s) (month name / year that toggle the views)      |         |
+| labelStyles           | CSSProperties | css styles of the center label(s)                                               |         |
+| gridClassName         | string        | className of the month/year grid container                                      |         |
+| gridStyles            | CSSProperties | css styles of the month/year grid container                                     |         |
+| cellClassName         | string        | className of a single month/year cell                                           |         |
+| cellStyles            | CSSProperties | css styles of a single month/year cell                                          |         |
+| selectedCellClassName | string        | className of the currently selected month/year cell                             |         |
+| selectedCellStyles    | CSSProperties | css styles of the currently selected month/year cell                            |         |
 
 ## WeekDays component
 
@@ -233,56 +323,57 @@ import { DaySlots } from "headless-react-datepicker";
 
 ### props
 
-| Name                           | Type                                              | Description        | Default |
-| ------------------------------ | ------------------------------------------------- | ------------------ | ------- |
-| dayRenderer                    | (args: **TDaySlotsDayRendererArgs**) => ReactNode | Custom renderer    |         |
-| onClickSlot                    | (date: **Date**) => void                          | when click on slot |         |
-| parentClassName                | string                                            | parent box         |         |
-| parentStyles                   | CSSProperties                                     | parent box         |         |
-| slotParentClassName            | string                                            |                    |         |
-| slotParentStyles               | CSSProperties                                     |                    |         |
-| slotClassName                  | string                                            |                    |         |
-| slotStyles                     | CSSProperties                                     |                    |         |
-| todayStyles                    | CSSProperties                                     |                    |         |
-| todayClassName                 | string                                            |                    |         |
-| todayParentStyles              | CSSProperties                                     |                    |         |
-| todayParentClassName           | string                                            |                    |         |
-| disableStyles                  | CSSProperties                                     |                    |         |
-| disableClassName               | string                                            |                    |         |
-| disableParentStyles            | CSSProperties                                     |                    |         |
-| disableParentClassName         | string                                            |                    |         |
-| weekendStyles                  | CSSProperties                                     |                    |         |
-| weekendClassName               | string                                            |                    |         |
-| weekendParentStyles            | CSSProperties                                     |                    |         |
-| weekendParentClassName         | string                                            |                    |         |
-| holidayStyles                  | CSSProperties                                     |                    |         |
-| holidayClassName               | string                                            |                    |         |
-| holidayParentStyles            | CSSProperties                                     |                    |         |
-| holidayParentClassName         | string                                            |                    |         |
-| selectedStyles                 | CSSProperties                                     |                    |         |
-| selectedClassName              | string                                            |                    |         |
-| selectedParentStyles           | CSSProperties                                     |                    |         |
-| selectedParentClassName        | string                                            |                    |         |
-| selectableStyles               | CSSProperties                                     |                    |         |
-| selectableClassName            | string                                            |                    |         |
-| selectableParentStyles         | CSSProperties                                     |                    |         |
-| selectableParentClassName      | string                                            |                    |         |
-| inSelectedRangeStyles          | CSSProperties                                     |                    |         |
-| inSelectedRangeClassName       | string                                            |                    |         |
-| inSelectedRangeParentStyles    | CSSProperties                                     |                    |         |
-| inSelectedRangeParentClassName | string                                            |                    |         |
-| inHoveredRangeStyles           | CSSProperties                                     |                    |         |
-| inHoveredRangeClassName        | string                                            |                    |         |
-| inHoveredRangeParentStyles     | CSSProperties                                     |                    |         |
-| inHoveredRangeParentClassName  | string                                            |                    |         |
-| startOfRangeStyles             | CSSProperties                                     |                    |         |
-| startOfRangeClassName          | string                                            |                    |         |
-| startOfRangeParentStyles       | CSSProperties                                     |                    |         |
-| startOfRangeParentClassName    | string                                            |                    |         |
-| endOfRangeStyles               | CSSProperties                                     |                    |         |
-| endOfRangeClassName            | string                                            |                    |         |
-| endOfRangeParentStyles         | CSSProperties                                     |                    |         |
-| endOfRangeParentClassName      | string                                            |                    |         |
+| Name                           | Type                                              | Description                                                                                                  | Default |
+| ------------------------------ | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------- |
+| dayRenderer                    | (args: **TDaySlotsDayRendererArgs**) => ReactNode | Custom renderer                                                                                              |         |
+| onClickSlot                    | (date: **Date**) => void                          | when click on slot                                                                                           |         |
+| monthOffset                    | number                                            | Render a month offset from the current one (e.g. `1` for the next month). Useful for side-by-side calendars. | 0       |
+| parentClassName                | string                                            | parent box                                                                                                   |         |
+| parentStyles                   | CSSProperties                                     | parent box                                                                                                   |         |
+| slotParentClassName            | string                                            |                                                                                                              |         |
+| slotParentStyles               | CSSProperties                                     |                                                                                                              |         |
+| slotClassName                  | string                                            |                                                                                                              |         |
+| slotStyles                     | CSSProperties                                     |                                                                                                              |         |
+| todayStyles                    | CSSProperties                                     |                                                                                                              |         |
+| todayClassName                 | string                                            |                                                                                                              |         |
+| todayParentStyles              | CSSProperties                                     |                                                                                                              |         |
+| todayParentClassName           | string                                            |                                                                                                              |         |
+| disableStyles                  | CSSProperties                                     |                                                                                                              |         |
+| disableClassName               | string                                            |                                                                                                              |         |
+| disableParentStyles            | CSSProperties                                     |                                                                                                              |         |
+| disableParentClassName         | string                                            |                                                                                                              |         |
+| weekendStyles                  | CSSProperties                                     |                                                                                                              |         |
+| weekendClassName               | string                                            |                                                                                                              |         |
+| weekendParentStyles            | CSSProperties                                     |                                                                                                              |         |
+| weekendParentClassName         | string                                            |                                                                                                              |         |
+| holidayStyles                  | CSSProperties                                     |                                                                                                              |         |
+| holidayClassName               | string                                            |                                                                                                              |         |
+| holidayParentStyles            | CSSProperties                                     |                                                                                                              |         |
+| holidayParentClassName         | string                                            |                                                                                                              |         |
+| selectedStyles                 | CSSProperties                                     |                                                                                                              |         |
+| selectedClassName              | string                                            |                                                                                                              |         |
+| selectedParentStyles           | CSSProperties                                     |                                                                                                              |         |
+| selectedParentClassName        | string                                            |                                                                                                              |         |
+| selectableStyles               | CSSProperties                                     |                                                                                                              |         |
+| selectableClassName            | string                                            |                                                                                                              |         |
+| selectableParentStyles         | CSSProperties                                     |                                                                                                              |         |
+| selectableParentClassName      | string                                            |                                                                                                              |         |
+| inSelectedRangeStyles          | CSSProperties                                     |                                                                                                              |         |
+| inSelectedRangeClassName       | string                                            |                                                                                                              |         |
+| inSelectedRangeParentStyles    | CSSProperties                                     |                                                                                                              |         |
+| inSelectedRangeParentClassName | string                                            |                                                                                                              |         |
+| inHoveredRangeStyles           | CSSProperties                                     |                                                                                                              |         |
+| inHoveredRangeClassName        | string                                            |                                                                                                              |         |
+| inHoveredRangeParentStyles     | CSSProperties                                     |                                                                                                              |         |
+| inHoveredRangeParentClassName  | string                                            |                                                                                                              |         |
+| startOfRangeStyles             | CSSProperties                                     |                                                                                                              |         |
+| startOfRangeClassName          | string                                            |                                                                                                              |         |
+| startOfRangeParentStyles       | CSSProperties                                     |                                                                                                              |         |
+| startOfRangeParentClassName    | string                                            |                                                                                                              |         |
+| endOfRangeStyles               | CSSProperties                                     |                                                                                                              |         |
+| endOfRangeClassName            | string                                            |                                                                                                              |         |
+| endOfRangeParentStyles         | CSSProperties                                     |                                                                                                              |         |
+| endOfRangeParentClassName      | string                                            |                                                                                                              |         |
 
 ### TDaySlotsDayRendererArgs props
 
@@ -325,8 +416,8 @@ const MyCustomAwesomeHeader = () => {
 
 | Name                      | Type                        | Description                                                                                              |
 | ------------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------- |
-| goToNextMonth             | () => void                  | Function to navigate to the next month                                                                   |
-| goToPrevMonth             | () => void                  | Function to navigate to the previous month                                                               |
+| goToNextMonth             | (step?: number) => void     | Function to navigate to the next month (`step` months forward, default `1`)                              |
+| goToPrevMonth             | (step?: number) => void     | Function to navigate to the previous month (`step` months back, default `1`)                             |
 | goToDate                  | (date: Date) => void        | Function to navigate to a specific date                                                                  |
 | goToCurrentMonth          | () => void                  | Function to navigate to the current month                                                                |
 | goToMonth                 | (month: number) => void     | Local month (based on the desired calendar)                                                              |
@@ -338,6 +429,8 @@ const MyCustomAwesomeHeader = () => {
 | lastDayOfMonth            | Date                        | Last day of the month                                                                                    |
 | selectedDay               | Date \| Date[] \| undefined | The selected day in the calendar                                                                         |
 | handleClickSlot           | (date: Date) => void        | Callback function when a date is clicked                                                                 |
+| hoveredDate               | Date \| undefined           | The date currently hovered while picking a range (shared across side-by-side calendars)                  |
+| handleHoverSlot           | (date?: Date) => void       | Callback when a day is hovered while picking a range. Pass `undefined` to clear (shared across calendars) |
 | monthInTheCalendar        | number                      | Current month in the calendar (based on desire calendar)                                                 |
 | totalDaysInTheCalendar    | number                      | Indicate the total days in the month                                                                     |
 | yearInTheCalendar         | number                      | Current year in the desire calendar                                                                      |
@@ -357,9 +450,9 @@ Using the [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Ref
 
 - [x] remove dependency to date-fns
 - [ ] time picker
-- [ ] rangle picker hover effect
+- [x] range picker hover effect
 - [ ] integrate popover for whole calendar
-- [ ] two side by side calendar
+- [x] two side by side calendar
 
 ## License
 

@@ -6,6 +6,7 @@ import ChevronRight from "../icons/ChevronRight";
 import { THeaderProps } from "./types";
 
 function Header({
+  navigationStep = 1,
   rootClassName,
   rootStyles,
   prevButtonStyles,
@@ -52,9 +53,9 @@ function Header({
         role="button"
         tabIndex={0}
         aria-label="Previous Month"
-        onClick={() => goToPrevMonth?.()}
+        onClick={() => goToPrevMonth?.(navigationStep)}
         onKeyDown={(e) => {
-          if (e.key === "Enter") goToPrevMonth?.();
+          if (e.key === "Enter") goToPrevMonth?.(navigationStep);
         }}
       >
         {leftIcon || <ChevronLeft />}
@@ -122,9 +123,9 @@ function Header({
         aria-label="Next Month"
         role="button"
         tabIndex={0}
-        onClick={() => goToNextMonth?.()}
+        onClick={() => goToNextMonth?.(navigationStep)}
         onKeyDown={(e) => {
-          if (e.key === "Enter") goToNextMonth?.();
+          if (e.key === "Enter") goToNextMonth?.(navigationStep);
         }}
       >
         {rightIcon || <ChevronRight />}

@@ -3,8 +3,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { defaultWeekStartsOn } from "./constants/defaults";
 import { PickerContext } from "./store/pickerContext";
 import { TDatePickerProps } from "./types";
-import { getMonthSlots } from "./utils/datePicker";
-import { addDays, getAllMonths, subDays } from "./utils/dateUtils";
+import { addCalendarMonths, getMonthSlots } from "./utils/datePicker";
+import { getAllMonths } from "./utils/dateUtils";
 import { normalizeTemporal } from "./utils/temporal";
 
 function DatePickerProvider<IsRange extends boolean>(
@@ -65,6 +65,13 @@ function DatePickerProvider<IsRange extends boolean>(
   const [internalValue, setInternalValue] = useState<Date[] | Date | undefined>(
     finalInitialValue
   );
+
+  /**
+   * The date currently being hovered while picking a range. Kept here (rather
+   * than in each `DaySlots`) so the hovered range preview is shared across
+   * side-by-side calendars.
+   */
+  const [hoveredDate, setHoveredDate] = useState<Date | undefined>(undefined);
 
   const finalValue = value || internalValue;
 
@@ -131,7 +138,7 @@ function DatePickerProvider<IsRange extends boolean>(
     [currentDate, calendar, weekStartsOn]
   );
 
-  const goToNextMonth = () => {
+  const goToNextMonth = (step = 1) => {
     // prevent go to next month if config.yearRangeTo	is reached
     if (
       yearRangeTo &&
@@ -141,11 +148,11 @@ function DatePickerProvider<IsRange extends boolean>(
       return;
     }
 
-    const updatedDate = addDays(daysOfMonth[daysOfMonth?.length - 1], 1);
+    const updatedDate = addCalendarMonths(firstDayOfMonth, step, calendar);
     setCurrentDate(updatedDate);
   };
 
-  const goToPrevMonth = () => {
+  const goToPrevMonth = (step = 1) => {
     // prevent go to previous month if config.yearRangeFrom	is reached
     if (
       yearRangeFrom &&
@@ -155,7 +162,7 @@ function DatePickerProvider<IsRange extends boolean>(
       return;
     }
 
-    const updatedDate = subDays(daysOfMonth[0], 1);
+    const updatedDate = addCalendarMonths(firstDayOfMonth, -step, calendar);
     setCurrentDate(updatedDate);
   };
 
@@ -214,6 +221,22 @@ function DatePickerProvider<IsRange extends boolean>(
     if (!value) {
       setInternalValue(finalValue);
     }
+  };
+
+  /**
+   * Handle hovering a day slot while picking a range. Kept here so the hovered
+   * range preview is shared across side-by-side calendars. Pass `undefined` to
+   * clear the hover.
+   */
+  const handleHoverSlot = (date: Date | undefined) => {
+    // only preview a hovered range while the first date of a range has been
+    // picked but the second one hasn't.
+    const isRangeInProgress =
+      Array.isArray(finalValue) && !!finalValue[0] && !finalValue[1];
+
+    if (date && !isRangeInProgress) return;
+
+    setHoveredDate(date);
   };
 
   /**
@@ -294,6 +317,8 @@ function DatePickerProvider<IsRange extends boolean>(
         firstDayOfMonth,
         lastDayOfMonth,
         selectedDay: finalValue,
+        hoveredDate,
+        handleHoverSlot,
         monthInTheCalendar,
         totalDaysInTheCalendar,
         yearInTheCalendar,

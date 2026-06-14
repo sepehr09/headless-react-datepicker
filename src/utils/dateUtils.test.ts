@@ -40,6 +40,15 @@ describe("eachDayOfInterval", () => {
       new Date("2022-07-27T14:30:00.000Z"),
     ]);
   });
+
+  it("throws when the start date is after the end date", () => {
+    const start = new Date("2022-07-27T14:30:00.000Z");
+    const end = new Date("2022-07-25T14:30:00.000Z");
+
+    expect(() => eachDayOfInterval(start, end)).toThrow(
+      "Start date must be before or equal to end date"
+    );
+  });
 });
 
 describe("startOfWeek", () => {
@@ -57,7 +66,25 @@ describe("startOfWeek", () => {
   });
 });
 
+describe("startOfWeek", () => {
+  it("defaults to Sunday as the start of the week when not provided", () => {
+    const desireDate = new Date("2024-05-23T14:30:00.000Z"); // Thursday
+    const startOfWeekDate = startOfWeek(desireDate);
+
+    expect(startOfWeekDate.getUTCDate()).toBe(19); // Sunday
+    expect(startOfWeekDate.getUTCHours()).toBe(0);
+  });
+});
+
 describe("endOfWeek", () => {
+  it("defaults to Sunday as the start of the week when not provided", () => {
+    const desireDate = new Date("2024-05-23T14:30:00.000Z"); // Thursday
+    const endOfWeekDate = endOfWeek(desireDate);
+
+    expect(endOfWeekDate.getUTCDate()).toBe(25); // Saturday
+    expect(endOfWeekDate.getUTCHours()).toBe(23);
+  });
+
   it("get endOfWeek", () => {
     const desireDate = new Date("2024-05-23T14:30:00.000Z");
     const endOfWeekDate = endOfWeek(desireDate, 6); // Start of week, with Saturday as the start of the week (6)
@@ -118,6 +145,19 @@ describe("getWeekDayName", () => {
     expect(getWeekDayName(5, { weekdayFormat: "long" })).toBe("Friday");
     expect(getWeekDayName(6, { weekdayFormat: "long" })).toBe("Saturday");
   });
+
+  it("falls back to the default locale and format when no options are given", () => {
+    expect(getWeekDayName(0)).toBe("S"); // Sunday, narrow / en-US
+  });
+
+  it("throws when the day number is out of range", () => {
+    expect(() => getWeekDayName(-1)).toThrow(
+      "Day number must be between 0 and 6"
+    );
+    expect(() => getWeekDayName(7)).toThrow(
+      "Day number must be between 0 and 6"
+    );
+  });
 });
 
 describe("addDays", () => {
@@ -140,6 +180,18 @@ describe("addDays", () => {
   it("returns `Invalid Date` if the given date is invalid", () => {
     const result = addDays(new Date(NaN), 10);
     expect(result instanceof Date && isNaN(result.getTime())).toBe(true);
+  });
+
+  it("returns the same day when amount is 0 (no-op)", () => {
+    const date = new Date(2014, 8 /* Sep */, 1, 11, 30);
+    const result = addDays(date, 0);
+    expect(result).toEqual(date);
+  });
+
+  it("returns the original date when amount is NaN", () => {
+    const date = new Date(2014, 8 /* Sep */, 1);
+    const result = addDays(date, NaN);
+    expect(result).toEqual(date);
   });
 });
 

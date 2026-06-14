@@ -91,4 +91,14 @@ describe("Title component", () => {
 
     expect(titleElement).toBeInTheDocument();
   });
+
+  it("shows an offset month when monthOffset is provided (side-by-side calendars)", () => {
+    const { getByText } = render(
+      <DatePickerProvider initialValue={new Date("2024-08-01T00:00:00.000Z")}>
+        <Title monthOffset={1} />
+      </DatePickerProvider>
+    );
+
+    expect(getByText("Sep 2024")).toBeInTheDocument();
+  });
 });

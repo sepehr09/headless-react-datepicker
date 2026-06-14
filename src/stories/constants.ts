@@ -1,3 +1,6 @@
+import type { Meta } from "@storybook/react";
+import DatePickerProvider from "../DatePickerProvider";
+
 export const argTypes = {
   config: {
     control: "null",
@@ -66,3 +69,20 @@ export const argTypes = {
     control: "boolean",
   },
 };
+
+/**
+ * Shared meta fields used by every story group. Each `*.stories.tsx` file
+ * spreads this and only adds its own `title` so the sidebar groups stay
+ * consistent (same controls, layout and autodocs).
+ */
+export const baseMeta = {
+  component: DatePickerProvider,
+  parameters: {
+    // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout
+    layout: "fullscreen",
+    deepControls: { enabled: true },
+  },
+  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
+  tags: ["autodocs"],
+  argTypes: argTypes,
+} satisfies Omit<Meta<typeof DatePickerProvider>, "title">;

@@ -3,14 +3,15 @@ import {
   KeyboardEvent,
   ReactNode,
   useContext,
+  useMemo,
   useRef,
-  useState,
 } from "react";
 import { defaultWeekStartsOn } from "../../constants/defaults";
 import { bindWeekDayToNumber } from "../../constants/weekdays";
 import { PickerContext } from "../../store/pickerContext";
 import { Day } from "../../types";
 import { classJoin } from "../../utils/classJoin";
+import { addCalendarMonths, getMonthSlots } from "../../utils/datePicker";
 import { isSameDay, isToday, isWithinInterval } from "../../utils/dateUtils";
 import { IsSameMonth } from "../../utils/jalali";
 import { TDaySlots } from "./types";
@@ -19,6 +20,7 @@ function DaySlots(props: TDaySlots) {
   const {
     dayRenderer,
     onClickSlot: onClickSlotProp,
+    monthOffset,
     parentClassName,
     parentStyles,
     slotParentClassName,
@@ -78,16 +80,16 @@ function DaySlots(props: TDaySlots) {
   } = props;
 
   const {
-    daysOfMonth,
+    daysOfMonth: contextDaysOfMonth,
     config,
     selectedDay,
     handleClickSlot,
     calendar,
-    monthInTheCalendar,
-    firstDayOfMonth,
+    monthInTheCalendar: contextMonthInTheCalendar,
+    firstDayOfMonth: contextFirstDayOfMonth,
+    hoveredDate: hoveredItem,
+    handleHoverSlot,
   } = useContext(PickerContext);
-
-  const [hoveredItem, setHoveredItem] = useState<Date | undefined>(undefined);
 
   const {
     locale,
@@ -103,6 +105,31 @@ function DaySlots(props: TDaySlots) {
     weekStartsOn = defaultWeekStartsOn,
     allowBackwardRange,
   } = config || {};
+
+  /**
+   * When `monthOffset` is provided, this calendar renders a month other than
+   * the one in the context (offset by `monthOffset` months) so multiple
+   * calendars can be shown side-by-side. The shared state (selection, hover,
+   * navigation) still lives in the context, so everything stays in sync.
+   */
+  const offsetSlots = useMemo(() => {
+    if (!monthOffset || !contextFirstDayOfMonth || !calendar) return undefined;
+    return getMonthSlots({
+      currentDate: addCalendarMonths(
+        contextFirstDayOfMonth,
+        monthOffset,
+        calendar
+      ),
+      calendar,
+      weekStartsOn,
+    });
+  }, [monthOffset, contextFirstDayOfMonth, calendar, weekStartsOn]);
+
+  const daysOfMonth = offsetSlots?.daysOfMonth ?? contextDaysOfMonth;
+  const monthInTheCalendar =
+    offsetSlots?.monthInTheCalendar ?? contextMonthInTheCalendar;
+  const firstDayOfMonth =
+    offsetSlots?.firstDayOfMonth ?? contextFirstDayOfMonth;
 
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -296,20 +323,13 @@ function DaySlots(props: TDaySlots) {
     (daysOfMonth?.[0]?.getDay() - bindWeekDayToNumber[weekStartsOn] + 7) % 7;
 
   const handleMouseEnter = (date: Date) => {
-    if (
-      !Array.isArray(selectedDay) ||
-      (Array.isArray(selectedDay) && selectedDay?.[0] && selectedDay?.[1])
-    ) {
-      return;
-    }
-
-    setHoveredItem(date);
+    handleHoverSlot?.(date);
   };
 
   const handleMouseLeave = () => {
     if (!hoveredItem) return;
 
-    setHoveredItem(undefined);
+    handleHoverSlot?.(undefined);
   };
 
   return (
@@ -404,10 +424,21 @@ function DaySlots(props: TDaySlots) {
           ...(isDisabled && disableStyles),
         };
 
+        // Resolve the (mutually conflicting) state text color ourselves, in
+        // priority order, so we only ever emit a single text-color utility.
+        // Order matters: disabled > holiday/weekend > today (last one wins).
+        const stateTextColor = isDisabled
+          ? "rhmdp-text-gray-400"
+          : isInHoliday || isInWeekend
+            ? "rhmdp-text-red-500"
+            : IsToday
+              ? "rhmdp-text-blue-600"
+              : undefined;
+
         const parentClassNames = classJoin(
           "rhmdp-border rhmdp-border-transparent rhmdp-h-max",
+          stateTextColor,
           slotParentClassName,
-          IsToday && "rhmdp-text-blue-600",
           IsToday && todayParentClassName,
           isSelectable && selectableParentClassName,
           isSelected && selectedParentClassName,
@@ -419,11 +450,8 @@ function DaySlots(props: TDaySlots) {
           isStartOfRange && startOfRangeParentClassName,
           isEndOfRange && "rhmdp-rounded-e-lg",
           isEndOfRange && endOfRangeParentClassName,
-          isInWeekend && "rhmdp-text-red-500",
           isInWeekend && weekendParentClassName,
-          isInHoliday && "rhmdp-text-red-500",
           isInHoliday && holidayParentClassName,
-          isDisabled && "rhmdp-text-gray-400",
           isDisabled && disableParentClassName
         );
 

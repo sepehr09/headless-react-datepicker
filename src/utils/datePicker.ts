@@ -1,7 +1,40 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { defaultWeekStartsOn } from "../constants/defaults";
 import { bindWeekDayToNumber } from "../constants/weekdays";
 import { TCalendar, TDay } from "../types";
 import { eachDayOfInterval, endOfWeek, startOfWeek } from "./dateUtils";
+import { normalizeTemporal } from "./temporal";
+
+/**
+ * Add (or subtract) a number of months to a date, respecting the given
+ * calendar (e.g. persian, islamic, ...). Returns the gregorian `Date` that
+ * lands on the first day of the resulting month in that calendar.
+ *
+ * Useful for rendering side-by-side calendars where the second calendar shows
+ * the month after the first one.
+ *
+ * @example
+ * // Show the month after the currently displayed persian month:
+ * addCalendarMonths(firstDayOfMonth, 1, "persian")
+ */
+export function addCalendarMonths(
+  date: Date,
+  months: number,
+  calendar: TCalendar
+): Date {
+  const { year, month } = getMonthInfo(date, calendar);
+
+  const shifted = Temporal.PlainDate.from({
+    year,
+    month,
+    day: 1,
+    calendar,
+  })
+    .add({ months })
+    .getISOFields();
+
+  return new Date(`${normalizeTemporal(shifted)}T00:00:00`);
+}
 
 export function getMonthInfo(date: Date, calendar: TCalendar) {
   const startDate = new Date(new Date(date).setHours(0, 0, 0, 0));

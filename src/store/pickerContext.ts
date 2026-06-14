@@ -4,13 +4,15 @@ import { TDatePickerProps, TMonthListItem } from "../types";
 export type TPickerContext<IsRange extends boolean> = {
   /**
    * Function to navigate to the next month
+   * @param step number of months to move forward (default: 1)
    */
-  goToNextMonth: () => void;
+  goToNextMonth: (step?: number) => void;
 
   /**
    * Function to navigate to the previous month
+   * @param step number of months to move backward (default: 1)
    */
-  goToPrevMonth: () => void;
+  goToPrevMonth: (step?: number) => void;
 
   /**
    * Function to navigate to a specific date
@@ -74,6 +76,20 @@ export type TPickerContext<IsRange extends boolean> = {
    * @type {Date | Date[] | undefined}
    */
   selectedDay?: Date | Date[] | undefined;
+
+  /**
+   * The date currently being hovered while picking a range. Shared across all
+   * `DaySlots` so the hovered range preview spans side-by-side calendars.
+   * @type {Date | undefined}
+   */
+  hoveredDate?: Date | undefined;
+
+  /**
+   * Callback when a day slot is hovered while picking a range. Pass `undefined`
+   * to clear the hover. Shared across side-by-side calendars.
+   * @param date the hovered date, or `undefined` to clear
+   */
+  handleHoverSlot?: (date: Date | undefined) => void;
 
   /**
    * Callback function when a date is clicked

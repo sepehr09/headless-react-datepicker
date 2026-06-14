@@ -1,5 +1,12 @@
 export type THeaderProps = {
   /**
+   * Number of months the previous/next arrows move per click. Set to `2` when
+   * showing two calendars side-by-side so both move together.
+   * @default 1
+   */
+  navigationStep?: number;
+
+  /**
    * the root css styles of the header
    */
   rootStyles?: React.CSSProperties;

@@ -1,10 +1,21 @@
 # Changelog
 
+### version 1.4.0
+
+- new: add `PanelHeader` component, a self-contained alternative to `Header` that shows the month and year pickers inside the calendar area instead of `<select>` dropdowns. Clicking the month opens a 12-month grid; clicking the year opens a paginated year grid with prev/next page arrows (page size via `yearsPerPage`, default 12). Wrap `WeekDays` / `DaySlots` as its children and it swaps them for the grids while navigating. Works across all calendars and locales.
+- new: add `monthOffset` prop to `Title` and `DaySlots` so you can render two (or more) calendars side-by-side (Airbnb-style) from a single `DatePickerProvider`. Navigation moves every month together.
+- new: add `navigationStep` prop to `Header` so the prev/next arrows can move multiple months per click (e.g. `navigationStep={2}` for two side-by-side calendars). `goToNextMonth` / `goToPrevMonth` now accept an optional `step` argument.
+- new: add `addCalendarMonths` utility to shift a date by a number of months while respecting the active calendar (persian, islamic, ...).
+- fix: in side-by-side calendars, the hovered range preview now spans across calendars (e.g. selecting a start date on the left calendar and hovering the right one). The hovered date is now shared via context (`hoveredDate` / `handleHoverSlot`).
+- fix: `classJoin` no longer drops non-conflicting tailwind utilities that share a prefix (e.g. `text-green-500` and `text-2xl` are now both kept).
+- chore: simplify `classJoin` into a dependency-free class combiner (join, ignore falsy values, remove exact duplicates).
+- chore: resolve the day cell's state text color (today/weekend/holiday/disabled) by priority internally so only a single color utility is emitted.
+
 ### version 1.3.0
 
 - new: In `dayRenderer`, the `isOtherMonth` prop is now exposed to indicate whether a day is in the current month or not.
 - chore: Add the `isToday` prop in dayRenderer to be consistent with other props. Keep the `IsToday` prop for backward compatibility.
-  
+
 ### version 1.2.0
 
 - new: add `holidays` prop so you can set array of holidays to show them differently or prevent user to be able to select them or not.

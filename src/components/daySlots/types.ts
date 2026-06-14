@@ -26,6 +26,16 @@ export type TDaySlots = {
   dayRenderer?: (args: TDaySlotsDayRendererArgs) => ReactNode;
   onClickSlot?: (date: Date) => void;
 
+  /**
+   * Render a different month than the one currently in the calendar, offset by
+   * this number of months. Useful for showing two (or more) calendars
+   * side-by-side (Airbnb-style). Navigation still moves every calendar together
+   * and range selection/hover spans across them.
+   * @example 1 // show the month after the current one
+   * @default 0
+   */
+  monthOffset?: number;
+
   parentClassName?: string;
   parentStyles?: CSSProperties;
 

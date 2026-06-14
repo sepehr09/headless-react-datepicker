@@ -6,21 +6,21 @@ describe("classJoin", () => {
     expect(classJoin("a", "b", "c")).toBe("a b c");
   });
 
-  it("should remove duplicates", () => {
+  it("should remove exact duplicates", () => {
     expect(classJoin("a a a")).toBe("a");
+    expect(classJoin("a b", "a")).toBe("a b");
   });
 
-  it("should remove duplicates even with rhmdp- prefix", () => {
-    expect(classJoin("bg-blue-600", "bg-blue-700")).toBe("bg-blue-700");
+  it("should keep non-conflicting utilities that share a prefix", () => {
+    // text color and text size don't conflict, both must be kept
+    expect(classJoin("text-green-500", "text-2xl")).toBe(
+      "text-green-500 text-2xl"
+    );
   });
 
-  it("should remove duplicates even with rhmdp- prefix", () => {
-    expect(classJoin("rhmdp-bg-blue-600", "bg-blue-700")).toBe("bg-blue-700");
-  });
-
-  it("should remove duplicates even with rhmdp- prefix, but respect last value", () => {
-    expect(classJoin("bg-blue-700", "rhmdp-bg-blue-600")).toBe(
-      "rhmdp-bg-blue-600"
+  it("should keep conflicting utilities (cascade resolves them, not us)", () => {
+    expect(classJoin("bg-blue-600", "bg-blue-700")).toBe(
+      "bg-blue-600 bg-blue-700"
     );
   });
 

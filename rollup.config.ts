@@ -13,6 +13,7 @@ export default [
       typescript({
         tsconfig: "./tsconfig.json",
         useTsconfigDeclarationDir: true,
+        include: ["src/**/*.ts", "src/**/*.tsx"],
       }),
       terser(),
     ],
@@ -26,6 +27,7 @@ export default [
       typescript({
         tsconfig: "./tsconfig.cjs.json",
         useTsconfigDeclarationDir: true,
+        include: ["src/**/*.ts", "src/**/*.tsx"],
         tsconfigOverride: {
           compilerOptions: {
             module: "esnext",
