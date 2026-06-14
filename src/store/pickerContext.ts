@@ -1,5 +1,6 @@
 import { createContext } from "react";
 import { TDatePickerProps, TMonthListItem } from "../types";
+import { TTimeParts } from "../utils/time";
 
 export type TPickerContext<IsRange extends boolean> = {
   /**
@@ -97,6 +98,17 @@ export type TPickerContext<IsRange extends boolean> = {
    * @returns
    */
   handleClickSlot?: (date: Date) => void;
+
+  /**
+   * Update the time (hours/minutes/seconds) of the current selection while
+   * keeping its calendar day. Any part left out keeps its current value. For a
+   * range picker, `index` chooses which end to update (`0` = start, `1` = end).
+   * If nothing is selected yet, the time is applied to the day currently shown
+   * in the calendar.
+   * @param time the time parts to set
+   * @param index which end of a range to update (default `0`)
+   */
+  handleChangeTime?: (time: Partial<TTimeParts>, index?: number) => void;
 
   /**
    * Current month in the calendar

@@ -3,6 +3,8 @@ import DatePickerProvider from "../DatePickerProvider";
 import DaySlots from "../components/daySlots/DaySlots";
 import Header from "../components/header/Header";
 import PanelHeader from "../components/panelHeader/PanelHeader";
+import TimePicker from "../components/timePicker/TimePicker";
+import { TTimePickerProps } from "../components/timePicker/types";
 import Title from "../components/title/Title";
 import WeekDays from "../components/weekDays/WeekDays";
 import { TDatePickerOnChange, TDatePickerProps } from "../types";
@@ -145,6 +147,73 @@ export const RenderDualDatePicker = <T extends boolean>(
         </div>
       </DatePickerProvider>
     </div>
+  );
+};
+
+/**
+ * A calendar plus a `TimePicker`. The selected value now carries a time of day,
+ * and picking a different day keeps the chosen time. Pass `timePickerProps`
+ * (e.g. `{ use12Hours: true, showSeconds: true }`) to configure the clock. The
+ * chosen date+time is shown below so you can see it update live.
+ */
+export const RenderDateTimePicker = <T extends boolean>(
+  props: TDatePickerProps<T> & { timePickerProps?: TTimePickerProps }
+) => {
+  const { timePickerProps, ...providerProps } = props;
+  const [value, setValue] = useState<TDatePickerProps<T>["value"]>(
+    providerProps.initialValue
+  );
+
+  const onChange: TDatePickerOnChange<T> = (e) => {
+    providerProps?.onChange?.(e);
+    setValue(e);
+  };
+
+  const format = (d: Date) =>
+    new Intl.DateTimeFormat(providerProps.config?.locale || "en-US", {
+      dateStyle: "medium",
+      timeStyle: timePickerProps?.showSeconds ? "medium" : "short",
+      calendar: providerProps.calendar,
+      hour12: timePickerProps?.use12Hours,
+    }).format(d);
+
+  const label = Array.isArray(value)
+    ? value.map(format).join("  —  ")
+    : value
+      ? format(value)
+      : "—";
+
+  return (
+    <Card>
+      <DatePickerProvider {...providerProps} onChange={onChange}>
+        <Title />
+        <Header
+          monthSelectStyles={selectStyles}
+          yearSelectStyles={selectStyles}
+        />
+        <WeekDays />
+        <DaySlots />
+        <div
+          style={{
+            borderTop: "1px solid #eee",
+            marginTop: 8,
+            paddingTop: 8,
+          }}
+        >
+          <TimePicker {...timePickerProps} />
+        </div>
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: 8,
+            fontSize: 14,
+            color: "#444",
+          }}
+        >
+          {label}
+        </div>
+      </DatePickerProvider>
+    </Card>
   );
 };
 

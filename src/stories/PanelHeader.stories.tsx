@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import DatePickerProvider from "../DatePickerProvider";
 import { RenderPanelDatePicker } from "./_shared";
+import { rtlDecorator } from "./rtlDecorator";
 import { baseMeta } from "./constants";
 
 const meta = {
@@ -25,6 +26,26 @@ export const PanelMonthYearPicker: Story = {
       weekdayFormat: "short",
       dayFormat: "numeric",
       weekends: ["saturday", "sunday"],
+      weekendSelectable: true,
+    },
+  },
+};
+
+export const PanelMonthYearPickerPersian: Story = {
+  render: RenderPanelDatePicker,
+  decorators: [rtlDecorator],
+  args: {
+    isRange: false,
+    initialValue: new Date(),
+    calendar: "persian",
+    config: {
+      locale: "fa-IR",
+      weekStartsOn: "saturday",
+      showOtherDays: false,
+      otherDaysSelectable: false,
+      weekdayFormat: "narrow",
+      dayFormat: "numeric",
+      weekends: ["thursday", "friday"],
       weekendSelectable: true,
     },
   },

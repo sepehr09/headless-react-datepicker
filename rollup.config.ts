@@ -14,6 +14,15 @@ export default [
         tsconfig: "./tsconfig.json",
         useTsconfigDeclarationDir: true,
         include: ["src/**/*.ts", "src/**/*.tsx"],
+        // keep test/story files out of the published bundle's typecheck
+        tsconfigOverride: {
+          exclude: [
+            "src/**/*.test.ts",
+            "src/**/*.test.tsx",
+            "src/**/*.stories.tsx",
+            "src/stories",
+          ],
+        },
       }),
       terser(),
     ],
@@ -32,6 +41,13 @@ export default [
           compilerOptions: {
             module: "esnext",
           },
+          // keep test/story files out of the published bundle's typecheck
+          exclude: [
+            "src/**/*.test.ts",
+            "src/**/*.test.tsx",
+            "src/**/*.stories.tsx",
+            "src/stories",
+          ],
         },
       }),
       terser(),

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import DatePickerProvider from "../DatePickerProvider";
 import { RenderDualDatePicker } from "./_shared";
+import { rtlDecorator } from "./rtlDecorator";
 import { baseMeta } from "./constants";
 
 const meta = {
@@ -32,6 +33,7 @@ export const TwoCalendarsSideBySide: Story = {
 
 export const TwoCalendarsPersian: Story = {
   render: RenderDualDatePicker,
+  decorators: [rtlDecorator],
   args: {
     isRange: true,
     initialValue: [

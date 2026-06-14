@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import DatePickerProvider from "../DatePickerProvider";
 import { RenderDatePicker } from "./_shared";
+import { rtlDecorator } from "./rtlDecorator";
 import { baseMeta } from "./constants";
 
 const meta = {
@@ -13,6 +14,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Persian: Story = {
   render: RenderDatePicker,
+  decorators: [rtlDecorator],
   args: {
     isRange: false,
     initialValue: new Date("2025-04-17T00:00:00"),
@@ -49,6 +51,7 @@ export const Islamic: Story = {
 
 export const GregoryInFa_IR: Story = {
   render: RenderDatePicker,
+  decorators: [rtlDecorator],
   args: {
     isRange: false,
     initialValue: new Date("2025-04-17T00:00:00"),

@@ -4,8 +4,9 @@ import { defaultWeekStartsOn } from "./constants/defaults";
 import { PickerContext } from "./store/pickerContext";
 import { TDatePickerProps } from "./types";
 import { addCalendarMonths, getMonthSlots } from "./utils/datePicker";
-import { getAllMonths } from "./utils/dateUtils";
+import { getAllMonths, startOfDay } from "./utils/dateUtils";
 import { normalizeTemporal } from "./utils/temporal";
+import { getTimeParts, setTimeParts, TTimeParts } from "./utils/time";
 
 function DatePickerProvider<IsRange extends boolean>(
   props: TDatePickerProps<IsRange>
@@ -175,6 +176,10 @@ function DatePickerProvider<IsRange extends boolean>(
   };
 
   const getSingleSelectionValue = (date: Date) => {
+    // Carry over a previously-picked time so changing the day keeps the time.
+    if (internalValue && !Array.isArray(internalValue)) {
+      return setTimeParts(date, getTimeParts(internalValue));
+    }
     return date;
   };
 
@@ -188,11 +193,15 @@ function DatePickerProvider<IsRange extends boolean>(
       (!allowBackwardRange &&
         new Date(internalValue[0]).getTime() > new Date(date).getTime())
     ) {
-      return [date];
+      // Carry over the previous start's time onto the new start.
+      const prevStart = internalValue?.[0];
+      return [prevStart ? setTimeParts(date, getTimeParts(prevStart)) : date];
     }
 
-    // Range (To)
-    return [internalValue[0], date].sort(
+    // Range (To) — carry over the previous end's time onto the new end.
+    const prevEnd = internalValue?.[1];
+    const end = prevEnd ? setTimeParts(date, getTimeParts(prevEnd)) : date;
+    return [internalValue[0], end].sort(
       (a, b) => new Date(a).getTime() - new Date(b).getTime()
     );
   };
@@ -237,6 +246,35 @@ function DatePickerProvider<IsRange extends boolean>(
     if (date && !isRangeInProgress) return;
 
     setHoveredDate(date);
+  };
+
+  /**
+   * Update the time (hours/minutes/seconds) of the current selection while
+   * keeping its calendar day. For a range picker, `index` chooses which end to
+   * update (`0` = start, `1` = end). If nothing is selected yet, the time is
+   * applied to the day currently shown in the calendar (at midnight).
+   */
+  const handleChangeTime = (time: Partial<TTimeParts>, index = 0) => {
+    let nextValue: Date | Date[];
+
+    if (isRange) {
+      const current = Array.isArray(internalValue) ? [...internalValue] : [];
+      const base = current[index] ?? startOfDay(currentDate);
+      current[index] = setTimeParts(base, time);
+      nextValue = current;
+    } else {
+      const base =
+        internalValue && !Array.isArray(internalValue)
+          ? internalValue
+          : startOfDay(currentDate);
+      nextValue = setTimeParts(base, time);
+    }
+
+    onChange?.(nextValue as IsRange extends true ? Date[] : Date);
+
+    if (!value) {
+      setInternalValue(nextValue);
+    }
   };
 
   /**
@@ -319,6 +357,7 @@ function DatePickerProvider<IsRange extends boolean>(
         selectedDay: finalValue,
         hoveredDate,
         handleHoverSlot,
+        handleChangeTime,
         monthInTheCalendar,
         totalDaysInTheCalendar,
         yearInTheCalendar,

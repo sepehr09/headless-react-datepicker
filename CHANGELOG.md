@@ -2,6 +2,10 @@
 
 ### version 1.4.0
 
+- new: add `TimePicker` component to set the time (hours/minutes, with optional `showSeconds` and a 12-hour `use12Hours` AM/PM toggle) of the selected day. Each unit has stepper arrows and a native `<select>` dropdown (clicking the value), toggleable with `dropdown`. It's headless like the rest of the library: default UI, a `renderer` escape hatch, and granular `className`/`styles` props. Digits and the AM/PM label follow the calendar `locale`. For ranges, target an end with `index`.
+- new: add `handleChangeTime(time, index?)` to the context to set the time of the current selection while keeping its day.
+- new: picking a different day now preserves the previously-chosen time (instead of resetting to midnight), so date + time selections stay in sync.
+- new: add `getTimeParts`, `setTimeParts`, `wrap`, `to12Hour`, `from12Hour` time utilities and the `TTimePickerProps`, `TTimePickerRendererArgs`, `TTimePickerUnit`, `TTimeParts`, `TPeriod` types.
 - new: add `PanelHeader` component, a self-contained alternative to `Header` that shows the month and year pickers inside the calendar area instead of `<select>` dropdowns. Clicking the month opens a 12-month grid; clicking the year opens a paginated year grid with prev/next page arrows (page size via `yearsPerPage`, default 12). Wrap `WeekDays` / `DaySlots` as its children and it swaps them for the grids while navigating. Works across all calendars and locales.
 - new: add `monthOffset` prop to `Title` and `DaySlots` so you can render two (or more) calendars side-by-side (Airbnb-style) from a single `DatePickerProvider`. Navigation moves every month together.
 - new: add `navigationStep` prop to `Header` so the prev/next arrows can move multiple months per click (e.g. `navigationStep={2}` for two side-by-side calendars). `goToNextMonth` / `goToPrevMonth` now accept an optional `step` argument.
