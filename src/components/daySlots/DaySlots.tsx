@@ -12,7 +12,12 @@ import { PickerContext } from "../../store/pickerContext";
 import { Day } from "../../types";
 import { classJoin } from "../../utils/classJoin";
 import { addCalendarMonths, getMonthSlots } from "../../utils/datePicker";
-import { isSameDay, isToday, isWithinInterval } from "../../utils/dateUtils";
+import {
+  isSameDay,
+  isToday,
+  isWithinInterval,
+  startOfDay,
+} from "../../utils/dateUtils";
 import { IsSameMonth } from "../../utils/jalali";
 import { TDaySlots } from "./types";
 
@@ -170,8 +175,10 @@ function DaySlots(props: TDaySlots) {
   const IsRangeSelected = (date: Date) => {
     if (Array.isArray(selectedDay) && selectedDay?.[0] && selectedDay?.[1]) {
       return isWithinInterval(date, {
-        start: selectedDay[0].setHours(0, 0, 0, 0),
-        end: selectedDay[selectedDay?.length - 1].setHours(0, 0, 0, 0),
+        // `startOfDay` returns a new Date so we never mutate the stored
+        // selection (which would wipe the time set via `TimePicker`).
+        start: startOfDay(selectedDay[0]),
+        end: startOfDay(selectedDay[selectedDay.length - 1]),
       });
     }
     return false;
@@ -252,11 +259,18 @@ function DaySlots(props: TDaySlots) {
     }
 
     // check if hovered date is before the selected date
-    if (hoveredItem < selectedDay?.[0] && !allowBackwardRange) return false;
+    if (
+      startOfDay(hoveredItem) < startOfDay(selectedDay[0]) &&
+      !allowBackwardRange
+    ) {
+      return false;
+    }
 
+    // `startOfDay` returns a new Date so we never mutate the stored selection
+    // or the hovered date (which would wipe their time portion).
     return isWithinInterval(date, {
-      start: selectedDay[0].setHours(0, 0, 0, 0),
-      end: hoveredItem.setHours(0, 0, 0, 0),
+      start: startOfDay(selectedDay[0]),
+      end: startOfDay(hoveredItem),
     });
   };
 

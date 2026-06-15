@@ -776,4 +776,22 @@ describe("DaySlots component", () => {
     const upSlot = getByLabelText(container, "August 1, 2024");
     expect(upSlot).toHaveFocus();
   });
+
+  it("does not mutate the selected range dates' time while rendering", () => {
+    // Rendering the range used to call `.setHours(0,0,0,0)` on the selected
+    // dates in place, wiping the time portion (breaking TimePicker).
+    const start = new Date(2024, 7, 10, 9, 30, 0);
+    const end = new Date(2024, 7, 20, 18, 45, 0);
+
+    render(
+      <DatePickerProvider isRange value={[start, end]}>
+        <DaySlots slotClassName="slotClassName" />
+      </DatePickerProvider>
+    );
+
+    expect(start.getHours()).toBe(9);
+    expect(start.getMinutes()).toBe(30);
+    expect(end.getHours()).toBe(18);
+    expect(end.getMinutes()).toBe(45);
+  });
 });
