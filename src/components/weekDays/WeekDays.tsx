@@ -3,6 +3,11 @@ import { defaultWeekStartsOn } from "../../constants/defaults";
 import { bindWeekDayToNumber } from "../../constants/weekdays";
 import { PickerContext } from "../../store/pickerContext";
 import { TDay } from "../../types";
+import {
+  WEEK_DAYS,
+  WEEK_DAYS_DAY,
+  WEEK_DAYS_DAY_WEEKEND,
+} from "../../constants/classNames";
 import { classJoin } from "../../utils/classJoin";
 import { getWeekDayName } from "../../utils/dateUtils";
 import { TWeekDaysProps } from "./types";
@@ -19,11 +24,16 @@ function WeekDays({
     locale,
     weekdayFormat,
     weekStartsOn = defaultWeekStartsOn,
+    weekends,
   } = config || {};
 
   return (
     <div
-      className={classJoin("rhmdp-grid rhmdp-grid-cols-7", rootClassName)}
+      className={classJoin(
+        WEEK_DAYS,
+        "rhmdp-grid rhmdp-grid-cols-7",
+        rootClassName
+      )}
       style={rootStyle}
     >
       {Array.from({ length: 7 }).map((_, index) => {
@@ -47,10 +57,15 @@ function WeekDays({
           });
         }
 
+        const isWeekend = !!weekends?.includes(weekDay);
+
         return (
           <div
             key={index}
             className={classJoin(
+              WEEK_DAYS_DAY,
+              `${WEEK_DAYS_DAY}--${weekDay}`,
+              isWeekend && WEEK_DAYS_DAY_WEEKEND,
               `rhmdp-text-center rhmdp-font-bold`,
               className
             )}

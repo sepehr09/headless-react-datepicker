@@ -1,4 +1,13 @@
 import { useContext, useState } from "react";
+import {
+  PANEL_HEADER,
+  PANEL_HEADER_CELL,
+  PANEL_HEADER_CELL_SELECTED,
+  PANEL_HEADER_GRID,
+  PANEL_HEADER_LABEL,
+  PANEL_HEADER_NEXT_BUTTON,
+  PANEL_HEADER_PREV_BUTTON,
+} from "../../constants/classNames";
 import { PickerContext } from "../../store/pickerContext";
 import { classJoin } from "../../utils/classJoin";
 import ChevronLeft from "../icons/ChevronLeft";
@@ -85,7 +94,11 @@ function PanelHeader({
 
   const prevButton = (
     <div
-      className={classJoin("rhmdp-cursor-pointer", prevButtonClassName)}
+      className={classJoin(
+        PANEL_HEADER_PREV_BUTTON,
+        "rhmdp-cursor-pointer",
+        prevButtonClassName
+      )}
       style={prevButtonStyles}
       role="button"
       tabIndex={0}
@@ -101,7 +114,11 @@ function PanelHeader({
 
   const nextButton = (
     <div
-      className={classJoin("rhmdp-cursor-pointer", nextButtonClassName)}
+      className={classJoin(
+        PANEL_HEADER_NEXT_BUTTON,
+        "rhmdp-cursor-pointer",
+        nextButtonClassName
+      )}
       style={nextButtonStyles}
       role="button"
       tabIndex={0}
@@ -116,6 +133,7 @@ function PanelHeader({
   );
 
   const labelBaseClassName = classJoin(
+    PANEL_HEADER_LABEL,
     "rhmdp-font-bold rhmdp-cursor-pointer rhmdp-select-none",
     labelClassName
   );
@@ -165,6 +183,7 @@ function PanelHeader({
     return (
       <span
         className={classJoin(
+          PANEL_HEADER_LABEL,
           "rhmdp-font-bold rhmdp-select-none",
           labelClassName
         )}
@@ -177,6 +196,8 @@ function PanelHeader({
 
   const cellClass = (active: boolean) =>
     classJoin(
+      PANEL_HEADER_CELL,
+      active && PANEL_HEADER_CELL_SELECTED,
       "rhmdp-cursor-pointer rhmdp-text-center rhmdp-py-2 rhmdp-rounded-lg",
       active ? "rhmdp-bg-blue-500 rhmdp-text-white" : "",
       cellClassName,
@@ -195,6 +216,7 @@ function PanelHeader({
       return (
         <div
           className={classJoin(
+            PANEL_HEADER_GRID,
             "rhmdp-grid rhmdp-grid-cols-3 rhmdp-gap-2",
             gridClassName
           )}
@@ -261,6 +283,8 @@ function PanelHeader({
     <>
       <div
         className={classJoin(
+          PANEL_HEADER,
+          `${PANEL_HEADER}--${view}`,
           "rhmdp-flex rhmdp-items-center rhmdp-justify-between rhmdp-py-4 rhmdp-select-none",
           rootClassName
         )}

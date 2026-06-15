@@ -267,14 +267,11 @@ describe("DatePickerProvider", () => {
 
   describe("controlled value", () => {
     it("reflects the value prop and updates the displayed month when it changes", () => {
-      const { result, rerender } = renderHook(
-        () => useDatePickerContext(),
-        {
-          wrapper: createWrapper({
-            value: new Date("2024-07-15T00:00:00.000Z"),
-          }),
-        }
-      );
+      const { result } = renderHook(() => useDatePickerContext(), {
+        wrapper: createWrapper({
+          value: new Date("2024-07-15T00:00:00.000Z"),
+        }),
+      });
 
       expect(result.current.selectedDay).toEqual(
         new Date("2024-07-15T00:00:00.000Z")
@@ -293,6 +290,51 @@ describe("DatePickerProvider", () => {
       expect(onChange).toHaveBeenCalledWith(clicked);
       // selectedDay stays tied to the controlled value prop
       expect(result.current.selectedDay).toEqual(value);
+    });
+  });
+
+  describe("yearsList", () => {
+    it("defaults to the 20 years up to the displayed year", () => {
+      const { result } = renderProvider({
+        initialValue: new Date(2024, 0, 1),
+      });
+
+      const years = result.current.yearsList!;
+      expect(years[0]).toBe(2004);
+      expect(years[years.length - 1]).toBe(2024);
+    });
+
+    it("stays frozen to the initial window when navigating (no range set)", () => {
+      const { result } = renderProvider({
+        initialValue: new Date(2024, 0, 1),
+      });
+
+      // pick the oldest year currently shown
+      const oldest = result.current.yearsList![0];
+      expect(oldest).toBe(2004);
+
+      act(() => result.current.goToYear(oldest));
+
+      // the list does not slide — it remains the initial window
+      const years = result.current.yearsList!;
+      expect(years[0]).toBe(2004);
+      expect(years.at(-1)).toBe(2024);
+    });
+
+    it("stays fixed to the configured range regardless of navigation", () => {
+      const { result } = renderProvider({
+        initialValue: new Date(2024, 0, 1),
+        config: { yearRangeFrom: 2000, yearRangeTo: 2030 },
+      });
+
+      expect(result.current.yearsList![0]).toBe(2000);
+      expect(result.current.yearsList!.at(-1)).toBe(2030);
+
+      act(() => result.current.goToYear(2005));
+
+      // a configured range is absolute, so it must not slide
+      expect(result.current.yearsList![0]).toBe(2000);
+      expect(result.current.yearsList!.at(-1)).toBe(2030);
     });
   });
 });

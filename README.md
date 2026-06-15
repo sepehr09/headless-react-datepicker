@@ -140,6 +140,53 @@ const DualCalendar = () => {
 
 ![Headless React Datepicker structure](documentation/assets/headless.png "Headless React Datepicker structure")
 
+## Styling with plain CSS (no Tailwind / no inline styles)
+
+Besides the `className` / `style` props and the render props, every component
+emits **stable BEM-style class hooks** so you can style the whole calendar from
+a plain CSS file — no Tailwind and no inline styles required. State is exposed
+as `--modifier` classes (e.g. `--selected`, `--today`, `--disabled`).
+
+If you want full control, simply **don't import `dist/styles.css`** (that file
+only carries the default Tailwind look) and target the hooks yourself:
+
+```css
+/* a day cell */
+.rhmdp-daySlots__day {
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.rhmdp-daySlots__day--today {
+  color: #2563eb;
+}
+.rhmdp-daySlots__day--selected {
+  background: #2563eb;
+  color: #fff;
+}
+.rhmdp-daySlots__day--in-range {
+  background: #eaeaec;
+}
+.rhmdp-daySlots__day--disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+```
+
+### Class hook reference
+
+| Component       | Base class(es)                                                                                                   | State modifiers (`base--modifier`)                                                                                                          |
+| --------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **DaySlots**    | `.rhmdp-daySlots` (grid), `.rhmdp-daySlots__cell` (wrapper), `.rhmdp-daySlots__day`, `.rhmdp-daySlots__placeholder` | on both `__cell` and `__day`: `--today`, `--selected`, `--selectable`, `--disabled`, `--weekend`, `--holiday`, `--other-month`, `--in-range`, `--in-hovered-range`, `--range-start`, `--range-end`, `--first-of-month`; plus `__cell--empty` |
+| **WeekDays**    | `.rhmdp-weekDays`, `.rhmdp-weekDays__day`                                                                        | `--monday` … `--sunday`, `--weekend`                                                                                                        |
+| **Header**      | `.rhmdp-header`, `__prevButton`, `__nextButton`, `__monthSelect`, `__yearSelect`, `__monthOption`, `__yearOption` | `__monthOption--selected`, `__yearOption--selected`                                                                                         |
+| **PanelHeader** | `.rhmdp-panelHeader`, `__prevButton`, `__nextButton`, `__label`, `__grid`, `__cell`                              | root `--days` / `--months` / `--years`; `__cell--selected`                                                                                  |
+| **Title**       | `.rhmdp-title`                                                                                                   |                                                                                                                                            |
+| **TimePicker**  | `.rhmdp-timePicker`, `__column`, `__button`, `__value`, `__option`, `__separator`                                | `__column--hours` / `--minutes` / `--seconds` / `--period`; `__button--up` / `--down`                                                       |
+
+> These hooks are additive — the `className` / `style` props and the Tailwind
+> defaults keep working exactly as before.
+
 # DatePickerProvider
 
 Must be in place as the parent of the whole calendar component.

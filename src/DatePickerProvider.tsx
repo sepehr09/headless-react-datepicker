@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { defaultWeekStartsOn } from "./constants/defaults";
 import { PickerContext } from "./store/pickerContext";
 import { TDatePickerProps } from "./types";
@@ -47,12 +47,13 @@ function DatePickerProvider<IsRange extends boolean>(
     }
 
     if (initialValue) {
-      return Array.isArray(initialValue)
-        ? new Date(initialValue?.[0].toISOString())
-        : new Date(initialValue.toISOString());
+      const first = (
+        Array.isArray(initialValue) ? initialValue[0] : initialValue
+      ) as Date | undefined;
+      if (first) return new Date(first);
     }
 
-    return new Date(new Date().toISOString());
+    return new Date();
   }, [defaultStartDate, initialValue]);
 
   /**
@@ -76,14 +77,22 @@ function DatePickerProvider<IsRange extends boolean>(
 
   const finalValue = value || internalValue;
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  /**
+   * Keep a stable `onChange` identity (so it can safely live in context) while
+   * always invoking the latest handler the consumer passed — avoids capturing a
+   * stale closure when `onChange` is an inline/recreated function.
+   */
+  const onChangeRef = useRef(onChangeProp);
+  onChangeRef.current = onChangeProp;
   const onChange = useCallback(
-    (onChangeProp as TDatePickerProps<IsRange>["onChange"]) || (() => {}),
+    (val: IsRange extends true ? Date[] : Date) => onChangeRef.current?.(val),
     []
-  ); // Memoize the onChange function
+  );
 
   /**
-   * Update internalValue if `value` prop is changed (controlled component)
+   * Update internalValue if `value` prop is changed (controlled component).
+   * Intentionally keyed only on `value`: `internalValue`/`defaultStartDate` are
+   * read inside but must NOT retrigger this effect (doing so would loop).
    */
   useEffect(() => {
     if (value) {
@@ -118,6 +127,7 @@ function DatePickerProvider<IsRange extends boolean>(
         );
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const {
@@ -316,16 +326,20 @@ function DatePickerProvider<IsRange extends boolean>(
     [calendar, locale]
   );
 
-  const yearsList = useMemo(
-    () =>
-      Array.from({
-        length:
-          (yearRangeTo || yearInTheCalendar)! -
-          (yearRangeFrom || (yearInTheCalendar || 0) - 20)! +
-          1,
-      }).map((_, i) => (yearRangeFrom || (yearInTheCalendar || 0) - 20)! + i),
-    [yearRangeFrom, yearRangeTo, calendar]
-  );
+  /**
+   * The selectable years. When no explicit range is configured it defaults to
+   * the 20 years up to the initially displayed year. This list is intentionally
+   * frozen: it is computed once (keyed only on the configured range / calendar)
+   * and does NOT slide as the user navigates, so `yearInTheCalendar` is read but
+   * left out of the deps on purpose.
+   */
+  const yearsList = useMemo(() => {
+    const from = yearRangeFrom ?? (yearInTheCalendar || 0) - 20;
+    const to = yearRangeTo ?? yearInTheCalendar ?? 0;
+    const length = Math.max(0, to - from + 1);
+    return Array.from({ length }, (_, i) => from + i);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [yearRangeFrom, yearRangeTo, calendar]);
 
   return (
     <PickerContext.Provider

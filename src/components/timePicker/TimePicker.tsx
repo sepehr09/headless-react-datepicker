@@ -1,4 +1,14 @@
 import { CSSProperties, ReactNode, useContext } from "react";
+import {
+  TIME_PICKER,
+  TIME_PICKER_BUTTON,
+  TIME_PICKER_BUTTON_DOWN,
+  TIME_PICKER_BUTTON_UP,
+  TIME_PICKER_COLUMN,
+  TIME_PICKER_OPTION,
+  TIME_PICKER_SEPARATOR,
+  TIME_PICKER_VALUE,
+} from "../../constants/classNames";
 import { PickerContext } from "../../store/pickerContext";
 import { classJoin } from "../../utils/classJoin";
 import { from12Hour, getTimeParts, to12Hour, TPeriod, wrap } from "../../utils/time";
@@ -167,6 +177,8 @@ function TimePicker({
     <div
       key={key}
       className={classJoin(
+        TIME_PICKER_COLUMN,
+        `${TIME_PICKER_COLUMN}--${key}`,
         "rhmdp-flex rhmdp-flex-col rhmdp-items-center rhmdp-select-none",
         columnClassName,
         extraColumnClassName
@@ -178,6 +190,8 @@ function TimePicker({
         aria-label={upAriaLabel}
         onClick={onUp}
         className={classJoin(
+          TIME_PICKER_BUTTON,
+          TIME_PICKER_BUTTON_UP,
           "rhmdp-flex rhmdp-justify-center rhmdp-cursor-pointer rhmdp-rounded hover:rhmdp-bg-gray-200",
           buttonClassName,
           upButtonClassName
@@ -193,6 +207,7 @@ function TimePicker({
           value={selectValue}
           onChange={(e) => onSelect(e.target.value)}
           className={classJoin(
+            TIME_PICKER_VALUE,
             "rhmdp-py-1 rhmdp-text-xl rhmdp-font-bold rhmdp-tabular-nums rhmdp-text-center rhmdp-bg-transparent rhmdp-appearance-none rhmdp-cursor-pointer",
             valueClassName
           )}
@@ -202,7 +217,7 @@ function TimePicker({
             <option
               key={o.value}
               value={o.value}
-              className={optionClassName}
+              className={classJoin(TIME_PICKER_OPTION, optionClassName)}
               style={optionStyles}
             >
               {o.label}
@@ -212,6 +227,7 @@ function TimePicker({
       ) : (
         <div
           className={classJoin(
+            TIME_PICKER_VALUE,
             "rhmdp-py-1 rhmdp-text-xl rhmdp-font-bold rhmdp-tabular-nums",
             valueClassName
           )}
@@ -228,6 +244,8 @@ function TimePicker({
         aria-label={downAriaLabel}
         onClick={onDown}
         className={classJoin(
+          TIME_PICKER_BUTTON,
+          TIME_PICKER_BUTTON_DOWN,
           "rhmdp-flex rhmdp-justify-center rhmdp-cursor-pointer rhmdp-rounded hover:rhmdp-bg-gray-200",
           buttonClassName,
           downButtonClassName
@@ -244,6 +262,7 @@ function TimePicker({
       key={key}
       aria-hidden="true"
       className={classJoin(
+        TIME_PICKER_SEPARATOR,
         "rhmdp-text-xl rhmdp-font-bold",
         separatorClassName
       )}
@@ -258,6 +277,7 @@ function TimePicker({
   return (
     <div
       className={classJoin(
+        TIME_PICKER,
         "rhmdp-flex rhmdp-items-center rhmdp-justify-center rhmdp-gap-2 rhmdp-py-2",
         rootClassName
       )}

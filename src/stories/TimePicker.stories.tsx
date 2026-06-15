@@ -5,7 +5,6 @@ import {
   TTimePickerRendererArgs,
 } from "../components/timePicker/types";
 import { RenderDateTimePicker } from "./_shared";
-import { rtlDecorator } from "./rtlDecorator";
 import { baseMeta } from "./constants";
 
 const meta = {
@@ -152,20 +151,5 @@ export const CustomRenderer: Story = {
     initialValue: new Date(new Date().setHours(9, 30, 0, 0)),
     calendar: "gregory",
     config: baseConfig,
-  },
-};
-
-/**
- * Persian (Jalali) calendar with a localized 12-hour clock — digits and the
- * AM/PM label follow the locale.
- */
-export const PersianLocalized: Story = {
-  render: withTimePicker({ use12Hours: true, showSeconds: true }),
-  decorators: [rtlDecorator],
-  args: {
-    isRange: false,
-    initialValue: new Date(new Date().setHours(13, 5, 0, 0)),
-    calendar: "persian",
-    config: { ...baseConfig, locale: "fa-IR", weekStartsOn: "saturday",weekdayFormat:"narrow" },
   },
 };

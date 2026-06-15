@@ -2,6 +2,10 @@
 
 ### version 1.4.0
 
+- new: CSS-only styling — every component emits stable BEM class hooks with `--modifier` state classes, so the calendar can be styled from a plain CSS file (no Tailwind/`className`/inline styles). See the README.
+- fix: `DaySlots` no longer mutates selected/hovered dates while rendering (which wiped the time and broke `TimePicker`).
+- fix: `onChange` always uses the latest handler (no more stale closure).
+- fix: an empty `initialValue` array no longer throws.
 - new: add `TimePicker` component to set the time (hours/minutes, with optional `showSeconds` and a 12-hour `use12Hours` AM/PM toggle) of the selected day. Each unit has stepper arrows and a native `<select>` dropdown (clicking the value), toggleable with `dropdown`. It's headless like the rest of the library: default UI, a `renderer` escape hatch, and granular `className`/`styles` props. Digits and the AM/PM label follow the calendar `locale`. For ranges, target an end with `index`.
 - new: add `handleChangeTime(time, index?)` to the context to set the time of the current selection while keeping its day.
 - new: picking a different day now preserves the previously-chosen time (instead of resetting to midnight), so date + time selections stay in sync.

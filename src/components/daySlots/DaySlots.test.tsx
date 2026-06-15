@@ -777,6 +777,41 @@ describe("DaySlots component", () => {
     expect(upSlot).toHaveFocus();
   });
 
+  it("emits stable BEM class hooks for CSS-only styling", () => {
+    const { container } = render(
+      <DatePickerProvider
+        isRange
+        value={[new Date(2024, 7, 10), new Date(2024, 7, 20)]}
+      >
+        <DaySlots />
+      </DatePickerProvider>
+    );
+
+    // root + a stable day hook on every rendered day
+    expect(container.querySelector(".rhmdp-daySlots")).toBeInTheDocument();
+    expect(
+      container.querySelectorAll(".rhmdp-daySlots__day").length
+    ).toBeGreaterThan(0);
+
+    // state modifiers for the range
+    expect(
+      container.querySelector(".rhmdp-daySlots__day--range-start")
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector(".rhmdp-daySlots__day--range-end")
+    ).toBeInTheDocument();
+    expect(
+      container.querySelectorAll(".rhmdp-daySlots__day--in-range").length
+    ).toBeGreaterThan(0);
+    // both the cell (parent) and the day expose the selected hook
+    expect(
+      container.querySelector(".rhmdp-daySlots__cell--selected")
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector(".rhmdp-daySlots__day--selected")
+    ).toBeInTheDocument();
+  });
+
   it("does not mutate the selected range dates' time while rendering", () => {
     // Rendering the range used to call `.setHours(0,0,0,0)` on the selected
     // dates in place, wiping the time portion (breaking TimePicker).

@@ -1,4 +1,15 @@
 import { useContext } from "react";
+import {
+  HEADER,
+  HEADER_MONTH_OPTION,
+  HEADER_MONTH_OPTION_SELECTED,
+  HEADER_MONTH_SELECT,
+  HEADER_NEXT_BUTTON,
+  HEADER_PREV_BUTTON,
+  HEADER_YEAR_OPTION,
+  HEADER_YEAR_OPTION_SELECTED,
+  HEADER_YEAR_SELECT,
+} from "../../constants/classNames";
 import { PickerContext } from "../../store/pickerContext";
 import { classJoin } from "../../utils/classJoin";
 import ChevronLeft from "../icons/ChevronLeft";
@@ -42,13 +53,18 @@ function Header({
   return (
     <div
       className={classJoin(
+        HEADER,
         "rhmdp-flex rhmdp-items-center rhmdp-justify-between rhmdp-py-4 rhmdp-select-none",
         rootClassName
       )}
       style={rootStyles}
     >
       <div
-        className={classJoin("rhmdp-cursor-pointer", prevButtonClassName)}
+        className={classJoin(
+          HEADER_PREV_BUTTON,
+          "rhmdp-cursor-pointer",
+          prevButtonClassName
+        )}
         style={prevButtonStyles}
         role="button"
         tabIndex={0}
@@ -65,7 +81,7 @@ function Header({
           goToMonth(parseInt(v.target.value, 10));
         }}
         style={monthSelectStyles}
-        className={monthSelectClassName}
+        className={classJoin(HEADER_MONTH_SELECT, monthSelectClassName)}
         value={monthInTheCalendar}
       >
         {monthsList?.map((month) => (
@@ -79,6 +95,8 @@ function Header({
                 : {}),
             }}
             className={classJoin(
+              HEADER_MONTH_OPTION,
+              month.value === monthInTheCalendar && HEADER_MONTH_OPTION_SELECTED,
               monthOptionClassName,
               month.value === monthInTheCalendar
                 ? monthSelectedOptionClassName
@@ -94,7 +112,7 @@ function Header({
         onChange={(v) => {
           goToYear(parseInt(v.target.value, 10));
         }}
-        className={yearSelectClassName}
+        className={classJoin(HEADER_YEAR_SELECT, yearSelectClassName)}
         style={yearSelectStyles}
         value={yearInTheCalendar}
       >
@@ -108,6 +126,8 @@ function Header({
                 ...(year === yearInTheCalendar ? yearSelectedOptionStyles : {}),
               }}
               className={classJoin(
+                HEADER_YEAR_OPTION,
+                year === yearInTheCalendar && HEADER_YEAR_OPTION_SELECTED,
                 yearOptionClassName,
                 year === yearInTheCalendar ? yearSelectedOptionClassName : ""
               )}
@@ -118,7 +138,11 @@ function Header({
         })}
       </select>
       <div
-        className={classJoin("rhmdp-cursor-pointer", nextButtonClassName)}
+        className={classJoin(
+          HEADER_NEXT_BUTTON,
+          "rhmdp-cursor-pointer",
+          nextButtonClassName
+        )}
         style={nextButtonStyles}
         aria-label="Next Month"
         role="button"
