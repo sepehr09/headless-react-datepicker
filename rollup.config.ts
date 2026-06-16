@@ -7,7 +7,12 @@ export default [
   {
     input: "src/index.ts",
     output: [{ dir: "dist/esm", format: "esm" }],
-    external: ["react", "react-dom", "react/jsx-runtime"],
+    external: [
+      "react",
+      "react-dom",
+      "react/jsx-runtime",
+      "@js-temporal/polyfill",
+    ],
     plugins: [
       nodeResolve(),
       typescript({
@@ -29,8 +34,15 @@ export default [
   },
   {
     input: "src/index.ts",
-    output: [{ dir: "dist/cjs", format: "cjs" }],
-    external: ["react", "react-dom", "react/jsx-runtime"],
+    output: [
+      { dir: "dist/cjs", format: "cjs", entryFileNames: "index.cjs" },
+    ],
+    external: [
+      "react",
+      "react-dom",
+      "react/jsx-runtime",
+      "@js-temporal/polyfill",
+    ],
     plugins: [
       nodeResolve(),
       typescript({

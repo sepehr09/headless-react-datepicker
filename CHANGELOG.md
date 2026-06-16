@@ -16,6 +16,7 @@
 - fix: the hovered range preview now spans across side-by-side calendars.
 - fix: `onChange` always uses the latest handler (no more stale closure).
 - fix: an empty `initialValue` array no longer throws.
+- fix: added an `exports` map and ship the CommonJS build as `index.cjs`, so `require()` works under the package's `"type": "module"` setting (it was previously parsed as ESM and broke CJS consumers).
 
 **BREAKING — Tailwind removed**
 
@@ -25,6 +26,9 @@
 **Chores**
 
 - chore: migrate the package manager from yarn to pnpm.
+- chore: the stylesheet can now be imported as `headless-react-datepicker/styles.css` (the existing `headless-react-datepicker/dist/styles.css` path keeps working).
+- perf: the `@js-temporal/polyfill` is no longer inlined into the build — it stays an external dependency that's resolved (and de-duplicated) from your `node_modules`. This drops the published runtime bundle size without losing any feature.
+- perf: bumped the compile `target` from ES5 to ES2019, removing the iterator/spread helper boilerplate from the output.
 
 ### version 1.3.0
 

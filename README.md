@@ -82,7 +82,7 @@ yarn add headless-react-datepicker
 ### 2. Import the CSS file
 
 ```jsx
-import "headless-react-datepicker/dist/styles.css";
+import "headless-react-datepicker/styles.css";
 ```
 
 ## Usage
@@ -813,6 +813,8 @@ const MyCustomAwesomeHeader = () => {
 ## Dependencies
 
 Uses the native [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) (the ECMAScript Internationalization API) with [excellent browser support](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat#browser_compatibility), and depends on the [Temporal polyfill](https://www.npmjs.com/package/@js-temporal/polyfill) to convert other calendars to Gregorian.
+
+The polyfill is the library's only runtime dependency and is **not bundled** into the package — it's installed automatically and resolved (de-duplicated) from your `node_modules`, so the library's own bundle stays tiny. The package ships both ESM and CommonJS builds with a modern `exports` map and `sideEffects` metadata for clean tree-shaking.
 
 ## Contributing
 

@@ -46,11 +46,24 @@
     "Islamic-umalqura",
     "Roc"
   ],
-  "main": "./dist/cjs/index.js",
+  "main": "./dist/cjs/index.cjs",
   "module": "./dist/esm/index.js",
   "types": "./dist/d/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/d/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.cjs"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./dist/styles.css": "./dist/styles.css",
+    "./package.json": "./package.json"
+  },
   "files": [
     "/dist"
+  ],
+  "sideEffects": [
+    "**/*.css"
   ],
   "scripts": {
     "dev": "vite",
@@ -58,7 +71,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build": "rm -rf dist && pnpm build:rollup",
+    "build": "rm -rf dist && pnpm build:rollup && rm -f dist/styles.js",
     "build-storybook": "storybook build --output-dir ./docs && touch ./docs/.nojekyll",
     "build:rollup": "NODE_ENV=production rollup -c --bundleConfigAsCjs",
     "test": "TZ=UTC vitest",
