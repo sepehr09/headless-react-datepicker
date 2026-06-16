@@ -6,7 +6,11 @@ export type TDaySlotsDayRendererArgs = {
    * based on calendar config.dayFormat
    */
   formattedDay: string;
-  IsToday: boolean; // For backwards compatibility
+  /**
+   * For backwards compatibility
+   * @deprecated use `isToday` instead. will remove in next major release.
+   */
+  IsToday: boolean;
   isToday: boolean;
   isSelectable: boolean;
   isDisabled: boolean;
