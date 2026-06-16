@@ -1,23 +1,38 @@
 # Changelog
 
-### version 1.4.0
+### version 2.0.0
 
-- new: CSS-only styling — every component emits stable BEM class hooks with `--modifier` state classes, so the calendar can be styled from a plain CSS file (no Tailwind/`className`/inline styles). See the README.
-- fix: `DaySlots` no longer mutates selected/hovered dates while rendering (which wiped the time and broke `TimePicker`).
-- fix: `onChange` always uses the latest handler (no more stale closure).
-- fix: an empty `initialValue` array no longer throws.
-- new: add `TimePicker` component to set the time (hours/minutes, with optional `showSeconds` and a 12-hour `use12Hours` AM/PM toggle) of the selected day. Each unit has stepper arrows and a native `<select>` dropdown (clicking the value), toggleable with `dropdown`. It's headless like the rest of the library: default UI, a `renderer` escape hatch, and granular `className`/`styles` props. Digits and the AM/PM label follow the calendar `locale`. For ranges, target an end with `index`.
-- new: add `handleChangeTime(time, index?)` to the context to set the time of the current selection while keeping its day.
+**Highlights**
+
+- new: **side-by-side calendars** — add a `monthOffset` prop to `Title` and `DaySlots` so you can render two (or more) calendars at once (Airbnb-style) from a single `DatePickerProvider`. Navigation moves every month together, and range selection / hover spans across the calendars. Add `navigationStep` to `Header` so the prev/next arrows move multiple months per click (e.g. `navigationStep={2}`); `goToNextMonth` / `goToPrevMonth` now accept an optional `step`, and multi-month steps are clamped to `yearRangeFrom` / `yearRangeTo`.
+- new: add **`TimePicker`** component to set the time (hours/minutes, with optional `showSeconds` and a 12-hour `use12Hours` AM/PM toggle) of the selected day. Each unit has stepper arrows and a native `<select>` dropdown (clicking the value), toggleable with `dropdown`. It's headless like the rest of the library: default UI, a `renderer` escape hatch, and granular `className`/`styles` props. Digits and the AM/PM label follow the calendar `locale`. For ranges, target an end with `index`.
+- new: add **`PanelHeader`** component, a self-contained alternative to `Header` that shows the month and year pickers inside the calendar area instead of `<select>` dropdowns. Clicking the month opens a 12-month grid; clicking the year opens a paginated year grid with prev/next page arrows (page size via `yearsPerPage`, default 12). Wrap `WeekDays` / `DaySlots` as its children and it swaps them for the grids while navigating. Works across all calendars and locales.
+- new: **CSS-only styling** — every component emits stable BEM class hooks with `--modifier` state classes, so the calendar can be styled from a plain CSS file (no Tailwind/`className`/inline styles). See the README.
+- new: **CSS-variable theming** — the default look now reads from a curated set of `--rhmdp-*` CSS variables named with a consistent `--rhmdp-<scope>-[state-]<property>` structure (scope ∈ `day` | `weekday` | `title` | `arrow` | `header` | `time` | `panel`; property ∈ `bg` | `text` | `border` | `radius` | `weight`). Day grid: `--rhmdp-day-text` / `--rhmdp-day-muted-text` / `--rhmdp-day-border` / `--rhmdp-day-radius` / `--rhmdp-day-padding` / `--rhmdp-day-gap` / `--rhmdp-day-weight` / `--rhmdp-day-size`, states `--rhmdp-day-today-text` / `--rhmdp-day-weekend-text` / `--rhmdp-day-holiday-text` / `--rhmdp-day-disabled-text`, hover `--rhmdp-day-hover-bg` / `--rhmdp-day-hover-text`, selected `--rhmdp-day-selected-bg` / `--rhmdp-day-selected-text`, ranges `--rhmdp-day-range-bg` / `--rhmdp-day-range-hover-bg`. Shared arrow buttons (`Header` / `PanelHeader` / `TimePicker`): `--rhmdp-arrow-text` / `--rhmdp-arrow-bg` / `--rhmdp-arrow-hover-bg` / `--rhmdp-arrow-hover-text`. `Header` month/year dropdowns: `--rhmdp-header-select-bg` / `--rhmdp-header-select-text` / `--rhmdp-header-select-border`. Per-part text, weight & size: `--rhmdp-weekday-text` / `--rhmdp-weekday-weight` / `--rhmdp-weekday-size`, `--rhmdp-title-text` / `--rhmdp-title-weight` / `--rhmdp-title-size`, `--rhmdp-header-weight`, `--rhmdp-time-text` / `--rhmdp-time-weight` / `--rhmdp-time-size`, and `PanelHeader` `--rhmdp-panel-selected-bg` / `--rhmdp-panel-selected-text`. Set one anywhere up the tree to re-theme — no `className`/inline overrides. Each falls back to its previous default, so nothing changes unless you opt in. See the README. Set one anywhere up the tree to re-theme — no `className`/inline overrides. Each falls back to its previous default, so nothing changes unless you opt in. See the README.
+
+**Time API**
+
+- new: add `handleChangeTime(time, index?)` to the context to set the time of the current selection while keeping its day (`index` picks the range end).
 - new: picking a different day now preserves the previously-chosen time (instead of resetting to midnight), so date + time selections stay in sync.
 - new: add `getTimeParts`, `setTimeParts`, `wrap`, `to12Hour`, `from12Hour` time utilities and the `TTimePickerProps`, `TTimePickerRendererArgs`, `TTimePickerUnit`, `TTimeParts`, `TPeriod` types.
-- new: add `PanelHeader` component, a self-contained alternative to `Header` that shows the month and year pickers inside the calendar area instead of `<select>` dropdowns. Clicking the month opens a 12-month grid; clicking the year opens a paginated year grid with prev/next page arrows (page size via `yearsPerPage`, default 12). Wrap `WeekDays` / `DaySlots` as its children and it swaps them for the grids while navigating. Works across all calendars and locales.
-- new: add `monthOffset` prop to `Title` and `DaySlots` so you can render two (or more) calendars side-by-side (Airbnb-style) from a single `DatePickerProvider`. Navigation moves every month together.
-- new: add `navigationStep` prop to `Header` so the prev/next arrows can move multiple months per click (e.g. `navigationStep={2}` for two side-by-side calendars). `goToNextMonth` / `goToPrevMonth` now accept an optional `step` argument.
 - new: add `addCalendarMonths` utility to shift a date by a number of months while respecting the active calendar (persian, islamic, ...).
+
+**Fixes**
+
+- fix: `DaySlots` no longer mutates selected/hovered dates while rendering (which wiped the time and broke `TimePicker`).
 - fix: in side-by-side calendars, the hovered range preview now spans across calendars (e.g. selecting a start date on the left calendar and hovering the right one). The hovered date is now shared via context (`hoveredDate` / `handleHoverSlot`).
-- fix: `classJoin` no longer drops non-conflicting tailwind utilities that share a prefix (e.g. `text-green-500` and `text-2xl` are now both kept).
+- fix: `onChange` always uses the latest handler (no more stale closure).
+- fix: an empty `initialValue` array no longer throws.
+
+**Behavior change**
+
+- **BREAKING — Tailwind removed.** The library no longer depends on Tailwind CSS. The default look now ships as a plain, dependency-free `dist/styles.css` whose rules target the existing BEM class hooks (`.rhmdp-daySlots__day`, `.rhmdp-header__monthSelect`, …) and read every color/size/spacing from the `--rhmdp-*` CSS variables. The CSS-variable names are unchanged, so variable-based theming and the BEM class hooks work exactly as before. What changed: (1) the rendered markup no longer carries the internal `rhmdp-*` _utility_ classes (e.g. `rhmdp-bg-day-selected-bg`, `rhmdp-flex`) — only the documented BEM hooks + `--modifier` state classes remain; if you targeted those undocumented utility classes, switch to the BEM hooks or CSS variables. (2) If you previously skipped importing `dist/styles.css` and instead let your own Tailwind build generate the library's classes from `node_modules`, that no longer works — import `dist/styles.css` (or style the BEM hooks yourself). `tailwindcss` is dropped from the dependencies and `tailwind.config.js` is removed.
+- change: `classJoin` no longer resolves conflicting tailwind utilities — previously a className that shared a prefix with a built-in (e.g. passing `rhmdp-bg-red-500` to override the default `rhmdp-bg-blue-500`) _replaced_ it; now both are kept and the CSS cascade decides the winner. Most overrides still work, but if a `className` override that used to "win" stops winning, force it with Tailwind's `!important` modifier (e.g. `!rhmdp-bg-red-500`) or use a tool like `tailwind-merge`. Internally, the day cell's state text color (today/weekend/holiday/disabled) is now resolved by priority so only a single color utility is emitted.
+
+**Chores**
+
+- chore: migrate the package manager from yarn to pnpm (CI, lockfile, and scripts).
 - chore: simplify `classJoin` into a dependency-free class combiner (join, ignore falsy values, remove exact duplicates).
-- chore: resolve the day cell's state text color (today/weekend/holiday/disabled) by priority internally so only a single color utility is emitted.
 
 ### version 1.3.0
 

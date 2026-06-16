@@ -3,7 +3,27 @@ import { defaultWeekStartsOn } from "../constants/defaults";
 import { bindWeekDayToNumber } from "../constants/weekdays";
 import { TCalendar, TDay } from "../types";
 import { eachDayOfInterval, endOfWeek, startOfWeek } from "./dateUtils";
-import { normalizeTemporal } from "./temporal";
+
+/**
+ * Build the gregorian `Date` at local midnight on the first day of the given
+ * month/year in `calendar`. Constructed from numeric components (not a parsed
+ * date string) so it is unambiguously local time regardless of the host
+ * timezone — see the note on `addCalendarMonths`.
+ */
+export function firstDayOfCalendarMonth(
+  year: number,
+  month: number,
+  calendar: TCalendar
+): Date {
+  const { isoYear, isoMonth, isoDay } = Temporal.PlainDate.from({
+    year,
+    month,
+    day: 1,
+    calendar,
+  }).getISOFields();
+
+  return new Date(isoYear, isoMonth - 1, isoDay);
+}
 
 /**
  * Add (or subtract) a number of months to a date, respecting the given
@@ -33,7 +53,7 @@ export function addCalendarMonths(
     .add({ months })
     .getISOFields();
 
-  return new Date(`${normalizeTemporal(shifted)}T00:00:00`);
+  return new Date(shifted.isoYear, shifted.isoMonth - 1, shifted.isoDay);
 }
 
 export function getMonthInfo(date: Date, calendar: TCalendar) {

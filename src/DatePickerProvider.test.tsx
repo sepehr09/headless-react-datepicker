@@ -110,6 +110,30 @@ describe("DatePickerProvider", () => {
       expect(result.current.yearInTheCalendar).toBe(2020);
     });
 
+    it("goToNextMonth clamps a multi-month step to yearRangeTo (December)", () => {
+      const { result } = renderProvider({
+        defaultStartDate: new Date("2024-11-01T00:00:00.000Z"),
+        config: { yearRangeTo: 2024 },
+      });
+
+      // stepping 3 months would land in Feb 2025; it should clamp to Dec 2024
+      act(() => result.current.goToNextMonth(3));
+      expect(result.current.monthInTheCalendar).toBe(12);
+      expect(result.current.yearInTheCalendar).toBe(2024);
+    });
+
+    it("goToPrevMonth clamps a multi-month step to yearRangeFrom (January)", () => {
+      const { result } = renderProvider({
+        defaultStartDate: new Date("2020-02-01T00:00:00.000Z"),
+        config: { yearRangeFrom: 2020 },
+      });
+
+      // stepping 3 months would land in Nov 2019; it should clamp to Jan 2020
+      act(() => result.current.goToPrevMonth(3));
+      expect(result.current.monthInTheCalendar).toBe(1);
+      expect(result.current.yearInTheCalendar).toBe(2020);
+    });
+
     it("goToDate jumps to the given date", () => {
       const { result } = renderProvider({
         defaultStartDate: new Date("2024-01-01T00:00:00.000Z"),

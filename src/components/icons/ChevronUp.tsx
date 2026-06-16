@@ -6,7 +6,7 @@ function ChevronUp() {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className="rhmdp-w-5 rhmdp-h-5"
+
     >
       <path
         strokeLinecap="round"

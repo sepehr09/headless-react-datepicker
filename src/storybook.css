@@ -1,1 +1,11 @@
-@tailwind base;
+/* Minimal reset for the Storybook demo pages (replaces Tailwind's preflight,
+   which the library no longer depends on). Not shipped with the package. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}

@@ -381,7 +381,6 @@ function DaySlots(props: TDaySlots) {
     <div
       className={classJoin(
         DAY_SLOTS,
-        "rhmdp-grid rhmdp-grid-cols-7 *:rhmdp-text-center",
         parentClassName
       )}
       role="presentation"
@@ -483,21 +482,12 @@ function DaySlots(props: TDaySlots) {
           ...(isDisabled && disableStyles),
         };
 
-        // Resolve the (mutually conflicting) state text color ourselves, in
-        // priority order, so we only ever emit a single text-color utility.
-        // Order matters: disabled > holiday/weekend > today (last one wins).
-        const stateTextColor = isDisabled
-          ? "rhmdp-text-gray-400"
-          : isInHoliday || isInWeekend
-            ? "rhmdp-text-red-500"
-            : IsToday
-              ? "rhmdp-text-blue-600"
-              : undefined;
-
+        // State text color, range fills and rounded range-ends are all styled
+        // from `src/styles.css` via the BEM modifier classes below (the day
+        // cell's color priority — other-month > disabled > holiday > weekend >
+        // today > base — is encoded by the rule order there).
         const parentClassNames = classJoin(
           DAY_SLOTS_CELL,
-          "rhmdp-border rhmdp-border-transparent rhmdp-h-max",
-          stateTextColor,
           slotParentClassName,
           IsToday && DAY_SLOTS_CELL_TODAY,
           IsToday && todayParentClassName,
@@ -506,16 +496,12 @@ function DaySlots(props: TDaySlots) {
           isSelected && DAY_SLOTS_CELL_SELECTED,
           isSelected && selectedParentClassName,
           isInSelectedRange && DAY_SLOTS_CELL_IN_RANGE,
-          isInSelectedRange && "rhmdp-bg-[#EAEAEC]",
           isInSelectedRange && inSelectedRangeParentClassName,
           isInHoveredRange && DAY_SLOTS_CELL_IN_HOVERED_RANGE,
-          isInHoveredRange && "rhmdp-bg-[#EAEAEC]",
           isInHoveredRange && inHoveredRangeParentClassName,
           isStartOfRange && DAY_SLOTS_CELL_RANGE_START,
-          isStartOfRange && "rhmdp-rounded-s-lg",
           isStartOfRange && startOfRangeParentClassName,
           isEndOfRange && DAY_SLOTS_CELL_RANGE_END,
-          isEndOfRange && "rhmdp-rounded-e-lg",
           isEndOfRange && endOfRangeParentClassName,
           isInWeekend && DAY_SLOTS_CELL_WEEKEND,
           isInWeekend && weekendParentClassName,
@@ -529,17 +515,12 @@ function DaySlots(props: TDaySlots) {
 
         const dayClassNames = classJoin(
           DAY_SLOTS_DAY,
-          "rhmdp-p-2 rhmdp-rounded-lg rhmdp-h-full",
           slotClassName,
           IsToday && DAY_SLOTS_DAY_TODAY,
           IsToday && todayClassName,
-          isSelectable ? "rhmdp-cursor-pointer" : "rhmdp-cursor-not-allowed",
           isSelectable && DAY_SLOTS_DAY_SELECTABLE,
-          isSelectable && !isSelected && "hover:rhmdp-bg-gray-300",
           isSelectable && selectableClassName,
           isSelected && DAY_SLOTS_DAY_SELECTED,
-          isSelected &&
-            "rhmdp-bg-blue-500 hover:rhmdp-bg-blue-500 rhmdp-text-white",
           isSelected && selectedClassName,
           isInSelectedRange && DAY_SLOTS_DAY_IN_RANGE,
           isInSelectedRange && inSelectedRangeClassName,

@@ -62,7 +62,7 @@ export default [
     ],
     plugins: [
       postcss({
-        plugins: [require("tailwindcss"), require("autoprefixer")],
+        plugins: [require("autoprefixer")],
         extract: true,
         minimize: true,
         config: false,

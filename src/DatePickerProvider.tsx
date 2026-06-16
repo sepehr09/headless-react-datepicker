@@ -3,7 +3,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { defaultWeekStartsOn } from "./constants/defaults";
 import { PickerContext } from "./store/pickerContext";
 import { TDatePickerProps } from "./types";
-import { addCalendarMonths, getMonthSlots } from "./utils/datePicker";
+import {
+  addCalendarMonths,
+  firstDayOfCalendarMonth,
+  getMonthInfo,
+  getMonthSlots,
+} from "./utils/datePicker";
 import { getAllMonths, startOfDay } from "./utils/dateUtils";
 import { normalizeTemporal } from "./utils/temporal";
 import { getTimeParts, setTimeParts, TTimeParts } from "./utils/time";
@@ -150,30 +155,34 @@ function DatePickerProvider<IsRange extends boolean>(
   );
 
   const goToNextMonth = (step = 1) => {
-    // prevent go to next month if config.yearRangeTo	is reached
-    if (
-      yearRangeTo &&
-      yearInTheCalendar === yearRangeTo &&
-      monthInTheCalendar === 12
-    ) {
-      return;
+    let updatedDate = addCalendarMonths(firstDayOfMonth, step, calendar);
+
+    // Clamp to `yearRangeTo` (December of that year). Done against the target
+    // rather than the current month so multi-month steps can't overshoot the
+    // configured upper bound.
+    if (yearRangeTo) {
+      const { year } = getMonthInfo(updatedDate, calendar);
+      if (year > yearRangeTo) {
+        updatedDate = firstDayOfCalendarMonth(yearRangeTo, 12, calendar);
+      }
     }
 
-    const updatedDate = addCalendarMonths(firstDayOfMonth, step, calendar);
     setCurrentDate(updatedDate);
   };
 
   const goToPrevMonth = (step = 1) => {
-    // prevent go to previous month if config.yearRangeFrom	is reached
-    if (
-      yearRangeFrom &&
-      yearInTheCalendar === yearRangeFrom &&
-      monthInTheCalendar === 1
-    ) {
-      return;
+    let updatedDate = addCalendarMonths(firstDayOfMonth, -step, calendar);
+
+    // Clamp to `yearRangeFrom` (January of that year). Done against the target
+    // rather than the current month so multi-month steps can't overshoot the
+    // configured lower bound.
+    if (yearRangeFrom) {
+      const { year } = getMonthInfo(updatedDate, calendar);
+      if (year < yearRangeFrom) {
+        updatedDate = firstDayOfCalendarMonth(yearRangeFrom, 1, calendar);
+      }
     }
 
-    const updatedDate = addCalendarMonths(firstDayOfMonth, -step, calendar);
     setCurrentDate(updatedDate);
   };
 
@@ -269,6 +278,11 @@ function DatePickerProvider<IsRange extends boolean>(
 
     if (isRange) {
       const current = Array.isArray(internalValue) ? [...internalValue] : [];
+      // Fill any earlier end that hasn't been picked yet, so setting the end's
+      // time before a start exists can't leave a hole (`[undefined, date]`).
+      for (let i = 0; i < index; i++) {
+        if (!current[i]) current[i] = startOfDay(currentDate);
+      }
       const base = current[index] ?? startOfDay(currentDate);
       current[index] = setTimeParts(base, time);
       nextValue = current;

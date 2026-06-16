@@ -179,7 +179,6 @@ function TimePicker({
       className={classJoin(
         TIME_PICKER_COLUMN,
         `${TIME_PICKER_COLUMN}--${key}`,
-        "rhmdp-flex rhmdp-flex-col rhmdp-items-center rhmdp-select-none",
         columnClassName,
         extraColumnClassName
       )}
@@ -192,7 +191,6 @@ function TimePicker({
         className={classJoin(
           TIME_PICKER_BUTTON,
           TIME_PICKER_BUTTON_UP,
-          "rhmdp-flex rhmdp-justify-center rhmdp-cursor-pointer rhmdp-rounded hover:rhmdp-bg-gray-200",
           buttonClassName,
           upButtonClassName
         )}
@@ -208,7 +206,6 @@ function TimePicker({
           onChange={(e) => onSelect(e.target.value)}
           className={classJoin(
             TIME_PICKER_VALUE,
-            "rhmdp-py-1 rhmdp-text-xl rhmdp-font-bold rhmdp-tabular-nums rhmdp-text-center rhmdp-bg-transparent rhmdp-appearance-none rhmdp-cursor-pointer",
             valueClassName
           )}
           style={valueStyles}
@@ -228,7 +225,6 @@ function TimePicker({
         <div
           className={classJoin(
             TIME_PICKER_VALUE,
-            "rhmdp-py-1 rhmdp-text-xl rhmdp-font-bold rhmdp-tabular-nums",
             valueClassName
           )}
           style={valueStyles}
@@ -246,7 +242,6 @@ function TimePicker({
         className={classJoin(
           TIME_PICKER_BUTTON,
           TIME_PICKER_BUTTON_DOWN,
-          "rhmdp-flex rhmdp-justify-center rhmdp-cursor-pointer rhmdp-rounded hover:rhmdp-bg-gray-200",
           buttonClassName,
           downButtonClassName
         )}
@@ -263,7 +258,6 @@ function TimePicker({
       aria-hidden="true"
       className={classJoin(
         TIME_PICKER_SEPARATOR,
-        "rhmdp-text-xl rhmdp-font-bold",
         separatorClassName
       )}
       style={separatorStyles}
@@ -278,7 +272,6 @@ function TimePicker({
     <div
       className={classJoin(
         TIME_PICKER,
-        "rhmdp-flex rhmdp-items-center rhmdp-justify-center rhmdp-gap-2 rhmdp-py-2",
         rootClassName
       )}
       style={rootStyles}

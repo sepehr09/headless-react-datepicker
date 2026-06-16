@@ -1,3 +1,318 @@
-/* @tailwind base; */
-@tailwind components;
-@tailwind utilities;
+/**
+ * Default styles for react-headless-jalali-datepicker.
+ *
+ * This file is plain CSS (no Tailwind). Every rule targets the BEM class hooks
+ * exported from `src/constants/classNames.ts`, and every color / size / spacing
+ * reads from a `--rhmdp-*` CSS variable with the original default as a fallback.
+ * Re-theme by setting any variable up the tree — no `className` / inline-style
+ * overrides needed. See the README "Theming with CSS variables".
+ *
+ * Variable names follow `--rhmdp-<scope>-[state-]<property>` (scope ∈ day |
+ * weekday | title | arrow | header | time | panel).
+ */
+
+/* ----------------------------- scoped reset ------------------------------ */
+.rhmdp-daySlots,
+.rhmdp-daySlots *,
+.rhmdp-weekDays,
+.rhmdp-weekDays *,
+.rhmdp-header,
+.rhmdp-header *,
+.rhmdp-panelHeader,
+.rhmdp-panelHeader *,
+.rhmdp-timePicker,
+.rhmdp-timePicker *,
+.rhmdp-title {
+  box-sizing: border-box;
+}
+
+/* Base font — matches the previous Tailwind default sans-serif stack (the
+   library no longer ships Tailwind's preflight, which used to set this). */
+.rhmdp-title,
+.rhmdp-weekDays,
+.rhmdp-header,
+.rhmdp-panelHeader,
+.rhmdp-daySlots,
+.rhmdp-timePicker {
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/* Native form controls default to the UA font — make them inherit ours. */
+.rhmdp-header__monthSelect,
+.rhmdp-header__yearSelect,
+.rhmdp-timePicker__value,
+.rhmdp-timePicker__button {
+  font-family: inherit;
+}
+
+/* -------------------------------- Title ---------------------------------- */
+.rhmdp-title {
+  cursor: pointer;
+  color: var(--rhmdp-title-text, inherit);
+  font-weight: var(--rhmdp-title-weight, 700);
+  font-size: var(--rhmdp-title-size, 1.5rem);
+  line-height: 2rem;
+}
+
+/* -------------------------------- WeekDays -------------------------------- */
+.rhmdp-weekDays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.rhmdp-weekDays__day {
+  text-align: center;
+  color: var(--rhmdp-weekday-text, inherit);
+  font-weight: var(--rhmdp-weekday-weight, 700);
+  font-size: var(--rhmdp-weekday-size, inherit);
+}
+
+/* -------------------------------- DaySlots -------------------------------- */
+.rhmdp-daySlots {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--rhmdp-day-gap, 0px);
+}
+
+.rhmdp-daySlots > * {
+  text-align: center;
+}
+
+/* cell = the grid square (holds range fill, border and state text color) */
+.rhmdp-daySlots__cell {
+  height: max-content;
+  border: 1px solid var(--rhmdp-day-border, transparent);
+  color: var(--rhmdp-day-text, inherit);
+}
+
+/* state text colors — ordered low→high priority so the later rule wins for a
+   cell that matches several (other-month > disabled > holiday > weekend > today) */
+.rhmdp-daySlots__cell--today {
+  color: var(--rhmdp-day-today-text, #2563eb);
+}
+.rhmdp-daySlots__cell--weekend {
+  color: var(--rhmdp-day-weekend-text, #ef4444);
+}
+.rhmdp-daySlots__cell--holiday {
+  color: var(--rhmdp-day-holiday-text, #ef4444);
+}
+.rhmdp-daySlots__cell--disabled {
+  color: var(--rhmdp-day-disabled-text, #9ca3af);
+}
+.rhmdp-daySlots__cell--other-month {
+  color: var(--rhmdp-day-muted-text, #9ca3af);
+}
+
+/* range fills sit on the cell so they span edge-to-edge */
+.rhmdp-daySlots__cell--in-range {
+  background-color: var(--rhmdp-day-range-bg, #eaeaec);
+}
+.rhmdp-daySlots__cell--in-hovered-range {
+  background-color: var(--rhmdp-day-range-hover-bg, #eaeaec);
+}
+
+/* the cell currently under the cursor is the tentative end of the hovered-range
+   preview — round its end side so the fill matches the hovered day's pill */
+.rhmdp-daySlots__cell--in-hovered-range:hover {
+  border-start-end-radius: var(--rhmdp-day-radius, 0.5rem);
+  border-end-end-radius: var(--rhmdp-day-radius, 0.5rem);
+}
+
+/* rounded range ends (logical, so they flip in RTL) */
+.rhmdp-daySlots__cell--range-start {
+  border-start-start-radius: var(--rhmdp-day-radius, 0.5rem);
+  border-end-start-radius: var(--rhmdp-day-radius, 0.5rem);
+}
+.rhmdp-daySlots__cell--range-end {
+  border-start-end-radius: var(--rhmdp-day-radius, 0.5rem);
+  border-end-end-radius: var(--rhmdp-day-radius, 0.5rem);
+}
+
+/* day = the inner pill (padding, radius, hover / selected background) */
+.rhmdp-daySlots__day {
+  height: 100%;
+  padding: var(--rhmdp-day-padding, 0.5rem);
+  border-radius: var(--rhmdp-day-radius, 0.5rem);
+  font-weight: var(--rhmdp-day-weight, inherit);
+  font-size: var(--rhmdp-day-size, inherit);
+  cursor: not-allowed;
+}
+
+.rhmdp-daySlots__day--selectable {
+  cursor: pointer;
+}
+
+/* hover on a selectable, not-yet-selected day */
+.rhmdp-daySlots__day--selectable:not(.rhmdp-daySlots__day--selected):hover {
+  background-color: var(--rhmdp-day-hover-bg, #d1d5db);
+  color: var(--rhmdp-day-hover-text, inherit);
+}
+
+/* selected day (keeps its background on hover too). `position: relative` lifts
+   it into the positioned paint phase — above the static sibling cells — so a
+   box-shadow / glow on the range ends isn't clipped by the next cell's fill.
+   No offsets are set, so layout is unchanged. */
+.rhmdp-daySlots__day--selected {
+  position: relative;
+  background-color: var(--rhmdp-day-selected-bg, #3b82f6);
+  color: var(--rhmdp-day-selected-text, #ffffff);
+}
+
+/* --------------------------- Header / PanelHeader ------------------------- */
+.rhmdp-header,
+.rhmdp-panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  user-select: none;
+}
+
+/* prev / next arrow buttons — shared `arrow` tokens */
+.rhmdp-header__prevButton,
+.rhmdp-header__nextButton,
+.rhmdp-panelHeader__prevButton,
+.rhmdp-panelHeader__nextButton {
+  display: flex;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  color: var(--rhmdp-arrow-text, inherit);
+  background-color: var(--rhmdp-arrow-bg, transparent);
+}
+
+.rhmdp-header__prevButton:hover,
+.rhmdp-header__nextButton:hover,
+.rhmdp-panelHeader__prevButton:hover,
+.rhmdp-panelHeader__nextButton:hover {
+  background-color: var(--rhmdp-arrow-hover-bg, #e5e7eb);
+  color: var(--rhmdp-arrow-hover-text, inherit);
+}
+
+/* arrow icons (default chevrons) */
+.rhmdp-header__prevButton svg,
+.rhmdp-header__nextButton svg,
+.rhmdp-panelHeader__prevButton svg,
+.rhmdp-panelHeader__nextButton svg {
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* in RTL the prev/next chevrons point the other way */
+[dir="rtl"] .rhmdp-header__prevButton svg,
+[dir="rtl"] .rhmdp-header__nextButton svg,
+[dir="rtl"] .rhmdp-panelHeader__prevButton svg,
+[dir="rtl"] .rhmdp-panelHeader__nextButton svg {
+  transform: rotate(180deg);
+}
+
+/* Header month / year native <select> dropdowns */
+.rhmdp-header__monthSelect,
+.rhmdp-header__yearSelect {
+  font-weight: var(--rhmdp-header-weight, 700);
+  color: var(--rhmdp-header-select-text, inherit);
+  background-color: var(--rhmdp-header-select-bg, transparent);
+  border: 1px solid var(--rhmdp-header-select-border, transparent);
+}
+
+/* PanelHeader month / year label */
+.rhmdp-panelHeader__label {
+  cursor: pointer;
+  user-select: none;
+  font-weight: var(--rhmdp-header-weight, 700);
+}
+
+/* PanelHeader month / year grid */
+.rhmdp-panelHeader__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.rhmdp-panelHeader__cell {
+  cursor: pointer;
+  text-align: center;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.rhmdp-panelHeader__cell--selected {
+  background-color: var(--rhmdp-panel-selected-bg, #3b82f6);
+  color: var(--rhmdp-panel-selected-text, #ffffff);
+}
+
+/* ------------------------------- TimePicker ------------------------------- */
+.rhmdp-timePicker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.rhmdp-timePicker__column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+}
+
+/* up / down stepper buttons — shared `arrow` tokens.
+   These are real <button>s, so reset the native chrome (border / padding /
+   system background) that Tailwind's preflight used to strip. */
+.rhmdp-timePicker__button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  line-height: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  color: var(--rhmdp-arrow-text, inherit);
+  background-color: var(--rhmdp-arrow-bg, transparent);
+}
+
+.rhmdp-timePicker__button:hover {
+  background-color: var(--rhmdp-arrow-hover-bg, #e5e7eb);
+  color: var(--rhmdp-arrow-hover-text, inherit);
+}
+
+.rhmdp-timePicker__button svg {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* the value (a <select> in dropdown mode, otherwise a <div>) */
+.rhmdp-timePicker__value {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  text-align: center;
+  color: var(--rhmdp-time-text, inherit);
+  font-weight: var(--rhmdp-time-weight, 700);
+  font-size: var(--rhmdp-time-size, 1.25rem);
+  line-height: 1.75rem;
+  font-variant-numeric: tabular-nums;
+  background-color: transparent;
+  border: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+select.rhmdp-timePicker__value {
+  cursor: pointer;
+}
+
+.rhmdp-timePicker__separator {
+  color: var(--rhmdp-time-text, inherit);
+  font-weight: var(--rhmdp-time-weight, 700);
+  font-size: var(--rhmdp-time-size, 1.25rem);
+  line-height: 1.75rem;
+}

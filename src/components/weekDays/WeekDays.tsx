@@ -29,11 +29,7 @@ function WeekDays({
 
   return (
     <div
-      className={classJoin(
-        WEEK_DAYS,
-        "rhmdp-grid rhmdp-grid-cols-7",
-        rootClassName
-      )}
+      className={classJoin(WEEK_DAYS, rootClassName)}
       style={rootStyle}
     >
       {Array.from({ length: 7 }).map((_, index) => {
@@ -66,7 +62,6 @@ function WeekDays({
               WEEK_DAYS_DAY,
               `${WEEK_DAYS_DAY}--${weekDay}`,
               isWeekend && WEEK_DAYS_DAY_WEEKEND,
-              `rhmdp-text-center rhmdp-font-bold`,
               className
             )}
             style={style}

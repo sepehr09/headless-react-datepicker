@@ -77,6 +77,22 @@ describe("DatePickerProvider — time", () => {
       expect(end.getDate()).toBe(20);
       expect(end.getHours()).toBe(18);
     });
+
+    it("does not leave a hole when the end's time is set before a start exists", () => {
+      const { result } = renderProvider({
+        isRange: true,
+        defaultStartDate: new Date(2024, 6, 20, 0, 0, 0),
+      });
+
+      // set the end (index 1) while nothing is selected yet
+      act(() => result.current.handleChangeTime?.({ hours: 18 }, 1));
+
+      const value = result.current.selectedDay as Date[];
+      // index 0 is backfilled (not undefined) so consumers never see a hole
+      expect(value[0]).toBeInstanceOf(Date);
+      expect(value[1]).toBeInstanceOf(Date);
+      expect(value[1].getHours()).toBe(18);
+    });
   });
 
   describe("time preservation on day change", () => {

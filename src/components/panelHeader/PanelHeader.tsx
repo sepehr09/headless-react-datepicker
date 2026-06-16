@@ -96,7 +96,6 @@ function PanelHeader({
     <div
       className={classJoin(
         PANEL_HEADER_PREV_BUTTON,
-        "rhmdp-cursor-pointer",
         prevButtonClassName
       )}
       style={prevButtonStyles}
@@ -116,7 +115,6 @@ function PanelHeader({
     <div
       className={classJoin(
         PANEL_HEADER_NEXT_BUTTON,
-        "rhmdp-cursor-pointer",
         nextButtonClassName
       )}
       style={nextButtonStyles}
@@ -134,7 +132,6 @@ function PanelHeader({
 
   const labelBaseClassName = classJoin(
     PANEL_HEADER_LABEL,
-    "rhmdp-font-bold rhmdp-cursor-pointer rhmdp-select-none",
     labelClassName
   );
 
@@ -142,7 +139,7 @@ function PanelHeader({
   const renderHeaderCenter = () => {
     if (view === "days") {
       return (
-        <div className="rhmdp-flex rhmdp-gap-1">
+        <div style={{ display: "flex", gap: "0.25rem" }}>
           <span
             className={labelBaseClassName}
             style={labelStyles}
@@ -184,7 +181,6 @@ function PanelHeader({
       <span
         className={classJoin(
           PANEL_HEADER_LABEL,
-          "rhmdp-font-bold rhmdp-select-none",
           labelClassName
         )}
         style={labelStyles}
@@ -198,8 +194,6 @@ function PanelHeader({
     classJoin(
       PANEL_HEADER_CELL,
       active && PANEL_HEADER_CELL_SELECTED,
-      "rhmdp-cursor-pointer rhmdp-text-center rhmdp-py-2 rhmdp-rounded-lg",
-      active ? "rhmdp-bg-blue-500 rhmdp-text-white" : "",
       cellClassName,
       active ? selectedCellClassName : ""
     );
@@ -217,7 +211,6 @@ function PanelHeader({
         <div
           className={classJoin(
             PANEL_HEADER_GRID,
-            "rhmdp-grid rhmdp-grid-cols-3 rhmdp-gap-2",
             gridClassName
           )}
           style={gridStyles}
@@ -251,10 +244,7 @@ function PanelHeader({
     );
     return (
       <div
-        className={classJoin(
-          "rhmdp-grid rhmdp-grid-cols-3 rhmdp-gap-2",
-          gridClassName
-        )}
+        className={classJoin(PANEL_HEADER_GRID, gridClassName)}
         style={gridStyles}
       >
         {years.map((year) => {
@@ -285,7 +275,6 @@ function PanelHeader({
         className={classJoin(
           PANEL_HEADER,
           `${PANEL_HEADER}--${view}`,
-          "rhmdp-flex rhmdp-items-center rhmdp-justify-between rhmdp-py-4 rhmdp-select-none",
           rootClassName
         )}
         style={rootStyles}

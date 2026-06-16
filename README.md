@@ -54,11 +54,11 @@ npm install headless-react-datepicker
 
 # or
 
-yarn add headless-react-datepicker
+pnpm add headless-react-datepicker
 
 # or
 
-pnpm add headless-react-datepicker
+yarn add headless-react-datepicker
 ```
 
 ### 2. import the css file
@@ -140,6 +140,105 @@ const DualCalendar = () => {
 
 ![Headless React Datepicker structure](documentation/assets/headless.png "Headless React Datepicker structure")
 
+## Theming with CSS variables
+
+For a quick re-color (keeping the default look), set a few `--rhmdp-*` CSS
+variables anywhere up the tree — no `className` / inline-style overrides, no
+`!important`. The default `dist/styles.css` is a plain, dependency-free
+stylesheet (no Tailwind) whose every color, size and spacing reads from one of
+these variables, each falling back to its original default when unset:
+
+```css
+.my-calendar {
+  --rhmdp-day-selected-bg: #e11d48; /* selected day background          */
+  --rhmdp-day-selected-text: #ffffff; /* its text                         */
+  --rhmdp-day-range-bg: #ffe4e6; /* days inside a picked range       */
+  --rhmdp-day-range-hover-bg: #fecdd3; /* days previewed while hovering    */
+  --rhmdp-day-today-text: #e11d48; /* today's number                   */
+  --rhmdp-day-hover-bg: #fee2e2; /* hover bg on selectable days       */
+  --rhmdp-day-hover-text: #e11d48; /* hover text on selectable days     */
+}
+```
+
+```jsx
+<div className="my-calendar">
+  <DatePickerProvider isRange>{/* ... */}</DatePickerProvider>
+</div>
+```
+
+Because they cascade, you can also theme a single subtree (e.g. a dark panel) by
+setting the variables on a wrapping element, or scope them to `:root` for the
+whole app.
+
+### CSS variable reference
+
+Names follow a consistent `--rhmdp-<scope>-[state-]<property>` structure, where
+the scope is the part it belongs to (`day`, `weekday`, `title`, `arrow`,
+`header`, `time`, `panel`) and the property is `bg`, `text`, `border`, `radius`
+or `weight`. Every part/state is its own variable, so nothing is shared unless
+the scope says so (e.g. the `arrow` tokens are shared by `Header`, `PanelHeader`
+and `TimePicker`).
+
+**Day grid (`DaySlots`)**
+
+| Variable                      | Themes                                          | Default       |
+| ----------------------------- | ----------------------------------------------- | ------------- |
+| `--rhmdp-day-text`            | base day number color                           | `inherit`     |
+| `--rhmdp-day-muted-text`      | other-month days                                | `#9ca3af`     |
+| `--rhmdp-day-border`          | day cell border                                 | `transparent` |
+| `--rhmdp-day-radius`          | day cell + range-end corner radius              | `0.5rem`      |
+| `--rhmdp-day-padding`         | padding inside each day cell                    | `0.5rem`      |
+| `--rhmdp-day-gap`             | gap between day cells in the grid               | `0px`         |
+| `--rhmdp-day-weight`          | day number font weight                          | `inherit`     |
+| `--rhmdp-day-size`            | day number font size                            | `inherit`     |
+| `--rhmdp-day-today-text`      | today's number                                  | `#2563eb`     |
+| `--rhmdp-day-weekend-text`    | day text marked as weekend                      | `#ef4444`     |
+| `--rhmdp-day-holiday-text`    | day text marked as holiday                      | `#ef4444`     |
+| `--rhmdp-day-disabled-text`   | disabled day text                               | `#9ca3af`     |
+| `--rhmdp-day-hover-bg`        | hover background on selectable days             | `#d1d5db`     |
+| `--rhmdp-day-hover-text`      | hover text on selectable days                   | `inherit`     |
+| `--rhmdp-day-selected-bg`     | selected day background                         | `#3b82f6`     |
+| `--rhmdp-day-selected-text`   | selected day text                               | `#ffffff`     |
+| `--rhmdp-day-range-bg`        | background of days inside a selected range       | `#eaeaec`     |
+| `--rhmdp-day-range-hover-bg`  | background of days in the hovered-range preview  | `#eaeaec`     |
+
+**Arrow buttons (`Header` / `PanelHeader` / `TimePicker`)**
+
+| Variable                      | Themes                                          | Default       |
+| ----------------------------- | ----------------------------------------------- | ------------- |
+| `--rhmdp-arrow-text`          | chevron / arrow color                           | `inherit`     |
+| `--rhmdp-arrow-bg`            | arrow button background                         | `transparent` |
+| `--rhmdp-arrow-hover-bg`      | arrow button hover background                   | `#e5e7eb`     |
+| `--rhmdp-arrow-hover-text`    | arrow button hover color                        | `inherit`     |
+
+**Header month/year `<select>` dropdowns**
+
+| Variable                       | Themes                                         | Default       |
+| ------------------------------ | ---------------------------------------------- | ------------- |
+| `--rhmdp-header-select-bg`     | dropdown background                            | `transparent` |
+| `--rhmdp-header-select-text`   | dropdown text color                            | `inherit`     |
+| `--rhmdp-header-select-border` | dropdown border color                          | `transparent` |
+
+**Per-part text, weight, size & misc**
+
+| Variable                      | Themes                                          | Default       |
+| ----------------------------- | ----------------------------------------------- | ------------- |
+| `--rhmdp-weekday-text`        | `WeekDays` header text                          | `inherit`     |
+| `--rhmdp-weekday-weight`      | `WeekDays` header font weight                   | `700`         |
+| `--rhmdp-weekday-size`        | `WeekDays` header font size                     | `inherit`     |
+| `--rhmdp-title-text`          | `Title` text                                    | `inherit`     |
+| `--rhmdp-title-weight`        | `Title` font weight                             | `700`         |
+| `--rhmdp-title-size`          | `Title` font size                               | `1.5rem`      |
+| `--rhmdp-header-weight`       | `Header` / `PanelHeader` month-year label weight | `700`        |
+| `--rhmdp-time-text`           | `TimePicker` value text                         | `inherit`     |
+| `--rhmdp-time-weight`         | `TimePicker` value font weight                  | `700`         |
+| `--rhmdp-time-size`           | `TimePicker` value font size                    | `1.25rem`     |
+| `--rhmdp-panel-selected-bg`   | selected month/year cell (`PanelHeader`)        | `#3b82f6`     |
+| `--rhmdp-panel-selected-text` | selected month/year cell text (`PanelHeader`)   | `#ffffff`     |
+
+> Variables are the light touch (re-color the default theme). For full
+> structural control, use the BEM class hooks below.
+
 ## Styling with plain CSS (no Tailwind / no inline styles)
 
 Besides the `className` / `style` props and the render props, every component
@@ -148,7 +247,7 @@ a plain CSS file — no Tailwind and no inline styles required. State is exposed
 as `--modifier` classes (e.g. `--selected`, `--today`, `--disabled`).
 
 If you want full control, simply **don't import `dist/styles.css`** (that file
-only carries the default Tailwind look) and target the hooks yourself:
+only carries the default look) and target the hooks yourself:
 
 ```css
 /* a day cell */
@@ -175,17 +274,17 @@ only carries the default Tailwind look) and target the hooks yourself:
 
 ### Class hook reference
 
-| Component       | Base class(es)                                                                                                   | State modifiers (`base--modifier`)                                                                                                          |
-| --------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Component       | Base class(es)                                                                                                      | State modifiers (`base--modifier`)                                                                                                                                                                                                           |
+| --------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **DaySlots**    | `.rhmdp-daySlots` (grid), `.rhmdp-daySlots__cell` (wrapper), `.rhmdp-daySlots__day`, `.rhmdp-daySlots__placeholder` | on both `__cell` and `__day`: `--today`, `--selected`, `--selectable`, `--disabled`, `--weekend`, `--holiday`, `--other-month`, `--in-range`, `--in-hovered-range`, `--range-start`, `--range-end`, `--first-of-month`; plus `__cell--empty` |
-| **WeekDays**    | `.rhmdp-weekDays`, `.rhmdp-weekDays__day`                                                                        | `--monday` … `--sunday`, `--weekend`                                                                                                        |
-| **Header**      | `.rhmdp-header`, `__prevButton`, `__nextButton`, `__monthSelect`, `__yearSelect`, `__monthOption`, `__yearOption` | `__monthOption--selected`, `__yearOption--selected`                                                                                         |
-| **PanelHeader** | `.rhmdp-panelHeader`, `__prevButton`, `__nextButton`, `__label`, `__grid`, `__cell`                              | root `--days` / `--months` / `--years`; `__cell--selected`                                                                                  |
-| **Title**       | `.rhmdp-title`                                                                                                   |                                                                                                                                            |
-| **TimePicker**  | `.rhmdp-timePicker`, `__column`, `__button`, `__value`, `__option`, `__separator`                                | `__column--hours` / `--minutes` / `--seconds` / `--period`; `__button--up` / `--down`                                                       |
+| **WeekDays**    | `.rhmdp-weekDays`, `.rhmdp-weekDays__day`                                                                           | `--monday` … `--sunday`, `--weekend`                                                                                                                                                                                                         |
+| **Header**      | `.rhmdp-header`, `__prevButton`, `__nextButton`, `__monthSelect`, `__yearSelect`, `__monthOption`, `__yearOption`   | `__monthOption--selected`, `__yearOption--selected`                                                                                                                                                                                          |
+| **PanelHeader** | `.rhmdp-panelHeader`, `__prevButton`, `__nextButton`, `__label`, `__grid`, `__cell`                                 | root `--days` / `--months` / `--years`; `__cell--selected`                                                                                                                                                                                   |
+| **Title**       | `.rhmdp-title`                                                                                                      |                                                                                                                                                                                                                                              |
+| **TimePicker**  | `.rhmdp-timePicker`, `__column`, `__button`, `__value`, `__option`, `__separator`                                   | `__column--hours` / `--minutes` / `--seconds` / `--period`; `__button--up` / `--down`                                                                                                                                                        |
 
-> These hooks are additive — the `className` / `style` props and the Tailwind
-> defaults keep working exactly as before.
+> These hooks are additive — the `className` / `style` props and the default
+> styles keep working exactly as before.
 
 # DatePickerProvider
 
@@ -218,13 +317,13 @@ import { DatePickerProvider } from "headless-react-datepicker";
 | otherDaysSelectable | boolean \| undefined                       | Allow selecting other days from the previous and next month or not.                                                | false                         |
 | weekdayFormat       | "long" \| "short" \| "narrow" \| undefined |                                                                                                                    | "narrow"                      |
 | dayFormat           | "numeric" \| "2-digit" \| undefined        |                                                                                                                    | "numeric"                     |
-| yearRangeFrom       | number \| undefined                        |                                                                                                                    | last 10 years if not provided |
+| yearRangeFrom       | number \| undefined                        |                                                                                                                    | last 20 years if not provided |
 | yearRangeTo         | number \| undefined                        |                                                                                                                    | current year if not provided  |
-| maxDate             | Date \| undefined                          | Prevent selecting dates before this date.                                                                          |                               |
-| minDate             | Date \| undefined                          | Prevent selecting dates after this date.                                                                           |                               |
+| maxDate             | Date \| undefined                          | Prevent selecting dates after this date.                                                                           |                               |
+| minDate             | Date \| undefined                          | Prevent selecting dates before this date.                                                                          |                               |
 | weekends            | TDay[] \| undefined                        | Specify which days of the week are weekend.                                                                        | undefined                     |
 | weekendSelectable   | boolean \| undefined                       | Allow selecting weekends or not.                                                                                   | true                          |
-| holidays            | TDay[] \| undefined                        | Specify which days of the week are holidays.                                                                       | undefined                     |
+| holidays            | Date[] \| undefined                        | Specify which days are holidays.                                                                                   | undefined                     |
 | holidaySelectable   | boolean \| undefined                       | Allow selecting holidays or not.                                                                                   | false                         |
 | allowBackwardRange  | boolean \| undefined                       | If user select a date before the previous selected date, it will be considered as a range or start from beginning. | false                         |
 
@@ -553,8 +652,8 @@ const MyCustomAwesomeHeader = () => {
 | goToMonth                 | (month: number) => void                                                                 | Local month (based on the desired calendar)                                                               |
 | goToYear                  | (year: number) => void                                                                  | Handle go to year (based on desire calendar)                                                              |
 | daysOfMonth               | Date[]                                                                                  | All the dates of the month rendered in the calendar                                                       |
-| startDateIncludeOtherDays | Date                                                                                    | End date of the month rendered in the calendar (include previous month days (if in the week))             |
-| endDateIncludeOtherDays   | Date                                                                                    | Start date of the month rendered in the calendar (include next month days (if in the week))               |
+| startDateIncludeOtherDays | Date                                                                                    | Start date of the month rendered in the calendar (include previous month days (if in the week))           |
+| endDateIncludeOtherDays   | Date                                                                                    | End date of the month rendered in the calendar (include next month days (if in the week))                 |
 | firstDayOfMonth           | Date                                                                                    | First day of the month                                                                                    |
 | lastDayOfMonth            | Date                                                                                    | Last day of the month                                                                                     |
 | selectedDay               | Date \| Date[] \| undefined                                                             | The selected day in the calendar                                                                          |

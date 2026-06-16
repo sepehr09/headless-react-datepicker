@@ -52,17 +52,12 @@ function Header({
 
   return (
     <div
-      className={classJoin(
-        HEADER,
-        "rhmdp-flex rhmdp-items-center rhmdp-justify-between rhmdp-py-4 rhmdp-select-none",
-        rootClassName
-      )}
+      className={classJoin(HEADER, rootClassName)}
       style={rootStyles}
     >
       <div
         className={classJoin(
           HEADER_PREV_BUTTON,
-          "rhmdp-cursor-pointer",
           prevButtonClassName
         )}
         style={prevButtonStyles}
@@ -140,7 +135,6 @@ function Header({
       <div
         className={classJoin(
           HEADER_NEXT_BUTTON,
-          "rhmdp-cursor-pointer",
           nextButtonClassName
         )}
         style={nextButtonStyles}
