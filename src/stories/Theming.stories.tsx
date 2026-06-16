@@ -76,6 +76,9 @@ const DEFAULT_TOKENS: Record<string, string> = {
   "--rhmdp-header-select-bg": "transparent",
   "--rhmdp-header-select-text": "inherit",
   "--rhmdp-header-select-border": "transparent",
+  "--rhmdp-header-select-radius": "revert",
+  "--rhmdp-header-select-padding": "revert",
+  "--rhmdp-header-select-size": "revert",
   /* arrow buttons (Header / PanelHeader / TimePicker) */
   "--rhmdp-arrow-text": "inherit",
   "--rhmdp-arrow-bg": "transparent",
@@ -90,6 +93,12 @@ const DEFAULT_TOKENS: Record<string, string> = {
   /* panel */
   "--rhmdp-panel-selected-bg": "#3b82f6",
   "--rhmdp-panel-selected-text": "#ffffff",
+  "--rhmdp-panel-cell-bg": "transparent",
+  "--rhmdp-panel-cell-text": "inherit",
+  "--rhmdp-panel-cell-hover-bg": "#e5e7eb",
+  "--rhmdp-panel-cell-hover-text": "inherit",
+  "--rhmdp-panel-cell-size": "inherit",
+  "--rhmdp-panel-cell-weight": "inherit",
 };
 
 type Theme = {
@@ -105,8 +114,6 @@ type Theme = {
   title?: CSSProperties;
   /** `Header` row chrome when needed. */
   headerRoot?: CSSProperties;
-  /** Month/year `<select>` chrome (no token covers the native dropdown). */
-  select?: CSSProperties;
   /**
    * Flourish a token can't express on the selected day — a gradient background
    * and/or a glow. Merged on top of the `--rhmdp-day-selected-bg` default.
@@ -140,11 +147,7 @@ const ThemedCalendar =
           onChange={(e) => console.log("onChange: ", e)}
         >
           <Title style={theme.title} />
-          <Header
-            rootStyles={theme.headerRoot}
-            monthSelectStyles={theme.select}
-            yearSelectStyles={theme.select}
-          />
+          <Header rootStyles={theme.headerRoot} />
           <WeekDays />
           <DaySlots
             parentStyles={theme.grid}
@@ -192,13 +195,16 @@ const singleArgs: Story["args"] = {
   },
 };
 
-/** Light, neutral month/year dropdown used by most light themes. */
-const lightSelect: CSSProperties = {
-  backgroundColor: "#f0f0f0",
-  color: "#000",
-  padding: "4px",
-  borderRadius: 5,
-  outline: "none",
+/**
+ * Light, neutral month/year `<select>` chrome used by most light themes —
+ * expressed as `--rhmdp-header-select-*` tokens so it's spread into a theme's
+ * `tokens` instead of passed as an inline `*Styles` prop.
+ */
+const lightSelectTokens: Record<string, string> = {
+  "--rhmdp-header-select-bg": "#f0f0f0",
+  "--rhmdp-header-select-text": "#000000",
+  "--rhmdp-header-select-radius": "5px",
+  "--rhmdp-header-select-padding": "4px",
 };
 
 /* -------------------------------------------------------------------------- */
@@ -239,15 +245,12 @@ export const AuroraGlass: Story = {
       "--rhmdp-weekday-text": "rgba(255,255,255,0.75)",
       "--rhmdp-title-text": "#ffffff",
       "--rhmdp-arrow-text": "#ffffff",
+      "--rhmdp-header-select-bg": "rgba(255,255,255,0.2)",
+      "--rhmdp-header-select-text": "#ffffff",
+      "--rhmdp-header-select-border": "rgba(255,255,255,0.3)",
+      "--rhmdp-header-select-radius": "8px",
+      "--rhmdp-header-select-padding": "4px 6px",
     }),
-    select: {
-      background: "rgba(255,255,255,0.2)",
-      color: "#fff",
-      border: "1px solid rgba(255,255,255,0.3)",
-      borderRadius: 8,
-      padding: "4px 6px",
-      outline: "none",
-    },
     selectedAccent: {
       background: "linear-gradient(135deg, #7c3aed, #db2777)",
       boxShadow: "0 6px 16px rgba(124, 58, 237, 0.5)",
@@ -294,15 +297,12 @@ export const MidnightNeon: Story = {
       "--rhmdp-arrow-hover-bg": "#1c2740",
       "--rhmdp-arrow-hover-text": "#67e8f9",
       "--rhmdp-time-text": "#f8fafc",
+      "--rhmdp-header-select-bg": "#1a2234",
+      "--rhmdp-header-select-text": "#cbd5e1",
+      "--rhmdp-header-select-border": "#243049",
+      "--rhmdp-header-select-radius": "8px",
+      "--rhmdp-header-select-padding": "4px 6px",
     }),
-    select: {
-      background: "#1a2234",
-      color: "#cbd5e1",
-      border: "1px solid #243049",
-      borderRadius: 8,
-      padding: "4px 6px",
-      outline: "none",
-    },
     // bg comes from --rhmdp-day-selected-bg; we only add the neon glow.
     selectedAccent: { boxShadow: "0 0 18px rgba(34, 211, 238, 0.7)" },
     // arrows (header + stepper) are themed via the shared --rhmdp-* tokens.
@@ -344,15 +344,12 @@ export const SunsetPeach: Story = {
       "--rhmdp-weekday-text": "#c2754b",
       "--rhmdp-title-text": "#9a3412",
       "--rhmdp-arrow-text": "#ea580c",
+      "--rhmdp-header-select-bg": "#fff1e7",
+      "--rhmdp-header-select-text": "#9a3412",
+      "--rhmdp-header-select-border": "#ffd8bf",
+      "--rhmdp-header-select-radius": "8px",
+      "--rhmdp-header-select-padding": "4px 6px",
     }),
-    select: {
-      background: "#fff1e7",
-      color: "#9a3412",
-      border: "1px solid #ffd8bf",
-      borderRadius: 8,
-      padding: "4px 6px",
-      outline: "none",
-    },
     selectedAccent: {
       background: "linear-gradient(135deg, #fb923c, #f43f5e)",
       boxShadow: "0 6px 14px rgba(244, 63, 94, 0.4)",
@@ -392,6 +389,9 @@ export const MinimalMono: Story = {
       "--rhmdp-weekday-text": "#bbbbbb",
       "--rhmdp-title-text": "#111111",
       "--rhmdp-arrow-text": "#111111",
+      // transparent bg/border come from DEFAULT_TOKENS; only text & weight differ.
+      "--rhmdp-header-select-text": "#111111",
+      "--rhmdp-header-weight": "300",
     }),
     title: {
       fontWeight: 300,
@@ -400,13 +400,6 @@ export const MinimalMono: Story = {
       textTransform: "uppercase",
       textAlign: "center",
       marginBottom: 12,
-    },
-    select: {
-      background: "transparent",
-      color: "#111",
-      border: "none",
-      outline: "none",
-      fontWeight: 300,
     },
   }),
 };
@@ -444,15 +437,12 @@ export const MintFresh: Story = {
       "--rhmdp-weekday-text": "#5eada2",
       "--rhmdp-title-text": "#0f766e",
       "--rhmdp-arrow-text": "#14b8a6",
+      "--rhmdp-header-select-bg": "#ecfdf5",
+      "--rhmdp-header-select-text": "#0f766e",
+      "--rhmdp-header-select-border": "#b7ebdd",
+      "--rhmdp-header-select-radius": "8px",
+      "--rhmdp-header-select-padding": "4px 6px",
     }),
-    select: {
-      background: "#ecfdf5",
-      color: "#0f766e",
-      border: "1px solid #b7ebdd",
-      borderRadius: 8,
-      padding: "4px 6px",
-      outline: "none",
-    },
     selectedAccent: { boxShadow: "0 6px 14px rgba(20, 184, 166, 0.4)" },
   }),
 };
@@ -488,15 +478,12 @@ export const RoyalGold: Story = {
       "--rhmdp-weekday-text": "#a5b4fc",
       "--rhmdp-title-text": "#fde68a",
       "--rhmdp-arrow-text": "#fbbf24",
+      "--rhmdp-header-select-bg": "#312e81",
+      "--rhmdp-header-select-text": "#e0e7ff",
+      "--rhmdp-header-select-border": "#4338ca",
+      "--rhmdp-header-select-radius": "8px",
+      "--rhmdp-header-select-padding": "4px 6px",
     }),
-    select: {
-      background: "#312e81",
-      color: "#e0e7ff",
-      border: "1px solid #4338ca",
-      borderRadius: 8,
-      padding: "4px 6px",
-      outline: "none",
-    },
     selectedAccent: {
       background: "linear-gradient(135deg, #fbbf24, #f59e0b)",
       boxShadow: "0 6px 16px rgba(251, 191, 36, 0.45)",
@@ -530,8 +517,8 @@ export const SlateRange: Story = {
       "--rhmdp-day-range-bg": "#a8adb4",
       "--rhmdp-day-range-hover-bg": "#cfd2d6",
       "--rhmdp-day-hover-bg": "#ececef",
+      ...lightSelectTokens,
     }),
-    select: lightSelect,
   }),
 };
 
@@ -564,9 +551,9 @@ export const CrimsonGrid: Story = {
       "--rhmdp-day-range-hover-bg": "#ffd0d0",
       "--rhmdp-day-hover-bg": "#ffe3e3",
       "--rhmdp-weekday-text": "#7a7a7a",
+      ...lightSelectTokens,
     }),
     grid: { gap: 2 },
-    select: lightSelect,
   }),
 };
 
@@ -602,14 +589,11 @@ export const GraphitePink: Story = {
       "--rhmdp-weekday-text": "#7a7a7a",
       "--rhmdp-title-text": "#ffffff",
       "--rhmdp-arrow-text": "#ffffff",
+      "--rhmdp-header-select-bg": "#636363",
+      "--rhmdp-header-select-text": "#ffffff",
+      "--rhmdp-header-select-radius": "5px",
+      "--rhmdp-header-select-padding": "4px",
     }),
-    select: {
-      backgroundColor: "#636363",
-      color: "#fff",
-      padding: "4px",
-      borderRadius: 5,
-      outline: "none",
-    },
   }),
 };
 
@@ -645,6 +629,7 @@ export const LimeSheet: Story = {
       "--rhmdp-day-weekend-text": "#ff0000",
       "--rhmdp-weekday-text": "#7a7a7a",
       "--rhmdp-title-text": "#5c5c5c",
+      ...lightSelectTokens,
     }),
     title: {
       fontWeight: 200,
@@ -661,6 +646,5 @@ export const LimeSheet: Story = {
       padding: 10,
       backgroundColor: "#fdfdfd",
     },
-    select: lightSelect,
   }),
 };

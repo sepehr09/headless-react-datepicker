@@ -139,7 +139,7 @@ function PanelHeader({
   const renderHeaderCenter = () => {
     if (view === "days") {
       return (
-        <div style={{ display: "flex", gap: "0.25rem" }}>
+        <div style={{ display: "flex", gap: "0.25rem", alignItems:"center" }}>
           <span
             className={labelBaseClassName}
             style={labelStyles}

@@ -33,7 +33,8 @@
 .rhmdp-header,
 .rhmdp-panelHeader,
 .rhmdp-daySlots,
-.rhmdp-timePicker {
+.rhmdp-timePicker,
+.rhmdp-panelHeader__grid {
   font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
@@ -208,20 +209,28 @@
   transform: rotate(180deg);
 }
 
-/* Header month / year native <select> dropdowns */
+/* Header month / year native <select> dropdowns.
+   `radius` / `padding` / `size` fall back to `revert` so an unset token keeps
+   the browser's native control look (rather than forcing it to 0 / inherit). */
 .rhmdp-header__monthSelect,
 .rhmdp-header__yearSelect {
   font-weight: var(--rhmdp-header-weight, 700);
+  font-size: var(--rhmdp-header-select-size, revert);
   color: var(--rhmdp-header-select-text, inherit);
   background-color: var(--rhmdp-header-select-bg, transparent);
   border: 1px solid var(--rhmdp-header-select-border, transparent);
+  border-radius: var(--rhmdp-header-select-radius, revert);
+  padding: var(--rhmdp-header-select-padding, revert);
 }
 
-/* PanelHeader month / year label */
+/* PanelHeader month / year label — it stands in for the `Title`, so it shares
+   the `--rhmdp-title-*` tokens (its own defaults keep the current look). */
 .rhmdp-panelHeader__label {
   cursor: pointer;
   user-select: none;
-  font-weight: var(--rhmdp-header-weight, 700);
+  color: var(--rhmdp-title-text, inherit);
+  font-weight: var(--rhmdp-title-weight, 700);
+  font-size: var(--rhmdp-title-size, inherit);
 }
 
 /* PanelHeader month / year grid */
@@ -237,6 +246,16 @@
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   border-radius: 0.5rem;
+  background-color: var(--rhmdp-panel-cell-bg, transparent);
+  color: var(--rhmdp-panel-cell-text, inherit);
+  font-size: var(--rhmdp-panel-cell-size, inherit);
+  font-weight: var(--rhmdp-panel-cell-weight, inherit);
+}
+
+/* hover on a non-selected month/year cell */
+.rhmdp-panelHeader__cell:not(.rhmdp-panelHeader__cell--selected):hover {
+  background-color: var(--rhmdp-panel-cell-hover-bg, #e5e7eb);
+  color: var(--rhmdp-panel-cell-hover-text, inherit);
 }
 
 .rhmdp-panelHeader__cell--selected {

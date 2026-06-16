@@ -213,11 +213,14 @@ and `TimePicker`).
 
 **Header month/year `<select>` dropdowns**
 
-| Variable                       | Themes                                         | Default       |
-| ------------------------------ | ---------------------------------------------- | ------------- |
-| `--rhmdp-header-select-bg`     | dropdown background                            | `transparent` |
-| `--rhmdp-header-select-text`   | dropdown text color                            | `inherit`     |
-| `--rhmdp-header-select-border` | dropdown border color                          | `transparent` |
+| Variable                        | Themes                                         | Default       |
+| ------------------------------- | ---------------------------------------------- | ------------- |
+| `--rhmdp-header-select-bg`      | dropdown background                            | `transparent` |
+| `--rhmdp-header-select-text`    | dropdown text color                            | `inherit`     |
+| `--rhmdp-header-select-border`  | dropdown border color                          | `transparent` |
+| `--rhmdp-header-select-radius`  | dropdown corner radius                         | `revert`      |
+| `--rhmdp-header-select-padding` | dropdown padding                               | `revert`      |
+| `--rhmdp-header-select-size`    | dropdown font size                             | `revert`      |
 
 **Per-part text, weight, size & misc**
 
@@ -226,15 +229,21 @@ and `TimePicker`).
 | `--rhmdp-weekday-text`        | `WeekDays` header text                          | `inherit`     |
 | `--rhmdp-weekday-weight`      | `WeekDays` header font weight                   | `700`         |
 | `--rhmdp-weekday-size`        | `WeekDays` header font size                     | `inherit`     |
-| `--rhmdp-title-text`          | `Title` text                                    | `inherit`     |
-| `--rhmdp-title-weight`        | `Title` font weight                             | `700`         |
-| `--rhmdp-title-size`          | `Title` font size                               | `1.5rem`      |
-| `--rhmdp-header-weight`       | `Header` / `PanelHeader` month-year label weight | `700`        |
+| `--rhmdp-title-text`          | `Title` text — also the `PanelHeader` label     | `inherit`     |
+| `--rhmdp-title-weight`        | `Title` / `PanelHeader` label font weight       | `700`         |
+| `--rhmdp-title-size`          | `Title` / `PanelHeader` label font size         | `1.5rem` / `inherit` |
+| `--rhmdp-header-weight`       | `Header` month-year `<select>` weight           | `700`         |
 | `--rhmdp-time-text`           | `TimePicker` value text                         | `inherit`     |
 | `--rhmdp-time-weight`         | `TimePicker` value font weight                  | `700`         |
 | `--rhmdp-time-size`           | `TimePicker` value font size                    | `1.25rem`     |
 | `--rhmdp-panel-selected-bg`   | selected month/year cell (`PanelHeader`)        | `#3b82f6`     |
 | `--rhmdp-panel-selected-text` | selected month/year cell text (`PanelHeader`)   | `#ffffff`     |
+| `--rhmdp-panel-cell-bg`       | month/year cell background (`PanelHeader`)       | `transparent` |
+| `--rhmdp-panel-cell-text`     | month/year cell text (`PanelHeader`)            | `inherit`     |
+| `--rhmdp-panel-cell-hover-bg` | month/year cell hover background (`PanelHeader`) | `#e5e7eb`     |
+| `--rhmdp-panel-cell-hover-text` | month/year cell hover text (`PanelHeader`)    | `inherit`     |
+| `--rhmdp-panel-cell-size`     | month/year cell font size (`PanelHeader`)       | `inherit`     |
+| `--rhmdp-panel-cell-weight`   | month/year cell font weight (`PanelHeader`)     | `inherit`     |
 
 > Variables are the light touch (re-color the default theme). For full
 > structural control, use the BEM class hooks below.

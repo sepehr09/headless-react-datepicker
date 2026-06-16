@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { CSSProperties, ReactNode, useState } from "react";
 import DatePickerProvider from "../DatePickerProvider";
 import DaySlots from "../components/daySlots/DaySlots";
 import Header from "../components/header/Header";
@@ -9,10 +9,24 @@ import Title from "../components/title/Title";
 import WeekDays from "../components/weekDays/WeekDays";
 import { TDatePickerOnChange, TDatePickerProps } from "../types";
 
+/**
+ * Demo theming through the library's own `--rhmdp-*` CSS variables instead of
+ * inline `*Styles` props. Set on a wrapper, they cascade into every calendar
+ * part rendered inside — e.g. the `Header` month/year `<select>` dropdowns read
+ * `--rhmdp-header-select-bg` / `--rhmdp-header-select-text`.
+ */
+export const calendarVars: CSSProperties = {
+  "--rhmdp-header-select-bg": "#f0f0f0",
+  "--rhmdp-header-select-text": "#000",
+  "--rhmdp-header-select-radius": "5px",
+  "--rhmdp-header-select-padding": "5px",
+} as CSSProperties;
+
 export const Card = ({ children }: { children: ReactNode }) => {
   return (
     <div
       style={{
+        ...calendarVars,
         background: "#fff",
         boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
         width: "300px",
@@ -26,13 +40,6 @@ export const Card = ({ children }: { children: ReactNode }) => {
   );
 };
 
-const selectStyles = {
-  backgroundColor: "#f0f0f0",
-  color: "#000",
-  padding: "5px",
-  borderRadius: "5px",
-};
-
 export const RenderDatePicker = <T extends boolean>(
   props: TDatePickerProps<T>
 ) => {
@@ -40,10 +47,7 @@ export const RenderDatePicker = <T extends boolean>(
     <Card>
       <DatePickerProvider {...props}>
         <Title />
-        <Header
-          monthSelectStyles={selectStyles}
-          yearSelectStyles={selectStyles}
-        />
+        <Header />
         <WeekDays />
         <DaySlots />
       </DatePickerProvider>
@@ -72,10 +76,7 @@ export const RenderControlledDatePicker = <T extends boolean>(
           onChange={onChange}
         >
           <Title />
-          <Header
-            monthSelectStyles={selectStyles}
-            yearSelectStyles={selectStyles}
-          />
+          <Header />
           <WeekDays />
           <DaySlots
             onClickSlot={(v) => {
@@ -114,6 +115,7 @@ export const RenderDualDatePicker = <T extends boolean>(
   return (
     <div
       style={{
+        ...calendarVars,
         background: "#fff",
         boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
         width: "640px",
@@ -124,11 +126,7 @@ export const RenderDualDatePicker = <T extends boolean>(
     >
       <DatePickerProvider {...props}>
         {/* Single header navigates both months together (2 months per click) */}
-        <Header
-          navigationStep={2}
-          monthSelectStyles={selectStyles}
-          yearSelectStyles={selectStyles}
-        />
+        <Header navigationStep={2} />
 
         <div style={{ display: "flex", gap: "24px" }}>
           {/* Left calendar: current month */}
@@ -187,10 +185,7 @@ export const RenderDateTimePicker = <T extends boolean>(
     <Card>
       <DatePickerProvider {...providerProps} onChange={onChange}>
         <Title />
-        <Header
-          monthSelectStyles={selectStyles}
-          yearSelectStyles={selectStyles}
-        />
+        <Header />
         <WeekDays />
         <DaySlots />
         <div

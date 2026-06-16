@@ -42,13 +42,6 @@ const baseArgs: Story["args"] = {
   },
 };
 
-const selectStyles = {
-  backgroundColor: "#f0f0f0",
-  color: "#000",
-  padding: "5px",
-  borderRadius: "5px",
-};
-
 /**
  * `Title` shows the current month and year for the calendar, formatted to the
  * active `locale` and `calendar`. Use `monthOffset` to show a neighbouring
@@ -76,10 +69,7 @@ export const HeaderOnly: Story = {
   render: (args) => (
     <Card>
       <DatePickerProvider {...args}>
-        <Header
-          monthSelectStyles={selectStyles}
-          yearSelectStyles={selectStyles}
-        />
+        <Header />
       </DatePickerProvider>
     </Card>
   ),
