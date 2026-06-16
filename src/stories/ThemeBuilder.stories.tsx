@@ -1,5 +1,5 @@
 import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import DatePickerProvider from "../DatePickerProvider";
 import DaySlots from "../components/daySlots/DaySlots";
 import Header from "../components/header/Header";

@@ -1,4 +1,4 @@
-import type { Decorator } from "@storybook/react";
+import type { Decorator } from "@storybook/react-vite";
 
 /**
  * Wraps a story in an RTL container so it renders right-to-left synchronously

@@ -1,9 +1,10 @@
-import type { Meta } from "@storybook/react";
+import type { Meta } from "@storybook/react-vite";
+import type { InputType } from "storybook/internal/types";
 import DatePickerProvider from "../DatePickerProvider";
 
-export const argTypes = {
+export const argTypes: Record<string, InputType> = {
   config: {
-    control: "null",
+    control: false,
   },
   "config.locale": {
     control: "select",

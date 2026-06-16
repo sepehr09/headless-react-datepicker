@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import DatePickerProvider from "../DatePickerProvider";
 import { RenderDatePicker } from "./_shared";
 import { rtlDecorator } from "./rtlDecorator";
