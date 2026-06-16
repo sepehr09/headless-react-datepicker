@@ -11,6 +11,24 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    options: {
+      storySort: {
+        method: "configure",
+        order: [
+          "Example",
+          [
+            "Calendar",
+            ["Header", "Panel Header", "Holidays"],
+            "Side by Side Calendars",
+            "TimePicker",
+            "Localization",
+            "Theming",
+            "Theme Builder",
+            "Components",
+          ],
+        ],
+      },
+    },
   },
 };
 

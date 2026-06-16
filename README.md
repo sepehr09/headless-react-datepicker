@@ -142,6 +142,8 @@ const DualCalendar = () => {
 
 ## Theming with CSS variables
 
+![Theme builder for the headless-react-datepicker](documentation/assets/theme-builder.png "Theme builder")
+
 For a quick re-color (keeping the default look), set a few `--rhmdp-*` CSS
 variables anywhere up the tree — no `className` / inline-style overrides, no
 `!important`. The default `dist/styles.css` is a plain, dependency-free
@@ -181,69 +183,71 @@ and `TimePicker`).
 
 **Day grid (`DaySlots`)**
 
-| Variable                      | Themes                                          | Default       |
-| ----------------------------- | ----------------------------------------------- | ------------- |
-| `--rhmdp-day-text`            | base day number color                           | `inherit`     |
-| `--rhmdp-day-muted-text`      | other-month days                                | `#9ca3af`     |
-| `--rhmdp-day-border`          | day cell border                                 | `transparent` |
-| `--rhmdp-day-radius`          | day cell + range-end corner radius              | `0.5rem`      |
-| `--rhmdp-day-padding`         | padding inside each day cell                    | `0.5rem`      |
-| `--rhmdp-day-gap`             | gap between day cells in the grid               | `0px`         |
-| `--rhmdp-day-weight`          | day number font weight                          | `inherit`     |
-| `--rhmdp-day-size`            | day number font size                            | `inherit`     |
-| `--rhmdp-day-today-text`      | today's number                                  | `#2563eb`     |
-| `--rhmdp-day-weekend-text`    | day text marked as weekend                      | `#ef4444`     |
-| `--rhmdp-day-holiday-text`    | day text marked as holiday                      | `#ef4444`     |
-| `--rhmdp-day-disabled-text`   | disabled day text                               | `#9ca3af`     |
-| `--rhmdp-day-hover-bg`        | hover background on selectable days             | `#d1d5db`     |
-| `--rhmdp-day-hover-text`      | hover text on selectable days                   | `inherit`     |
-| `--rhmdp-day-selected-bg`     | selected day background                         | `#3b82f6`     |
-| `--rhmdp-day-selected-text`   | selected day text                               | `#ffffff`     |
-| `--rhmdp-day-range-bg`        | background of days inside a selected range       | `#eaeaec`     |
-| `--rhmdp-day-range-hover-bg`  | background of days in the hovered-range preview  | `#eaeaec`     |
+| Variable                     | Themes                                          | Default       |
+| ---------------------------- | ----------------------------------------------- | ------------- |
+| `--rhmdp-day-text`           | base day number color                           | `inherit`     |
+| `--rhmdp-day-muted-text`     | other-month days                                | `#c7c7cc`     |
+| `--rhmdp-day-border`         | day cell border color                           | `transparent` |
+| `--rhmdp-day-border-width`   | normal (shared) cell border width               | `1px`         |
+| `--rhmdp-day-full-border-width` | border width on all 4 cell sides (0 = shared) | `0px`       |
+| `--rhmdp-day-radius`         | day cell + range-end corner radius              | `999px`       |
+| `--rhmdp-day-padding`        | padding inside each day cell                    | `0.5rem`      |
+| `--rhmdp-day-gap`            | gap between day cells (0 = shared borders)      | `0px`         |
+| `--rhmdp-day-weight`         | day number font weight                          | `inherit`     |
+| `--rhmdp-day-size`           | day number font size                            | `inherit`     |
+| `--rhmdp-day-today-text`     | today's number                                  | `#007aff`     |
+| `--rhmdp-day-weekend-text`   | day text marked as weekend                      | `#8e8e93`     |
+| `--rhmdp-day-holiday-text`   | day text marked as holiday                      | `#ff3b30`     |
+| `--rhmdp-day-disabled-text`  | disabled day text                               | `#c7c7cc`     |
+| `--rhmdp-day-hover-bg`       | hover background on selectable days             | `#f2f2f7`     |
+| `--rhmdp-day-hover-text`     | hover text on selectable days                   | `inherit`     |
+| `--rhmdp-day-selected-bg`    | selected day background                         | `#007aff`     |
+| `--rhmdp-day-selected-text`  | selected day text                               | `#ffffff`     |
+| `--rhmdp-day-range-bg`       | background of days inside a selected range      | `#e6f0ff`     |
+| `--rhmdp-day-range-hover-bg` | background of days in the hovered-range preview | `#f2f7ff`     |
 
 **Arrow buttons (`Header` / `PanelHeader` / `TimePicker`)**
 
-| Variable                      | Themes                                          | Default       |
-| ----------------------------- | ----------------------------------------------- | ------------- |
-| `--rhmdp-arrow-text`          | chevron / arrow color                           | `inherit`     |
-| `--rhmdp-arrow-bg`            | arrow button background                         | `transparent` |
-| `--rhmdp-arrow-hover-bg`      | arrow button hover background                   | `#e5e7eb`     |
-| `--rhmdp-arrow-hover-text`    | arrow button hover color                        | `inherit`     |
+| Variable                   | Themes                        | Default       |
+| -------------------------- | ----------------------------- | ------------- |
+| `--rhmdp-arrow-text`       | chevron / arrow color         | `inherit`     |
+| `--rhmdp-arrow-bg`         | arrow button background       | `transparent` |
+| `--rhmdp-arrow-hover-bg`   | arrow button hover background | `#f2f2f7`     |
+| `--rhmdp-arrow-hover-text` | arrow button hover color      | `inherit`     |
 
 **Header month/year `<select>` dropdowns**
 
-| Variable                        | Themes                                         | Default       |
-| ------------------------------- | ---------------------------------------------- | ------------- |
-| `--rhmdp-header-select-bg`      | dropdown background                            | `transparent` |
-| `--rhmdp-header-select-text`    | dropdown text color                            | `inherit`     |
-| `--rhmdp-header-select-border`  | dropdown border color                          | `transparent` |
-| `--rhmdp-header-select-radius`  | dropdown corner radius                         | `revert`      |
-| `--rhmdp-header-select-padding` | dropdown padding                               | `revert`      |
-| `--rhmdp-header-select-size`    | dropdown font size                             | `revert`      |
+| Variable                        | Themes                 | Default       |
+| ------------------------------- | ---------------------- | ------------- |
+| `--rhmdp-header-select-bg`      | dropdown background    | `transparent` |
+| `--rhmdp-header-select-text`    | dropdown text color    | `inherit`     |
+| `--rhmdp-header-select-border`  | dropdown border color  | `transparent` |
+| `--rhmdp-header-select-radius`  | dropdown corner radius | `revert`      |
+| `--rhmdp-header-select-padding` | dropdown padding       | `revert`      |
+| `--rhmdp-header-select-size`    | dropdown font size     | `revert`      |
 
 **Per-part text, weight, size & misc**
 
-| Variable                      | Themes                                          | Default       |
-| ----------------------------- | ----------------------------------------------- | ------------- |
-| `--rhmdp-weekday-text`        | `WeekDays` header text                          | `inherit`     |
-| `--rhmdp-weekday-weight`      | `WeekDays` header font weight                   | `700`         |
-| `--rhmdp-weekday-size`        | `WeekDays` header font size                     | `inherit`     |
-| `--rhmdp-title-text`          | `Title` text — also the `PanelHeader` label     | `inherit`     |
-| `--rhmdp-title-weight`        | `Title` / `PanelHeader` label font weight       | `700`         |
-| `--rhmdp-title-size`          | `Title` / `PanelHeader` label font size         | `1.5rem` / `inherit` |
-| `--rhmdp-header-weight`       | `Header` month-year `<select>` weight           | `700`         |
-| `--rhmdp-time-text`           | `TimePicker` value text                         | `inherit`     |
-| `--rhmdp-time-weight`         | `TimePicker` value font weight                  | `700`         |
-| `--rhmdp-time-size`           | `TimePicker` value font size                    | `1.25rem`     |
-| `--rhmdp-panel-selected-bg`   | selected month/year cell (`PanelHeader`)        | `#3b82f6`     |
-| `--rhmdp-panel-selected-text` | selected month/year cell text (`PanelHeader`)   | `#ffffff`     |
-| `--rhmdp-panel-cell-bg`       | month/year cell background (`PanelHeader`)       | `transparent` |
-| `--rhmdp-panel-cell-text`     | month/year cell text (`PanelHeader`)            | `inherit`     |
-| `--rhmdp-panel-cell-hover-bg` | month/year cell hover background (`PanelHeader`) | `#e5e7eb`     |
-| `--rhmdp-panel-cell-hover-text` | month/year cell hover text (`PanelHeader`)    | `inherit`     |
-| `--rhmdp-panel-cell-size`     | month/year cell font size (`PanelHeader`)       | `inherit`     |
-| `--rhmdp-panel-cell-weight`   | month/year cell font weight (`PanelHeader`)     | `inherit`     |
+| Variable                        | Themes                                           | Default              |
+| ------------------------------- | ------------------------------------------------ | -------------------- |
+| `--rhmdp-weekday-text`          | `WeekDays` header text                           | `inherit`            |
+| `--rhmdp-weekday-weight`        | `WeekDays` header font weight                    | `600`                |
+| `--rhmdp-weekday-size`          | `WeekDays` header font size                      | `inherit`            |
+| `--rhmdp-title-text`            | `Title` text — also the `PanelHeader` label      | `inherit`            |
+| `--rhmdp-title-weight`          | `Title` / `PanelHeader` label font weight        | `600`                |
+| `--rhmdp-title-size`            | `Title` / `PanelHeader` label font size          | `1.5rem` / `inherit` |
+| `--rhmdp-header-weight`         | `Header` month-year `<select>` weight            | `600`                |
+| `--rhmdp-time-text`             | `TimePicker` value text                          | `inherit`            |
+| `--rhmdp-time-weight`           | `TimePicker` value font weight                   | `600`                |
+| `--rhmdp-time-size`             | `TimePicker` value font size                     | `1.25rem`            |
+| `--rhmdp-panel-selected-bg`     | selected month/year cell (`PanelHeader`)         | `#007aff`            |
+| `--rhmdp-panel-selected-text`   | selected month/year cell text (`PanelHeader`)    | `#ffffff`            |
+| `--rhmdp-panel-cell-bg`         | month/year cell background (`PanelHeader`)       | `transparent`        |
+| `--rhmdp-panel-cell-text`       | month/year cell text (`PanelHeader`)             | `inherit`            |
+| `--rhmdp-panel-cell-hover-bg`   | month/year cell hover background (`PanelHeader`) | `#f2f2f7`            |
+| `--rhmdp-panel-cell-hover-text` | month/year cell hover text (`PanelHeader`)       | `inherit`            |
+| `--rhmdp-panel-cell-size`       | month/year cell font size (`PanelHeader`)        | `inherit`            |
+| `--rhmdp-panel-cell-weight`     | month/year cell font weight (`PanelHeader`)      | `inherit`            |
 
 > Variables are the light touch (re-color the default theme). For full
 > structural control, use the BEM class hooks below.
@@ -396,6 +400,66 @@ import { Header } from "headless-react-datepicker";
 | nextButtonClassName          | string        | className of the next button (right button)                                                                |
 | nextButtonStyles             | CSSProperties | css style of the next button (right button)                                                                |
 
+### Composable header parts
+
+The pieces that make up `Header` are also exported on their own so you can lay
+them out in **any order** — the standard `Header` keeps working unchanged (it's
+just a thin composition over these same parts):
+
+```jsx
+import {
+  HeaderPrevButton,
+  HeaderNextButton,
+  HeaderMonthSelect,
+  HeaderYearSelect,
+} from "headless-react-datepicker";
+```
+
+They share the same `DatePickerProvider` state and the same `rhmdp-header__*`
+class hooks / CSS variables as `Header`, so existing styling and theming carry
+over. For example, month & year on the left with both arrows together on the
+right:
+
+```jsx
+<DatePickerProvider>
+  <div style={{ display: "flex", justifyContent: "space-between" }}>
+    {/* left: month + year dropdowns */}
+    <div style={{ display: "flex", gap: 4 }}>
+      <HeaderMonthSelect />
+      <HeaderYearSelect />
+    </div>
+
+    {/* right: both arrows side-by-side */}
+    <div style={{ display: "flex", gap: 4 }}>
+      <HeaderPrevButton />
+      <HeaderNextButton />
+    </div>
+  </div>
+  <WeekDays />
+  <DaySlots />
+</DatePickerProvider>
+```
+
+#### HeaderPrevButton / HeaderNextButton props
+
+| Name           | Type          | Description                                                         | Default |
+| -------------- | ------------- | ------------------------------------------------------------------- | ------- |
+| navigationStep | number        | Number of months the arrow moves per click (e.g. `2` side-by-side). | 1       |
+| icon           | ReactNode     | Replace the default chevron icon.                                   |         |
+| className      | string        | className of the arrow button                                       |         |
+| styles         | CSSProperties | css styles of the arrow button                                      |         |
+
+#### HeaderMonthSelect / HeaderYearSelect props
+
+| Name                    | Type          | Description                                       |
+| ----------------------- | ------------- | ------------------------------------------------- |
+| className               | string        | className of the select dropdown                  |
+| styles                  | CSSProperties | css styles of the select dropdown                 |
+| optionClassName         | string        | className of the `<option>`s in the dropdown      |
+| optionStyles            | CSSProperties | css styles of the `<option>`s in the dropdown     |
+| selectedOptionClassName | string        | className of the selected option in the dropdown  |
+| selectedOptionStyles    | CSSProperties | css styles of the selected option in the dropdown |
+
 ## PanelHeader component
 
 The `PanelHeader` component is a self-contained alternative to `Header`. Instead of `<select>` dropdowns, it shows the month and year pickers **inside the calendar area**: clicking the month opens a grid of all 12 months, and clicking the year opens a paginated grid of years with prev/next page arrows.
@@ -441,6 +505,84 @@ const MyDatePicker = () => (
 | cellStyles            | CSSProperties | css styles of a single month/year cell                                      |         |
 | selectedCellClassName | string        | className of the currently selected month/year cell                         |         |
 | selectedCellStyles    | CSSProperties | css styles of the currently selected month/year cell                        |         |
+
+### Composable panel-header parts
+
+Like `Header`, `PanelHeader` is also exported as standalone, reorderable pieces.
+Because they share the panel's local view state (days / months / years + year
+paging), wrap them in a `PanelHeaderProvider`; inside it you can lay them out in
+**any order** (the default `PanelHeader` is just this composition):
+
+```jsx
+import {
+  PanelHeaderProvider,
+  PanelHeaderPrevButton,
+  PanelHeaderNextButton,
+  PanelHeaderLabel,
+  PanelHeaderBody,
+} from "headless-react-datepicker";
+```
+
+They keep the same `rhmdp-panelHeader__*` class hooks / CSS variables as
+`PanelHeader`. For example, the month/year label on the left with both arrows
+together on the right:
+
+```jsx
+<DatePickerProvider>
+  <PanelHeaderProvider>
+    <div style={{ display: "flex", justifyContent: "space-between" }}>
+      {/* left: month / year label (toggles the month/year grids) */}
+      <PanelHeaderLabel />
+
+      {/* right: both arrows side-by-side */}
+      <div style={{ display: "flex", gap: 4 }}>
+        <PanelHeaderPrevButton />
+        <PanelHeaderNextButton />
+      </div>
+    </div>
+
+    {/* swaps the day-view for the month/year grids while navigating */}
+    <PanelHeaderBody>
+      <WeekDays />
+      <DaySlots />
+    </PanelHeaderBody>
+  </PanelHeaderProvider>
+</DatePickerProvider>
+```
+
+#### PanelHeaderProvider props
+
+| Name         | Type      | Description                                                 | Default |
+| ------------ | --------- | ----------------------------------------------------------- | ------- |
+| children     | ReactNode | The parts to wrap (arrows / label / body), in any layout.   |         |
+| yearsPerPage | number    | Years shown per page in the year grid; arrows move by this. | 12      |
+
+#### PanelHeaderPrevButton / PanelHeaderNextButton props
+
+| Name      | Type          | Description                       |
+| --------- | ------------- | --------------------------------- |
+| icon      | ReactNode     | Replace the default chevron icon. |
+| className | string        | className of the arrow button     |
+| styles    | CSSProperties | css styles of the arrow button    |
+
+#### PanelHeaderLabel props
+
+| Name      | Type          | Description                       |
+| --------- | ------------- | --------------------------------- |
+| className | string        | className of the center label(s)  |
+| styles    | CSSProperties | css styles of the center label(s) |
+
+#### PanelHeaderBody props
+
+| Name                  | Type          | Description                                          |
+| --------------------- | ------------- | ---------------------------------------------------- |
+| children              | ReactNode     | The day-view content, shown in the `"days"` view.    |
+| gridClassName         | string        | className of the month/year grid container           |
+| gridStyles            | CSSProperties | css styles of the month/year grid container          |
+| cellClassName         | string        | className of a single month/year cell                |
+| cellStyles            | CSSProperties | css styles of a single month/year cell               |
+| selectedCellClassName | string        | className of the currently selected month/year cell  |
+| selectedCellStyles    | CSSProperties | css styles of the currently selected month/year cell |
 
 ## WeekDays component
 

@@ -45,32 +45,34 @@ const vars = (v: Record<string, string>): CSSProperties => v as CSSProperties;
 const DEFAULT_TOKENS: Record<string, string> = {
   /* day — base & structure */
   "--rhmdp-day-text": "inherit",
-  "--rhmdp-day-muted-text": "#9ca3af",
+  "--rhmdp-day-muted-text": "#c7c7cc",
   "--rhmdp-day-border": "transparent",
-  "--rhmdp-day-radius": "0.5rem",
+  "--rhmdp-day-border-width": "1px",
+  "--rhmdp-day-full-border-width": "0px",
+  "--rhmdp-day-radius": "999px",
   "--rhmdp-day-weight": "inherit",
   "--rhmdp-day-size": "inherit",
   "--rhmdp-day-padding": "0.5rem",
   "--rhmdp-day-gap": "0px",
   /* day — state text */
-  "--rhmdp-day-today-text": "#2563eb",
-  "--rhmdp-day-weekend-text": "#ef4444",
-  "--rhmdp-day-holiday-text": "#ef4444",
-  "--rhmdp-day-disabled-text": "#9ca3af",
+  "--rhmdp-day-today-text": "#007aff",
+  "--rhmdp-day-weekend-text": "#8e8e93",
+  "--rhmdp-day-holiday-text": "#ff3b30",
+  "--rhmdp-day-disabled-text": "#c7c7cc",
   /* day — hover / selected / range */
-  "--rhmdp-day-hover-bg": "#d1d5db",
+  "--rhmdp-day-hover-bg": "#f2f2f7",
   "--rhmdp-day-hover-text": "inherit",
-  "--rhmdp-day-selected-bg": "#3b82f6",
+  "--rhmdp-day-selected-bg": "#007aff",
   "--rhmdp-day-selected-text": "#ffffff",
-  "--rhmdp-day-range-bg": "#eaeaec",
-  "--rhmdp-day-range-hover-bg": "#eaeaec",
+  "--rhmdp-day-range-bg": "#e6f0ff",
+  "--rhmdp-day-range-hover-bg": "#f2f7ff",
   /* weekday */
   "--rhmdp-weekday-text": "inherit",
-  "--rhmdp-weekday-weight": "700",
+  "--rhmdp-weekday-weight": "600",
   "--rhmdp-weekday-size": "inherit",
   /* title */
   "--rhmdp-title-text": "inherit",
-  "--rhmdp-title-weight": "700",
+  "--rhmdp-title-weight": "600",
   "--rhmdp-title-size": "1.5rem",
   /* header month/year <select> dropdowns */
   "--rhmdp-header-select-bg": "transparent",
@@ -82,20 +84,20 @@ const DEFAULT_TOKENS: Record<string, string> = {
   /* arrow buttons (Header / PanelHeader / TimePicker) */
   "--rhmdp-arrow-text": "inherit",
   "--rhmdp-arrow-bg": "transparent",
-  "--rhmdp-arrow-hover-bg": "#e5e7eb",
+  "--rhmdp-arrow-hover-bg": "#f2f2f7",
   "--rhmdp-arrow-hover-text": "inherit",
   /* header label weight */
-  "--rhmdp-header-weight": "700",
+  "--rhmdp-header-weight": "600",
   /* time */
   "--rhmdp-time-text": "inherit",
-  "--rhmdp-time-weight": "700",
+  "--rhmdp-time-weight": "600",
   "--rhmdp-time-size": "1.25rem",
   /* panel */
-  "--rhmdp-panel-selected-bg": "#3b82f6",
+  "--rhmdp-panel-selected-bg": "#007aff",
   "--rhmdp-panel-selected-text": "#ffffff",
   "--rhmdp-panel-cell-bg": "transparent",
   "--rhmdp-panel-cell-text": "inherit",
-  "--rhmdp-panel-cell-hover-bg": "#e5e7eb",
+  "--rhmdp-panel-cell-hover-bg": "#f2f2f7",
   "--rhmdp-panel-cell-hover-text": "inherit",
   "--rhmdp-panel-cell-size": "inherit",
   "--rhmdp-panel-cell-weight": "inherit",
@@ -250,6 +252,14 @@ export const AuroraGlass: Story = {
       "--rhmdp-header-select-border": "rgba(255,255,255,0.3)",
       "--rhmdp-header-select-radius": "8px",
       "--rhmdp-header-select-padding": "4px 6px",
+      // Airy, refined typography to match the frosted look.
+      "--rhmdp-day-weight": "500",
+      "--rhmdp-day-size": "0.95rem",
+      "--rhmdp-weekday-weight": "600",
+      "--rhmdp-weekday-size": "0.72rem",
+      "--rhmdp-title-weight": "600",
+      "--rhmdp-title-size": "1.4rem",
+      "--rhmdp-header-weight": "600",
     }),
     selectedAccent: {
       background: "linear-gradient(135deg, #7c3aed, #db2777)",
@@ -302,6 +312,16 @@ export const MidnightNeon: Story = {
       "--rhmdp-header-select-border": "#243049",
       "--rhmdp-header-select-radius": "8px",
       "--rhmdp-header-select-padding": "4px 6px",
+      // Bold, techy dashboard type with a large neon clock readout.
+      "--rhmdp-day-weight": "500",
+      "--rhmdp-day-size": "0.95rem",
+      "--rhmdp-weekday-weight": "700",
+      "--rhmdp-weekday-size": "0.7rem",
+      "--rhmdp-title-weight": "700",
+      "--rhmdp-title-size": "1.35rem",
+      "--rhmdp-header-weight": "600",
+      "--rhmdp-time-weight": "700",
+      "--rhmdp-time-size": "1.3rem",
     }),
     // bg comes from --rhmdp-day-selected-bg; we only add the neon glow.
     selectedAccent: { boxShadow: "0 0 18px rgba(34, 211, 238, 0.7)" },
@@ -349,6 +369,14 @@ export const SunsetPeach: Story = {
       "--rhmdp-header-select-border": "#ffd8bf",
       "--rhmdp-header-select-radius": "8px",
       "--rhmdp-header-select-padding": "4px 6px",
+      // Friendly, slightly chunky rounded type.
+      "--rhmdp-day-weight": "500",
+      "--rhmdp-day-size": "1rem",
+      "--rhmdp-weekday-weight": "600",
+      "--rhmdp-weekday-size": "0.72rem",
+      "--rhmdp-title-weight": "700",
+      "--rhmdp-title-size": "1.5rem",
+      "--rhmdp-header-weight": "600",
     }),
     selectedAccent: {
       background: "linear-gradient(135deg, #fb923c, #f43f5e)",
@@ -392,6 +420,11 @@ export const MinimalMono: Story = {
       // transparent bg/border come from DEFAULT_TOKENS; only text & weight differ.
       "--rhmdp-header-select-text": "#111111",
       "--rhmdp-header-weight": "300",
+      // Thin, editorial weights throughout (the spaced title is set inline).
+      "--rhmdp-day-weight": "300",
+      "--rhmdp-day-size": "1rem",
+      "--rhmdp-weekday-weight": "400",
+      "--rhmdp-weekday-size": "0.7rem",
     }),
     title: {
       fontWeight: 300,
@@ -442,6 +475,14 @@ export const MintFresh: Story = {
       "--rhmdp-header-select-border": "#b7ebdd",
       "--rhmdp-header-select-radius": "8px",
       "--rhmdp-header-select-padding": "4px 6px",
+      // Soft, calm type — medium days, gentle uppercase weekday caps.
+      "--rhmdp-day-weight": "500",
+      "--rhmdp-day-size": "0.95rem",
+      "--rhmdp-weekday-weight": "600",
+      "--rhmdp-weekday-size": "0.72rem",
+      "--rhmdp-title-weight": "700",
+      "--rhmdp-title-size": "1.45rem",
+      "--rhmdp-header-weight": "600",
     }),
     selectedAccent: { boxShadow: "0 6px 14px rgba(20, 184, 166, 0.4)" },
   }),
@@ -483,7 +524,20 @@ export const RoyalGold: Story = {
       "--rhmdp-header-select-border": "#4338ca",
       "--rhmdp-header-select-radius": "8px",
       "--rhmdp-header-select-padding": "4px 6px",
+      // Restrained weights so the gold serif title carries the drama.
+      "--rhmdp-day-weight": "500",
+      "--rhmdp-day-size": "0.95rem",
+      "--rhmdp-weekday-weight": "600",
+      "--rhmdp-weekday-size": "0.7rem",
+      "--rhmdp-title-weight": "600",
+      "--rhmdp-title-size": "1.6rem",
+      "--rhmdp-header-weight": "600",
     }),
+    // A gold serif title is the luxe flourish (font-family isn't a token).
+    title: {
+      fontFamily: "Georgia, 'Times New Roman', serif",
+      letterSpacing: 1,
+    },
     selectedAccent: {
       background: "linear-gradient(135deg, #fbbf24, #f59e0b)",
       boxShadow: "0 6px 16px rgba(251, 191, 36, 0.45)",
@@ -492,38 +546,7 @@ export const RoyalGold: Story = {
 };
 
 /* -------------------------------------------------------------------------- */
-/*                          7. Slate Range (range)                            */
-/* -------------------------------------------------------------------------- */
-
-/**
- * A clean, neutral range picker: white card, rounded charcoal ends and a soft
- * grey fill. The dependable default for most product UIs.
- */
-export const SlateRange: Story = {
-  args: rangeArgs,
-  render: ThemedCalendar({
-    page: { background: "#f4f4f5" },
-    card: {
-      background: "#fff",
-      borderRadius: 12,
-      padding: 14,
-      boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-    },
-    tokens: vars({
-      ...DEFAULT_TOKENS,
-      "--rhmdp-day-radius": "10px",
-      "--rhmdp-day-selected-bg": "#303030",
-      "--rhmdp-day-selected-text": "#ffffff",
-      "--rhmdp-day-range-bg": "#a8adb4",
-      "--rhmdp-day-range-hover-bg": "#cfd2d6",
-      "--rhmdp-day-hover-bg": "#ececef",
-      ...lightSelectTokens,
-    }),
-  }),
-};
-
-/* -------------------------------------------------------------------------- */
-/*                          8. Crimson Grid (range)                           */
+/*                          7. Crimson Grid (range)                           */
 /* -------------------------------------------------------------------------- */
 
 /**
@@ -545,65 +568,51 @@ export const CrimsonGrid: Story = {
       ...DEFAULT_TOKENS,
       "--rhmdp-day-radius": "0px",
       "--rhmdp-day-border": "#c7cbcf",
+      "--rhmdp-day-full-border-width": "1px",
       "--rhmdp-day-selected-bg": "#d80202",
       "--rhmdp-day-selected-text": "#ffffff",
       "--rhmdp-day-range-bg": "#ff9a9a",
       "--rhmdp-day-range-hover-bg": "#ffd0d0",
       "--rhmdp-day-hover-bg": "#ffe3e3",
+      // Today / weekend tie back into the crimson palette (not the blue default).
+      "--rhmdp-day-today-text": "#d80202",
+      "--rhmdp-day-weekend-text": "#cf4d4d",
       "--rhmdp-weekday-text": "#7a7a7a",
       ...lightSelectTokens,
+      // Tight, tabular grid type with bold uppercase weekday headers.
+      "--rhmdp-day-weight": "400",
+      "--rhmdp-day-size": "0.9rem",
+      "--rhmdp-weekday-weight": "700",
+      "--rhmdp-weekday-size": "0.7rem",
+      "--rhmdp-header-weight": "700",
     }),
     grid: { gap: 2 },
-  }),
-};
-
-/* -------------------------------------------------------------------------- */
-/*                         9. Graphite Pink (range)                           */
-/* -------------------------------------------------------------------------- */
-
-/**
- * Dark and punchy: a graphite card with a hot-pink selection and pink weekend
- * accents.
- */
-export const GraphitePink: Story = {
-  args: rangeArgs,
-  render: ThemedCalendar({
-    page: { background: "#1f1f1f" },
-    card: {
-      background: "#333333",
-      borderRadius: 12,
-      padding: 17,
-      boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+    // Spaced, uppercase title gives the spreadsheet grid an editorial header.
+    title: {
+      fontWeight: 700,
+      fontSize: "1.05em",
+      letterSpacing: 4,
+      textTransform: "uppercase",
+      textAlign: "center",
+      marginBottom: 10,
     },
-    tokens: vars({
-      ...DEFAULT_TOKENS,
-      "--rhmdp-day-radius": "10px",
-      "--rhmdp-day-text": "#ffffff",
-      "--rhmdp-day-muted-text": "#8a8a8a",
-      "--rhmdp-day-selected-bg": "#ff4794",
-      "--rhmdp-day-selected-text": "#ffffff",
-      "--rhmdp-day-range-bg": "#6b6b6b",
-      "--rhmdp-day-range-hover-bg": "#525252",
-      "--rhmdp-day-hover-bg": "#4a4a4a",
-      "--rhmdp-day-weekend-text": "#ff4794",
-      "--rhmdp-weekday-text": "#7a7a7a",
-      "--rhmdp-title-text": "#ffffff",
-      "--rhmdp-arrow-text": "#ffffff",
-      "--rhmdp-header-select-bg": "#636363",
-      "--rhmdp-header-select-text": "#ffffff",
-      "--rhmdp-header-select-radius": "5px",
-      "--rhmdp-header-select-padding": "4px",
-    }),
+    // A crimson rule under the nav frames the grid (distinct from Lime's box).
+    headerRoot: {
+      borderBottom: "1px solid #cccccc",
+      marginBottom: 8,
+      paddingBottom: 6,
+    },
   }),
 };
 
 /* -------------------------------------------------------------------------- */
-/*                          10. Lime Sheet (range)                            */
+/*                           8. Lime Sheet (range)                            */
 /* -------------------------------------------------------------------------- */
 
 /**
- * Grid-lined and energetic: hairline borders on every cell, a spaced uppercase
- * title and a punchy lime selection.
+ * Grid-lined and airy: hairline shared borders, a wide-tracked thin uppercase
+ * title set in an inset header bar, and a punchy lime selection. The light,
+ * editorial counterpart to Crimson Grid's bold, tight grid.
  */
 export const LimeSheet: Story = {
   args: rangeArgs,
@@ -626,10 +635,18 @@ export const LimeSheet: Story = {
       "--rhmdp-day-range-bg": "#e7ffb9",
       "--rhmdp-day-range-hover-bg": "#ecf8d5",
       "--rhmdp-day-hover-bg": "#eef7d2",
+      // Lime-tied today (not the blue default) keeps the palette coherent.
+      "--rhmdp-day-today-text": "#65a30d",
       "--rhmdp-day-weekend-text": "#ff0000",
       "--rhmdp-weekday-text": "#7a7a7a",
       "--rhmdp-title-text": "#5c5c5c",
       ...lightSelectTokens,
+      // Thin, wide-tracked type — the airy opposite of Crimson's bold grid.
+      "--rhmdp-day-weight": "400",
+      "--rhmdp-day-size": "0.9rem",
+      "--rhmdp-weekday-weight": "500",
+      "--rhmdp-weekday-size": "0.7rem",
+      "--rhmdp-header-weight": "400",
     }),
     title: {
       fontWeight: 200,
@@ -640,11 +657,119 @@ export const LimeSheet: Story = {
       textTransform: "uppercase",
     },
     headerRoot: {
-      boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1) inset",
+      boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
       borderRadius: 7,
       marginBottom: 10,
       padding: 10,
-      backgroundColor: "#fdfdfd",
+      background: "linear-gradient(0deg, #ffffff 0%, #f4f4f4 100%)",
     },
+  }),
+};
+
+/* -------------------------------------------------------------------------- */
+/*                         9. iOS Cupertino (single)                          */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The native iOS Calendar look: a crisp white sheet on a light-grey backdrop,
+ * the system red accent for today and the selected day, and fully-rounded day
+ * circles.
+ */
+export const IOSCupertino: Story = {
+  args: singleArgs,
+  render: ThemedCalendar({
+    page: { background: "#f2f2f7" },
+    card: {
+      background: "#ffffff",
+      borderRadius: 16,
+      padding: 20,
+      border: "1px solid #e5e5ea",
+      boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
+      fontFamily:
+        "-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif",
+    },
+    tokens: vars({
+      ...DEFAULT_TOKENS,
+      "--rhmdp-day-radius": "999px",
+      "--rhmdp-day-text": "#1c1c1e",
+      "--rhmdp-day-muted-text": "#c7c7cc",
+      "--rhmdp-day-selected-bg": "#ff3b30",
+      "--rhmdp-day-selected-text": "#ffffff",
+      "--rhmdp-day-hover-bg": "#f2f2f7",
+      "--rhmdp-day-today-text": "#ff3b30",
+      "--rhmdp-day-weekend-text": "#8e8e93",
+      "--rhmdp-weekday-text": "#8e8e93",
+      "--rhmdp-title-text": "#1c1c1e",
+      "--rhmdp-arrow-text": "#ff3b30",
+      "--rhmdp-arrow-hover-bg": "#f2f2f7",
+      "--rhmdp-arrow-hover-text": "#ff3b30",
+      "--rhmdp-header-select-bg": "#f2f2f7",
+      "--rhmdp-header-select-text": "#1c1c1e",
+      "--rhmdp-header-select-radius": "8px",
+      "--rhmdp-header-select-padding": "4px 6px",
+      // SF-style: regular day numbers, semibold headers, small-caps weekdays.
+      "--rhmdp-day-weight": "400",
+      "--rhmdp-day-size": "1.05rem",
+      "--rhmdp-weekday-weight": "600",
+      "--rhmdp-weekday-size": "0.7rem",
+      "--rhmdp-title-weight": "600",
+      "--rhmdp-title-size": "1.3rem",
+      "--rhmdp-header-weight": "600",
+    }),
+  }),
+};
+
+/* -------------------------------------------------------------------------- */
+/*                     10. Android Material You (range)                       */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Material 3 / "Material You": a soft purple-tinted surface, the signature
+ * `#6750A4` primary for the selected ends, a light primary-container fill for
+ * the in-range days and generously rounded corners.
+ */
+export const AndroidMaterialYou: Story = {
+  args: rangeArgs,
+  render: ThemedCalendar({
+    page: { background: "#e7e0ec" },
+    card: {
+      background: "#fffbfe",
+      borderRadius: 28,
+      padding: 22,
+      boxShadow: "0 12px 32px rgba(103, 80, 164, 0.22)",
+      fontFamily: "Roboto, 'Google Sans', system-ui, sans-serif",
+    },
+    tokens: vars({
+      ...DEFAULT_TOKENS,
+      "--rhmdp-day-radius": "999px",
+      "--rhmdp-day-text": "#1c1b1f",
+      "--rhmdp-day-muted-text": "#c4c0c9",
+      "--rhmdp-day-selected-bg": "#6750a4",
+      "--rhmdp-day-selected-text": "#ffffff",
+      "--rhmdp-day-range-bg": "#e8def8",
+      "--rhmdp-day-range-hover-bg": "#f3edf7",
+      "--rhmdp-day-hover-bg": "#ece6f4",
+      "--rhmdp-day-hover-text": "#21005d",
+      "--rhmdp-day-today-text": "#6750a4",
+      "--rhmdp-day-weekend-text": "#49454f",
+      "--rhmdp-weekday-text": "#49454f",
+      "--rhmdp-title-text": "#1c1b1f",
+      "--rhmdp-arrow-text": "#49454f",
+      "--rhmdp-arrow-hover-bg": "#ece6f4",
+      "--rhmdp-arrow-hover-text": "#6750a4",
+      "--rhmdp-header-select-bg": "#f3edf7",
+      "--rhmdp-header-select-text": "#1c1b1f",
+      "--rhmdp-header-select-border": "#cac4d0",
+      "--rhmdp-header-select-radius": "8px",
+      "--rhmdp-header-select-padding": "4px 6px",
+      // Roboto / Material 3: medium (500) weights, larger headline title.
+      "--rhmdp-day-weight": "500",
+      "--rhmdp-day-size": "1rem",
+      "--rhmdp-weekday-weight": "500",
+      "--rhmdp-weekday-size": "0.75rem",
+      "--rhmdp-title-weight": "500",
+      "--rhmdp-title-size": "1.375rem",
+      "--rhmdp-header-weight": "500",
+    }),
   }),
 };

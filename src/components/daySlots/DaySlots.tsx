@@ -234,35 +234,30 @@ function DaySlots(props: TDaySlots) {
   };
 
   /**
-   * (otherDays and weekends) can be Enabled but NOT Selectable
+   * (otherDays and weekends) can be Enabled but NOT Selectable.
+   *
+   * This must mirror the guard order in `onClickSlot` exactly, otherwise a day
+   * can be styled as selectable (cursor: pointer) while clicks are ignored.
+   * In particular an other-month day is never selectable when
+   * `otherDaysSelectable` is false, even if it also falls on a (selectable)
+   * weekend or holiday.
    */
   const IsSelectable = ({
     isInWeekend,
     isInHoliday,
     isOtherMonth,
-    isDisabled,
+    isOutOfRange,
   }: {
     isInWeekend: boolean;
     isInHoliday: boolean;
     isOtherMonth: boolean;
-    isDisabled: boolean;
+    isOutOfRange: boolean;
   }): boolean => {
-    if (isOtherMonth) {
-      if (isInHoliday) {
-        return holidaySelectable;
-      }
-      if (isInWeekend) {
-        return weekendSelectable;
-      }
-      return otherDaysSelectable || false;
-    }
-    if (isInHoliday) {
-      return holidaySelectable;
-    }
-    if (isInWeekend) {
-      return weekendSelectable;
-    }
-    return !isDisabled;
+    if (isOtherMonth && !otherDaysSelectable) return false;
+    if (isOutOfRange) return false;
+    if (isInHoliday) return holidaySelectable;
+    if (isInWeekend) return weekendSelectable;
+    return true;
   };
 
   const IsInWeekend = (date: Date) => {
@@ -409,6 +404,8 @@ function DaySlots(props: TDaySlots) {
         const isStartOfRange = IsStartOfRange(date);
         const isEndOfRange = IsEndOfRange(date);
         const isDisabled = IsDisabled(date, isOtherMonth);
+        const isOutOfRange =
+          !!(minDate && date < minDate) || !!(maxDate && date > maxDate);
         const isInWeekend = IsInWeekend(date);
         const isInHoliday = IsInHoliday(date);
         const isFirstDayOfMonth = IsFirstDayOfMonth(date);
@@ -416,7 +413,7 @@ function DaySlots(props: TDaySlots) {
           isInWeekend,
           isInHoliday,
           isOtherMonth,
-          isDisabled,
+          isOutOfRange,
         });
 
         const formattedDay = dayFormatter(date);

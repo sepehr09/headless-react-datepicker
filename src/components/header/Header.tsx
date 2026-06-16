@@ -1,21 +1,18 @@
-import { useContext } from "react";
-import {
-  HEADER,
-  HEADER_MONTH_OPTION,
-  HEADER_MONTH_OPTION_SELECTED,
-  HEADER_MONTH_SELECT,
-  HEADER_NEXT_BUTTON,
-  HEADER_PREV_BUTTON,
-  HEADER_YEAR_OPTION,
-  HEADER_YEAR_OPTION_SELECTED,
-  HEADER_YEAR_SELECT,
-} from "../../constants/classNames";
-import { PickerContext } from "../../store/pickerContext";
+import { HEADER } from "../../constants/classNames";
 import { classJoin } from "../../utils/classJoin";
-import ChevronLeft from "../icons/ChevronLeft";
-import ChevronRight from "../icons/ChevronRight";
+import HeaderMonthSelect from "./HeaderMonthSelect";
+import HeaderNextButton from "./HeaderNextButton";
+import HeaderPrevButton from "./HeaderPrevButton";
+import HeaderYearSelect from "./HeaderYearSelect";
 import { THeaderProps } from "./types";
 
+/**
+ * The default header: prev/next arrows + month/year `<select>` dropdowns in a
+ * fixed row. It is a thin composition over the standalone parts
+ * (`HeaderPrevButton`, `HeaderMonthSelect`, `HeaderYearSelect`,
+ * `HeaderNextButton`) — render those individually instead if you need a custom
+ * order/layout. Props and behaviour here are unchanged.
+ */
 function Header({
   navigationStep = 1,
   rootClassName,
@@ -39,115 +36,36 @@ function Header({
   yearSelectedOptionClassName,
   yearSelectedOptionStyles,
 }: THeaderProps) {
-  const {
-    goToNextMonth,
-    goToPrevMonth,
-    goToMonth,
-    goToYear,
-    monthInTheCalendar,
-    yearInTheCalendar,
-    monthsList,
-    yearsList,
-  } = useContext(PickerContext);
-
   return (
-    <div
-      className={classJoin(HEADER, rootClassName)}
-      style={rootStyles}
-    >
-      <div
-        className={classJoin(
-          HEADER_PREV_BUTTON,
-          prevButtonClassName
-        )}
-        style={prevButtonStyles}
-        role="button"
-        tabIndex={0}
-        aria-label="Previous Month"
-        onClick={() => goToPrevMonth?.(navigationStep)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") goToPrevMonth?.(navigationStep);
-        }}
-      >
-        {leftIcon || <ChevronLeft />}
-      </div>
-      <select
-        onChange={(v) => {
-          goToMonth(parseInt(v.target.value, 10));
-        }}
-        style={monthSelectStyles}
-        className={classJoin(HEADER_MONTH_SELECT, monthSelectClassName)}
-        value={monthInTheCalendar}
-      >
-        {monthsList?.map((month) => (
-          <option
-            key={month.value}
-            value={month.value}
-            style={{
-              ...monthOptionStyles,
-              ...(month.value === monthInTheCalendar
-                ? monthSelectedOptionStyles
-                : {}),
-            }}
-            className={classJoin(
-              HEADER_MONTH_OPTION,
-              month.value === monthInTheCalendar && HEADER_MONTH_OPTION_SELECTED,
-              monthOptionClassName,
-              month.value === monthInTheCalendar
-                ? monthSelectedOptionClassName
-                : ""
-            )}
-          >
-            {month.label}
-          </option>
-        ))}
-      </select>
-
-      <select
-        onChange={(v) => {
-          goToYear(parseInt(v.target.value, 10));
-        }}
-        className={classJoin(HEADER_YEAR_SELECT, yearSelectClassName)}
-        style={yearSelectStyles}
-        value={yearInTheCalendar}
-      >
-        {yearsList?.map((year) => {
-          return (
-            <option
-              key={year}
-              value={year}
-              style={{
-                ...yearOptionStyles,
-                ...(year === yearInTheCalendar ? yearSelectedOptionStyles : {}),
-              }}
-              className={classJoin(
-                HEADER_YEAR_OPTION,
-                year === yearInTheCalendar && HEADER_YEAR_OPTION_SELECTED,
-                yearOptionClassName,
-                year === yearInTheCalendar ? yearSelectedOptionClassName : ""
-              )}
-            >
-              {year}
-            </option>
-          );
-        })}
-      </select>
-      <div
-        className={classJoin(
-          HEADER_NEXT_BUTTON,
-          nextButtonClassName
-        )}
-        style={nextButtonStyles}
-        aria-label="Next Month"
-        role="button"
-        tabIndex={0}
-        onClick={() => goToNextMonth?.(navigationStep)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") goToNextMonth?.(navigationStep);
-        }}
-      >
-        {rightIcon || <ChevronRight />}
-      </div>
+    <div className={classJoin(HEADER, rootClassName)} style={rootStyles}>
+      <HeaderPrevButton
+        navigationStep={navigationStep}
+        className={prevButtonClassName}
+        styles={prevButtonStyles}
+        icon={leftIcon}
+      />
+      <HeaderMonthSelect
+        className={monthSelectClassName}
+        styles={monthSelectStyles}
+        optionClassName={monthOptionClassName}
+        optionStyles={monthOptionStyles}
+        selectedOptionClassName={monthSelectedOptionClassName}
+        selectedOptionStyles={monthSelectedOptionStyles}
+      />
+      <HeaderYearSelect
+        className={yearSelectClassName}
+        styles={yearSelectStyles}
+        optionClassName={yearOptionClassName}
+        optionStyles={yearOptionStyles}
+        selectedOptionClassName={yearSelectedOptionClassName}
+        selectedOptionStyles={yearSelectedOptionStyles}
+      />
+      <HeaderNextButton
+        navigationStep={navigationStep}
+        className={nextButtonClassName}
+        styles={nextButtonStyles}
+        icon={rightIcon}
+      />
     </div>
   );
 }

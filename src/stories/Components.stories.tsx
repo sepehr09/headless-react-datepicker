@@ -2,7 +2,16 @@ import type { Meta, StoryObj } from "@storybook/react";
 import DatePickerProvider from "../DatePickerProvider";
 import DaySlots from "../components/daySlots/DaySlots";
 import Header from "../components/header/Header";
+import HeaderMonthSelect from "../components/header/HeaderMonthSelect";
+import HeaderNextButton from "../components/header/HeaderNextButton";
+import HeaderPrevButton from "../components/header/HeaderPrevButton";
+import HeaderYearSelect from "../components/header/HeaderYearSelect";
 import PanelHeader from "../components/panelHeader/PanelHeader";
+import PanelHeaderBody from "../components/panelHeader/PanelHeaderBody";
+import PanelHeaderLabel from "../components/panelHeader/PanelHeaderLabel";
+import PanelHeaderNextButton from "../components/panelHeader/PanelHeaderNextButton";
+import PanelHeaderPrevButton from "../components/panelHeader/PanelHeaderPrevButton";
+import PanelHeaderProvider from "../components/panelHeader/PanelHeaderProvider";
 import TimePicker from "../components/timePicker/TimePicker";
 import Title from "../components/title/Title";
 import WeekDays from "../components/weekDays/WeekDays";
@@ -50,11 +59,9 @@ const baseArgs: Story["args"] = {
 export const TitleOnly: Story = {
   name: "Title",
   render: (args) => (
-    <Card>
-      <DatePickerProvider {...args}>
-        <Title />
-      </DatePickerProvider>
-    </Card>
+    <DatePickerProvider {...args}>
+      <Title />
+    </DatePickerProvider>
   ),
   args: baseArgs,
 };
@@ -67,11 +74,63 @@ export const TitleOnly: Story = {
 export const HeaderOnly: Story = {
   name: "Header",
   render: (args) => (
-    <Card>
-      <DatePickerProvider {...args}>
-        <Header />
-      </DatePickerProvider>
-    </Card>
+    <DatePickerProvider {...args}>
+      <Header />
+    </DatePickerProvider>
+  ),
+  args: baseArgs,
+};
+
+/**
+ * `HeaderPrevButton` is the standalone "previous month" arrow from `Header`.
+ * Render it on its own (in any layout) — it shares the same state and class
+ * hooks as the arrow inside `Header`.
+ */
+export const HeaderPrevButtonOnly: Story = {
+  name: "HeaderPrevButton",
+  render: (args) => (
+    <DatePickerProvider {...args}>
+      <HeaderPrevButton />
+    </DatePickerProvider>
+  ),
+  args: baseArgs,
+};
+
+/**
+ * `HeaderNextButton` is the standalone "next month" arrow from `Header`.
+ */
+export const HeaderNextButtonOnly: Story = {
+  name: "HeaderNextButton",
+  render: (args) => (
+    <DatePickerProvider {...args}>
+      <HeaderNextButton />
+    </DatePickerProvider>
+  ),
+  args: baseArgs,
+};
+
+/**
+ * `HeaderMonthSelect` is the standalone month `<select>` dropdown from `Header`.
+ */
+export const HeaderMonthSelectOnly: Story = {
+  name: "HeaderMonthSelect",
+  render: (args) => (
+    <DatePickerProvider {...args}>
+      <HeaderMonthSelect />
+    </DatePickerProvider>
+  ),
+  args: baseArgs,
+};
+
+/**
+ * `HeaderYearSelect` is the standalone year `<select>` dropdown from `Header`.
+ */
+export const HeaderYearSelectOnly: Story = {
+  name: "HeaderYearSelect",
+  render: (args) => (
+    <DatePickerProvider {...args}>
+      <HeaderYearSelect />
+    </DatePickerProvider>
   ),
   args: baseArgs,
 };
@@ -85,11 +144,79 @@ export const HeaderOnly: Story = {
 export const PanelHeaderOnly: Story = {
   name: "Panel Header",
   render: (args) => (
-    <Card>
-      <DatePickerProvider {...args}>
-        <PanelHeader />
-      </DatePickerProvider>
-    </Card>
+    <DatePickerProvider {...args}>
+      <PanelHeader />
+    </DatePickerProvider>
+  ),
+  args: baseArgs,
+};
+
+/**
+ * `PanelHeaderLabel` is the standalone center label from `PanelHeader` — the
+ * month/year text that toggles the month/year grids. The standalone panel parts
+ * share view state, so wrap them in a `PanelHeaderProvider`.
+ */
+export const PanelHeaderLabelOnly: Story = {
+  name: "PanelHeaderLabel",
+  render: (args) => (
+    <DatePickerProvider {...args}>
+      <PanelHeaderProvider>
+        <PanelHeaderLabel />
+      </PanelHeaderProvider>
+    </DatePickerProvider>
+  ),
+  args: baseArgs,
+};
+
+/**
+ * `PanelHeaderPrevButton` is the standalone "previous" arrow from `PanelHeader`
+ * (its action follows the active view). Wrap it in a `PanelHeaderProvider`.
+ */
+export const PanelHeaderPrevButtonOnly: Story = {
+  name: "PanelHeaderPrevButton",
+  render: (args) => (
+    <DatePickerProvider {...args}>
+      <PanelHeaderProvider>
+        <PanelHeaderPrevButton />
+      </PanelHeaderProvider>
+    </DatePickerProvider>
+  ),
+  args: baseArgs,
+};
+
+/**
+ * `PanelHeaderNextButton` is the standalone "next" arrow from `PanelHeader`.
+ * Wrap it in a `PanelHeaderProvider`.
+ */
+export const PanelHeaderNextButtonOnly: Story = {
+  name: "PanelHeaderNextButton",
+  render: (args) => (
+    <DatePickerProvider {...args}>
+      <PanelHeaderProvider>
+        <PanelHeaderNextButton />
+      </PanelHeaderProvider>
+    </DatePickerProvider>
+  ),
+  args: baseArgs,
+};
+
+/**
+ * `PanelHeaderBody` is the standalone body from `PanelHeader`: it shows the
+ * day-view content (its children) and swaps it for the month/year grids while
+ * navigating. Wrap it in a `PanelHeaderProvider`.
+ */
+export const PanelHeaderBodyOnly: Story = {
+  name: "PanelHeaderBody",
+  render: (args) => (
+    <DatePickerProvider {...args}>
+      <PanelHeaderProvider>
+        <PanelHeaderLabel />
+        <PanelHeaderBody>
+          <WeekDays />
+          <DaySlots />
+        </PanelHeaderBody>
+      </PanelHeaderProvider>
+    </DatePickerProvider>
   ),
   args: baseArgs,
 };
@@ -102,11 +229,9 @@ export const PanelHeaderOnly: Story = {
 export const WeekDaysOnly: Story = {
   name: "WeekDays",
   render: (args) => (
-    <Card>
-      <DatePickerProvider {...args}>
-        <WeekDays />
-      </DatePickerProvider>
-    </Card>
+    <DatePickerProvider {...args}>
+      <WeekDays />
+    </DatePickerProvider>
   ),
   args: baseArgs,
 };
@@ -119,11 +244,9 @@ export const WeekDaysOnly: Story = {
 export const DaySlotsOnly: Story = {
   name: "DaySlots",
   render: (args) => (
-    <Card>
-      <DatePickerProvider {...args}>
-        <DaySlots />
-      </DatePickerProvider>
-    </Card>
+    <DatePickerProvider {...args}>
+      <DaySlots />
+    </DatePickerProvider>
   ),
   args: baseArgs,
 };
@@ -136,11 +259,9 @@ export const DaySlotsOnly: Story = {
 export const TimePickerOnly: Story = {
   name: "TimePicker",
   render: (args) => (
-    <Card>
-      <DatePickerProvider {...args}>
-        <TimePicker showSeconds use12Hours />
-      </DatePickerProvider>
-    </Card>
+    <DatePickerProvider {...args}>
+      <TimePicker showSeconds use12Hours />
+    </DatePickerProvider>
   ),
   args: baseArgs,
 };

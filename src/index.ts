@@ -5,9 +5,30 @@ import {
   TDaySlotsDayRendererArgs,
 } from "./components/daySlots/types";
 import Header from "./components/header/Header";
-import { THeaderProps } from "./components/header/types";
+import HeaderMonthSelect from "./components/header/HeaderMonthSelect";
+import HeaderNextButton from "./components/header/HeaderNextButton";
+import HeaderPrevButton from "./components/header/HeaderPrevButton";
+import HeaderYearSelect from "./components/header/HeaderYearSelect";
+import {
+  THeaderArrowProps,
+  THeaderMonthSelectProps,
+  THeaderProps,
+  THeaderYearSelectProps,
+} from "./components/header/types";
 import PanelHeader from "./components/panelHeader/PanelHeader";
-import { TPanelHeaderProps, TPanelView } from "./components/panelHeader/types";
+import PanelHeaderBody from "./components/panelHeader/PanelHeaderBody";
+import PanelHeaderLabel from "./components/panelHeader/PanelHeaderLabel";
+import PanelHeaderNextButton from "./components/panelHeader/PanelHeaderNextButton";
+import PanelHeaderPrevButton from "./components/panelHeader/PanelHeaderPrevButton";
+import PanelHeaderProvider from "./components/panelHeader/PanelHeaderProvider";
+import {
+  TPanelHeaderArrowProps,
+  TPanelHeaderBodyProps,
+  TPanelHeaderLabelProps,
+  TPanelHeaderProps,
+  TPanelHeaderProviderProps,
+  TPanelView,
+} from "./components/panelHeader/types";
 import TimePicker from "./components/timePicker/TimePicker";
 import {
   TTimePickerProps,
@@ -31,7 +52,16 @@ export default DatePickerProvider;
 export {
   DaySlots,
   Header,
+  HeaderMonthSelect,
+  HeaderNextButton,
+  HeaderPrevButton,
+  HeaderYearSelect,
   PanelHeader,
+  PanelHeaderBody,
+  PanelHeaderLabel,
+  PanelHeaderNextButton,
+  PanelHeaderPrevButton,
+  PanelHeaderProvider,
   TimePicker,
   Title,
   WeekDays,
@@ -43,8 +73,15 @@ export * from "./types";
 export type {
   TDaySlots,
   TDaySlotsDayRendererArgs,
+  THeaderArrowProps,
+  THeaderMonthSelectProps,
   THeaderProps,
+  THeaderYearSelectProps,
+  TPanelHeaderArrowProps,
+  TPanelHeaderBodyProps,
+  TPanelHeaderLabelProps,
   TPanelHeaderProps,
+  TPanelHeaderProviderProps,
   TPanelView,
   TPeriod,
   TPickerContext,
