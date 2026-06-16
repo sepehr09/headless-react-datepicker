@@ -71,6 +71,7 @@ export const PANEL_HEADER = "rhmdp-panelHeader";
 export const PANEL_HEADER_PREV_BUTTON = "rhmdp-panelHeader__prevButton";
 export const PANEL_HEADER_NEXT_BUTTON = "rhmdp-panelHeader__nextButton";
 export const PANEL_HEADER_LABEL = "rhmdp-panelHeader__label";
+export const PANEL_HEADER_LABEL_GROUP = "rhmdp-panelHeader__labelGroup";
 export const PANEL_HEADER_GRID = "rhmdp-panelHeader__grid";
 export const PANEL_HEADER_CELL = "rhmdp-panelHeader__cell";
 export const PANEL_HEADER_CELL_SELECTED = "rhmdp-panelHeader__cell--selected";

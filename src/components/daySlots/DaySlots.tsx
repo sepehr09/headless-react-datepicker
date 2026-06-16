@@ -386,11 +386,7 @@ function DaySlots(props: TDaySlots) {
         Array.from({ length: diff }, (_, i) => i).reduce<ReactNode[]>(
           (acc) => [
             ...acc,
-            <div
-              key={acc.length}
-              className={DAY_SLOTS_PLACEHOLDER}
-              style={{ height: 42 }}
-            />,
+            <div key={acc.length} className={DAY_SLOTS_PLACEHOLDER} />,
           ],
           []
         )}

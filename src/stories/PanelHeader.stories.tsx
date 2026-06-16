@@ -100,7 +100,7 @@ export const CustomLayout: Story = {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              marginBottom: 8,
+              marginBottom: 16,
             }}
           >
             {/* left: month / year label */}

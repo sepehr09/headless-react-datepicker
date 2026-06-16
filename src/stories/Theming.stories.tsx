@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import DatePickerProvider from "../DatePickerProvider";
 import DaySlots from "../components/daySlots/DaySlots";
 import Header from "../components/header/Header";
+import PanelHeader from "../components/panelHeader/PanelHeader";
 import TimePicker from "../components/timePicker/TimePicker";
 import { TTimePickerProps } from "../components/timePicker/types";
 import Title from "../components/title/Title";
@@ -53,6 +54,7 @@ const DEFAULT_TOKENS: Record<string, string> = {
   "--rhmdp-day-weight": "inherit",
   "--rhmdp-day-size": "inherit",
   "--rhmdp-day-padding": "0.5rem",
+  "--rhmdp-day-height": "2.5rem",
   "--rhmdp-day-gap": "0px",
   /* day — state text */
   "--rhmdp-day-today-text": "#007aff",
@@ -123,6 +125,11 @@ type Theme = {
   selectedAccent?: CSSProperties;
   /** Render a `TimePicker` with these props below the grid. */
   timePicker?: TTimePickerProps;
+  /**
+   * Use the self-contained `PanelHeader` (in-grid month/year pickers) instead of
+   * the default `Title` + `Header` row. The day-view is wrapped as its children.
+   */
+  panelHeader?: boolean;
 };
 
 /**
@@ -131,45 +138,58 @@ type Theme = {
  */
 const ThemedCalendar =
   (theme: Theme) =>
-  <T extends boolean>(props: TDatePickerProps<T>) => (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "48px 16px",
-        ...theme.page,
-      }}
-    >
-      {/* The `--rhmdp-*` tokens live here and cascade into the whole calendar. */}
-      <div style={{ width: 340, ...theme.card, ...theme.tokens }}>
-        <DatePickerProvider
-          {...props}
-          onChange={(e) => console.log("onChange: ", e)}
-        >
-          <Title style={theme.title} />
-          <Header rootStyles={theme.headerRoot} />
-          <WeekDays />
-          <DaySlots
-            parentStyles={theme.grid}
-            selectedStyles={theme.selectedAccent}
-          />
-          {theme.timePicker && (
-            <div
-              style={{
-                borderTop: "1px solid rgba(127,127,127,0.25)",
-                marginTop: 14,
-                paddingTop: 12,
-              }}
-            >
-              <TimePicker {...theme.timePicker} />
-            </div>
-          )}
-        </DatePickerProvider>
+  <T extends boolean>(props: TDatePickerProps<T>) =>
+    (
+      <div
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "48px 16px",
+          ...theme.page,
+        }}
+      >
+        {/* The `--rhmdp-*` tokens live here and cascade into the whole calendar. */}
+        <div style={{ width: 340, ...theme.card, ...theme.tokens }}>
+          <DatePickerProvider
+            {...props}
+            onChange={(e) => console.log("onChange: ", e)}
+          >
+            {theme.panelHeader ? (
+              <PanelHeader rootStyles={theme.headerRoot}>
+                <WeekDays />
+                <DaySlots
+                  parentStyles={theme.grid}
+                  selectedStyles={theme.selectedAccent}
+                />
+              </PanelHeader>
+            ) : (
+              <>
+                <Title style={theme.title} />
+                <Header rootStyles={theme.headerRoot} />
+                <WeekDays />
+                <DaySlots
+                  parentStyles={theme.grid}
+                  selectedStyles={theme.selectedAccent}
+                />
+              </>
+            )}
+            {theme.timePicker && (
+              <div
+                style={{
+                  borderTop: "1px solid rgba(127,127,127,0.25)",
+                  marginTop: 14,
+                  paddingTop: 12,
+                }}
+              >
+                <TimePicker {...theme.timePicker} />
+              </div>
+            )}
+          </DatePickerProvider>
+        </div>
       </div>
-    </div>
-  );
+    );
 
 const rangeArgs: Story["args"] = {
   isRange: true,
@@ -770,6 +790,61 @@ export const AndroidMaterialYou: Story = {
       "--rhmdp-title-weight": "500",
       "--rhmdp-title-size": "1.375rem",
       "--rhmdp-header-weight": "500",
+    }),
+  }),
+};
+
+/* -------------------------------------------------------------------------- */
+/*                            11. Compact (single)                            */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * A space-saving, dense layout — ideal for tight popovers or sidebars. Nothing
+ * but tokens shrink it: smaller day cells (`--rhmdp-day-padding` /
+ * `--rhmdp-day-height`), smaller type and a tighter radius, on a narrow card.
+ * Uses the in-grid `PanelHeader` so the month/year pickers don't add a separate
+ * row — keeping the footprint minimal.
+ */
+export const Compact: Story = {
+  args: singleArgs,
+  render: ThemedCalendar({
+    panelHeader: true,
+    page: { background: "#f2f2f7" },
+    card: {
+      width: 220,
+      background: "#ffffff",
+      borderRadius: 10,
+      padding: "0 1rem 0.75rem",
+      border: "1px solid #e5e5ea",
+      boxShadow: "0 6px 18px rgba(0,0,0,0.06)",
+    },
+    tokens: vars({
+      ...DEFAULT_TOKENS,
+      // The compact knobs: tight cells, small type, modest radius.
+      "--rhmdp-day-padding": "0.2rem",
+      "--rhmdp-day-height": "1.85rem",
+      "--rhmdp-day-radius": "7px",
+      "--rhmdp-day-size": "0.78rem",
+      "--rhmdp-day-weight": "500",
+      "--rhmdp-day-text": "#1c1c1e",
+      "--rhmdp-day-muted-text": "#c7c7cc",
+      "--rhmdp-day-selected-bg": "#007aff",
+      "--rhmdp-day-selected-text": "#ffffff",
+      "--rhmdp-day-hover-bg": "#eef1f6",
+      "--rhmdp-day-today-text": "#007aff",
+      "--rhmdp-weekday-text": "#8e8e93",
+      "--rhmdp-weekday-weight": "600",
+      "--rhmdp-weekday-size": "0.62rem",
+      "--rhmdp-title-text": "#1c1c1e",
+      "--rhmdp-title-weight": "600",
+      "--rhmdp-title-size": "0.95rem",
+      "--rhmdp-header-weight": "600",
+      "--rhmdp-header-select-bg": "#f2f2f7",
+      "--rhmdp-header-select-text": "#1c1c1e",
+      "--rhmdp-header-select-radius": "6px",
+      "--rhmdp-header-select-padding": "2px 4px",
+      "--rhmdp-header-select-size": "0.78rem",
+      "--rhmdp-panel-cell-size": "12px",
     }),
   }),
 };

@@ -41,7 +41,7 @@ export const Card = ({ children }: { children: ReactNode }) => {
 };
 
 export const RenderDatePicker = <T extends boolean>(
-  props: TDatePickerProps<T>
+  props: TDatePickerProps<T>,
 ) => {
   return (
     <Card>
@@ -56,7 +56,7 @@ export const RenderDatePicker = <T extends boolean>(
 };
 
 export const RenderControlledDatePicker = <T extends boolean>(
-  props: TDatePickerProps<T>
+  props: TDatePickerProps<T>,
 ) => {
   const [value, setValue] = useState(props?.initialValue);
 
@@ -91,7 +91,7 @@ export const RenderControlledDatePicker = <T extends boolean>(
             setValue(
               (props.isRange
                 ? [new Date("2024-06-24"), new Date("2024-06-28")]
-                : new Date("2024-06-24")) as TDatePickerProps<T>["value"]
+                : new Date("2024-06-24")) as TDatePickerProps<T>["value"],
             )
           }
           style={{ background: "#ddd", padding: 7, borderRadius: 7 }}
@@ -104,13 +104,68 @@ export const RenderControlledDatePicker = <T extends boolean>(
 };
 
 /**
+ * Custom navigation icons. `Header` accepts `leftIcon` / `rightIcon` as plain
+ * `ReactNode`, so you can drop in any SVG, emoji or icon-library component to
+ * replace the default chevrons — they inherit the `--rhmdp-arrow-*` theming.
+ */
+export const RenderCustomIconsDatePicker = <T extends boolean>(
+  props: TDatePickerProps<T>,
+) => {
+  return (
+    <Card>
+      <DatePickerProvider {...props}>
+        <Title />
+        <Header
+          leftIcon={
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="22"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+          }
+          rightIcon={
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="22"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+          }
+        />
+        <WeekDays />
+        <DaySlots />
+      </DatePickerProvider>
+    </Card>
+  );
+};
+
+/**
  * Two calendars side-by-side (Airbnb-style). A single shared state drives both
  * months: the left calendar shows the current month, the right one shows the
  * next month (`monthOffset={1}`). The `Header` navigation moves both at once and
  * range selection / hover spans across the two calendars.
  */
 export const RenderDualDatePicker = <T extends boolean>(
-  props: TDatePickerProps<T>
+  props: TDatePickerProps<T>,
 ) => {
   return (
     <div
@@ -155,11 +210,11 @@ export const RenderDualDatePicker = <T extends boolean>(
  * chosen date+time is shown below so you can see it update live.
  */
 export const RenderDateTimePicker = <T extends boolean>(
-  props: TDatePickerProps<T> & { timePickerProps?: TTimePickerProps }
+  props: TDatePickerProps<T> & { timePickerProps?: TTimePickerProps },
 ) => {
   const { timePickerProps, ...providerProps } = props;
   const [value, setValue] = useState<TDatePickerProps<T>["value"]>(
-    providerProps.initialValue
+    providerProps.initialValue,
   );
 
   const onChange: TDatePickerOnChange<T> = (e) => {
@@ -178,8 +233,8 @@ export const RenderDateTimePicker = <T extends boolean>(
   const label = Array.isArray(value)
     ? value.map(format).join("  —  ")
     : value
-      ? format(value)
-      : "—";
+    ? format(value)
+    : "—";
 
   return (
     <Card>
@@ -219,7 +274,7 @@ export const RenderDateTimePicker = <T extends boolean>(
  * as its children and it swaps them in/out while navigating.
  */
 export const RenderPanelDatePicker = <T extends boolean>(
-  props: TDatePickerProps<T>
+  props: TDatePickerProps<T>,
 ) => {
   return (
     <Card>

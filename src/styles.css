@@ -84,11 +84,15 @@
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: var(--rhmdp-day-gap, 0px);
   border-inline-end: calc(
-      var(--rhmdp-day-border-width, 1px) - var(--rhmdp-day-full-border-width, 0px)
-    ) solid var(--rhmdp-day-border, transparent);
+      var(--rhmdp-day-border-width, 1px) -
+        var(--rhmdp-day-full-border-width, 0px)
+    )
+    solid var(--rhmdp-day-border, transparent);
   border-block-end: calc(
-      var(--rhmdp-day-border-width, 1px) - var(--rhmdp-day-full-border-width, 0px)
-    ) solid var(--rhmdp-day-border, transparent);
+      var(--rhmdp-day-border-width, 1px) -
+        var(--rhmdp-day-full-border-width, 0px)
+    )
+    solid var(--rhmdp-day-border, transparent);
 }
 
 .rhmdp-daySlots > * {
@@ -152,14 +156,29 @@
   border-end-end-radius: var(--rhmdp-day-radius, 999px);
 }
 
-/* day = the inner pill (padding, radius, hover / selected background) */
+/* day = the inner pill (padding, radius, hover / selected background)
+   `line-height` is pinned so the row height is driven by the box, not the
+   glyph metrics — otherwise Persian numerals (taller Arabic-script line box)
+   make the cells grow vs. Latin digits. Centering + `min-height` keep every
+   calendar's cells uniform and aligned with the leading placeholders. */
 .rhmdp-daySlots__day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 100%;
+  min-height: var(--rhmdp-day-height, 2.5rem);
+  line-height: 1.5rem;
   padding: var(--rhmdp-day-padding, 0.5rem);
   border-radius: var(--rhmdp-day-radius, 999px);
   font-weight: var(--rhmdp-day-weight, inherit);
   font-size: var(--rhmdp-day-size, inherit);
   cursor: not-allowed;
+}
+
+/* leading empty cells before the 1st of the month — match the day height so
+   the first row aligns with the rest of the grid */
+.rhmdp-daySlots__placeholder {
+  height: var(--rhmdp-day-height, 2.5rem);
 }
 
 .rhmdp-daySlots__day--selectable {
@@ -254,6 +273,13 @@
   color: var(--rhmdp-title-text, inherit);
   font-weight: var(--rhmdp-title-weight, 600);
   font-size: var(--rhmdp-title-size, inherit);
+}
+
+/* wrapper around the month + year labels in the "days" view */
+.rhmdp-panelHeader__labelGroup {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
 }
 
 /* PanelHeader month / year grid */

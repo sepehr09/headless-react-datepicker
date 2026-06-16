@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import DatePickerProvider from "../DatePickerProvider";
-import { RenderControlledDatePicker, RenderDatePicker } from "./_shared";
+import {
+  RenderControlledDatePicker,
+  RenderCustomIconsDatePicker,
+  RenderDatePicker,
+} from "./_shared";
 import { baseMeta } from "./constants";
 
 const meta = {
@@ -49,6 +53,29 @@ export const RangeSelection: Story = {
       weekdayFormat: "narrow",
       dayFormat: "numeric",
       weekends: ["saturday", "sunday"],
+    },
+  },
+};
+
+/**
+ * Replace the default header chevrons with your own icons via `Header`'s
+ * `leftIcon` / `rightIcon` props (any `ReactNode` — SVG, emoji, icon component).
+ */
+export const CustomIcons: Story = {
+  render: RenderCustomIconsDatePicker,
+  args: {
+    isRange: false,
+    initialValue: new Date(),
+    calendar: "gregory",
+    config: {
+      locale: "en-US",
+      weekStartsOn: "monday",
+      showOtherDays: false,
+      otherDaysSelectable: false,
+      weekdayFormat: "short",
+      dayFormat: "numeric",
+      weekends: ["saturday", "sunday"],
+      weekendSelectable: true,
     },
   },
 };

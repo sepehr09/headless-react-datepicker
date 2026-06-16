@@ -1,5 +1,8 @@
 import { useContext } from "react";
-import { PANEL_HEADER_LABEL } from "../../constants/classNames";
+import {
+  PANEL_HEADER_LABEL,
+  PANEL_HEADER_LABEL_GROUP,
+} from "../../constants/classNames";
 import { PickerContext } from "../../store/pickerContext";
 import { classJoin } from "../../utils/classJoin";
 import { PanelHeaderContext } from "./panelHeaderContext";
@@ -28,7 +31,7 @@ function PanelHeaderLabel({ className, styles }: TPanelHeaderLabelProps) {
 
   if (view === "days") {
     return (
-      <div style={{ display: "flex", gap: "0.25rem", alignItems: "center" }}>
+      <div className={PANEL_HEADER_LABEL_GROUP}>
         <span
           className={labelBaseClassName}
           style={styles}

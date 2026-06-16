@@ -192,6 +192,7 @@ and `TimePicker`).
 | `--rhmdp-day-full-border-width` | border width on all 4 cell sides (0 = shared) | `0px`       |
 | `--rhmdp-day-radius`         | day cell + range-end corner radius              | `999px`       |
 | `--rhmdp-day-padding`        | padding inside each day cell                    | `0.5rem`      |
+| `--rhmdp-day-height`         | min height of each day cell (and placeholders)  | `2.5rem`      |
 | `--rhmdp-day-gap`            | gap between day cells (0 = shared borders)      | `0px`         |
 | `--rhmdp-day-weight`         | day number font weight                          | `inherit`     |
 | `--rhmdp-day-size`           | day number font size                            | `inherit`     |
