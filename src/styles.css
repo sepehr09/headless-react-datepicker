@@ -26,8 +26,11 @@
   box-sizing: border-box;
 }
 
-/* Base font — an iOS/system-native sans stack (SF on Apple platforms via
-   -apple-system, the platform UI font elsewhere via system-ui). */
+/* Base font — inherits the host app's font by default (consistent with every
+   other typographic token here, all of which default to `inherit`). Set
+   `--rhmdp-font-family` up the tree to give the calendar its own stack, e.g. an
+   iOS/system-native one: `-apple-system, BlinkMacSystemFont, ui-sans-serif,
+   system-ui, sans-serif`. */
 .rhmdp-title,
 .rhmdp-weekDays,
 .rhmdp-header,
@@ -40,9 +43,7 @@
 .rhmdp-daySlots,
 .rhmdp-timePicker,
 .rhmdp-panelHeader__grid {
-  font-family: -apple-system, BlinkMacSystemFont, ui-sans-serif, system-ui,
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-    "Noto Color Emoji";
+  font-family: var(--rhmdp-font-family, inherit);
 }
 
 /* -------------------------------- Title ---------------------------------- */

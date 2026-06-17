@@ -228,6 +228,7 @@ and `TimePicker`).
 | `--rhmdp-panel-cell-hover-text` | month/year cell hover text (`PanelHeader`)       | `inherit`            |
 | `--rhmdp-panel-cell-size`       | month/year cell font size (`PanelHeader`)        | `inherit`            |
 | `--rhmdp-panel-cell-weight`     | month/year cell font weight (`PanelHeader`)      | `inherit`            |
+| `--rhmdp-font-family`           | font family for every part                       | `inherit`            |
 
 > Variables are the light touch (re-color the default theme). For full
 > structural control, use the BEM class hooks below.

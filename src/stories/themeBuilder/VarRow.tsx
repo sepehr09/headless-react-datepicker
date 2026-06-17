@@ -52,6 +52,27 @@ const VarRow = ({
             flexShrink: 0,
           }}
         />
+      ) : def.kind === "font" ? (
+        // Preview the chosen font stack on a glyph.
+        <span
+          style={{
+            width: 30,
+            height: 30,
+            flexShrink: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            overflow: "hidden",
+            border: "1px solid #d1d5db",
+            borderRadius: 6,
+            background: "#fff",
+            color: "#111827",
+            fontFamily: state.value,
+            fontSize: 15,
+          }}
+        >
+          Aa
+        </span>
       ) : def.kind === "weight" || def.kind === "size" ? (
         // Preview the chosen font weight / size on a glyph.
         <span
@@ -124,7 +145,7 @@ const VarRow = ({
         }}
         spellCheck={false}
         style={{
-          width: 92,
+          width: def.kind === "font" ? 160 : 92,
           flexShrink: 0,
           fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
           fontSize: 12,

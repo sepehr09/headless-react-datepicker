@@ -387,6 +387,19 @@ export const SECTIONS: Section[] = [
     ],
   },
   {
+    title: "Font family",
+    vars: [
+      {
+        cssVar: "--rhmdp-font-family",
+        label: "Font family",
+        hint: "calendar font (defaults to inheriting the host app's)",
+        kind: "font",
+        seed: "-apple-system, BlinkMacSystemFont, system-ui, sans-serif",
+        enabledByDefault: false,
+      },
+    ],
+  },
+  {
     title: "Font size",
     vars: [
       {

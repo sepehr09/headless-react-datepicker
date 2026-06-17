@@ -4,7 +4,7 @@ import type { CSSProperties } from "react";
 /*                            Theme variable contract                         */
 /* -------------------------------------------------------------------------- */
 
-export type VarKind = "color" | "length" | "weight" | "size";
+export type VarKind = "color" | "length" | "weight" | "size" | "font";
 
 export type VarDef = {
   /** The CSS custom property name (with the leading `--`). */
