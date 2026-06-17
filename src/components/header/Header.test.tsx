@@ -189,6 +189,32 @@ describe("Header component", () => {
     );
   });
 
+  it("ignores non-Enter key presses on the next/prev arrows", async () => {
+    const { container } = render(
+      <DatePickerProvider
+        initialValue={new Date("2024-12-01T00:00:00.000Z")}
+        config={{ yearRangeFrom: 2024, yearRangeTo: 2025 }}
+      >
+        <Header
+          prevButtonClassName="prevBtn"
+          nextButtonClassName="nextBtn"
+          monthSelectedOptionClassName="monthSelectedOption"
+        />
+      </DatePickerProvider>
+    );
+
+    const prevButton = container.querySelector(".prevBtn");
+    const nextButton = container.querySelector(".nextBtn");
+
+    fireEvent.keyDown(nextButton!, { key: "ArrowRight" });
+    fireEvent.keyDown(prevButton!, { key: "ArrowLeft" });
+
+    // month is unchanged by non-Enter keys
+    expect(container.querySelector(".monthSelectedOption")).toHaveTextContent(
+      "December"
+    );
+  });
+
   it("should change month by dropdown select", async () => {
     const { container } = render(
       <DatePickerProvider

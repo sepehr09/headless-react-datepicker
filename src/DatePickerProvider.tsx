@@ -106,7 +106,7 @@ function DatePickerProvider<IsRange extends boolean>(
         internalValue &&
         (Array.isArray(internalValue)
           ? internalValue?.[0]?.toISOString() ===
-              (value as Date[])?.[0].toISOString() &&
+              (value as Date[])?.[0]?.toISOString() &&
             internalValue?.[1]?.toISOString() ===
               (value as Date[])?.[1]?.toISOString()
           : internalValue?.toISOString() === (value as Date)?.toISOString())
@@ -285,6 +285,11 @@ function DatePickerProvider<IsRange extends boolean>(
       }
       const base = current[index] ?? startOfDay(currentDate);
       current[index] = setTimeParts(base, time);
+      // Keep the range ordered: editing one end's time past the other (e.g. on
+      // the same day) must not deliver an inverted `[start > end]` to onChange.
+      if (current[0] && current[1]) {
+        current.sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+      }
       nextValue = current;
     } else {
       const base =

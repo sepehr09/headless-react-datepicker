@@ -709,6 +709,62 @@ describe("DaySlots component", () => {
     expect(inBetween).not.toHaveClass("inHoveredRangeParentClassName");
   });
 
+  it("does not preview a backward hover when allowBackwardRange is false", () => {
+    const { container } = render(
+      <DatePickerProvider
+        defaultStartDate={new Date("2024-08-01T00:00:00.000Z")}
+        isRange
+        config={{ allowBackwardRange: false }}
+      >
+        <DaySlots
+          slotParentClassName="slotParentClassName"
+          inHoveredRangeParentClassName="inHoveredRangeParentClassName"
+        />
+      </DatePickerProvider>
+    );
+
+    const slotParentElements = container.querySelectorAll(
+      ".slotParentClassName"
+    );
+
+    // start a range on August 15, 2024
+    fireEvent.click(slotParentElements[14].firstChild!);
+
+    // hover August 9, 2024 (before the start) -> no preview
+    fireEvent.mouseEnter(slotParentElements[8]);
+
+    const before = slotParentElements[10]; // August 11, 2024
+    expect(before).not.toHaveClass("inHoveredRangeParentClassName");
+  });
+
+  it("does not preview a hovered range once both ends are selected", () => {
+    const { container } = render(
+      <DatePickerProvider
+        defaultStartDate={new Date("2024-08-01T00:00:00.000Z")}
+        isRange
+      >
+        <DaySlots
+          slotParentClassName="slotParentClassName"
+          inHoveredRangeParentClassName="inHoveredRangeParentClassName"
+        />
+      </DatePickerProvider>
+    );
+
+    const slotParentElements = container.querySelectorAll(
+      ".slotParentClassName"
+    );
+
+    // complete a range: August 7 -> August 11
+    fireEvent.click(slotParentElements[6].firstChild!);
+    fireEvent.click(slotParentElements[10].firstChild!);
+
+    // hovering after the range is complete adds no preview styles
+    fireEvent.mouseEnter(slotParentElements[14]);
+
+    const inBetween = slotParentElements[8]; // August 9, 2024
+    expect(inBetween).not.toHaveClass("inHoveredRangeParentClassName");
+  });
+
   it("renders an offset month when monthOffset is provided (side-by-side calendars)", () => {
     const { container } = render(
       <DatePickerProvider initialValue={new Date("2024-08-01T00:00:00.000Z")}>

@@ -75,6 +75,18 @@ describe("TimePicker component", () => {
     expect((getByLabelText("hours") as HTMLSelectElement).value).toBe("9");
   });
 
+  it("wraps minutes 00 -> 59 on decrement, leaving hours untouched", () => {
+    const { getByLabelText } = render(
+      <DatePickerProvider initialValue={new Date(2024, 6, 15, 9, 0, 0)}>
+        <TimePicker />
+      </DatePickerProvider>
+    );
+
+    fireEvent.click(getByLabelText("Decrease minutes"));
+    expect((getByLabelText("minutes") as HTMLSelectElement).value).toBe("59");
+    expect((getByLabelText("hours") as HTMLSelectElement).value).toBe("9");
+  });
+
   it("shows a seconds column when showSeconds is set", () => {
     const { getByLabelText } = render(
       <DatePickerProvider initialValue={new Date(2024, 6, 15, 9, 30, 45)}>
@@ -85,6 +97,25 @@ describe("TimePicker component", () => {
     expect((getByLabelText("seconds") as HTMLSelectElement).value).toBe("45");
     fireEvent.click(getByLabelText("Increase seconds"));
     expect((getByLabelText("seconds") as HTMLSelectElement).value).toBe("46");
+  });
+
+  it("decrements seconds and selects a second directly from the dropdown", () => {
+    const { getByLabelText } = render(
+      <DatePickerProvider initialValue={new Date(2024, 6, 15, 9, 30, 0)}>
+        <TimePicker showSeconds />
+      </DatePickerProvider>
+    );
+
+    // 00 -> wraps back to 59
+    fireEvent.click(getByLabelText("Decrease seconds"));
+    expect((getByLabelText("seconds") as HTMLSelectElement).value).toBe("59");
+
+    // pick a value directly from the native dropdown
+    fireEvent.change(getByLabelText("seconds"), { target: { value: "25" } });
+    expect((getByLabelText("seconds") as HTMLSelectElement).value).toBe("25");
+    // hours/minutes are untouched
+    expect((getByLabelText("hours") as HTMLSelectElement).value).toBe("9");
+    expect((getByLabelText("minutes") as HTMLSelectElement).value).toBe("30");
   });
 
   it("renders 12-hour mode with an AM/PM toggle", () => {
@@ -101,6 +132,37 @@ describe("TimePicker component", () => {
     // toggling flips to AM (1 AM)
     fireEvent.click(getAllByLabelText("Toggle AM/PM")[0]);
     expect((getByLabelText("AM/PM") as HTMLSelectElement).value).toBe("AM");
+  });
+
+  it("changes the period directly from the AM/PM dropdown", () => {
+    const { getByLabelText } = render(
+      <DatePickerProvider initialValue={new Date(2024, 6, 15, 1, 5, 0)}>
+        <TimePicker use12Hours />
+      </DatePickerProvider>
+    );
+
+    // 01:05 -> 1 AM
+    expect((getByLabelText("hours") as HTMLSelectElement).value).toBe("1");
+    expect((getByLabelText("AM/PM") as HTMLSelectElement).value).toBe("AM");
+
+    // selecting PM from the dropdown shifts the 24h value to 13:00
+    fireEvent.change(getByLabelText("AM/PM"), { target: { value: "PM" } });
+    expect((getByLabelText("AM/PM") as HTMLSelectElement).value).toBe("PM");
+    // the 12-hour display stays 1, but the underlying hour is now 13 (PM)
+    expect((getByLabelText("hours") as HTMLSelectElement).value).toBe("1");
+  });
+
+  it("selects an hour directly in 12-hour mode keeping the period", () => {
+    const { getByLabelText } = render(
+      <DatePickerProvider initialValue={new Date(2024, 6, 15, 13, 0, 0)}>
+        <TimePicker use12Hours />
+      </DatePickerProvider>
+    );
+
+    // 13:00 -> 1 PM; choosing "5" keeps PM -> 17:00
+    fireEvent.change(getByLabelText("hours"), { target: { value: "5" } });
+    expect((getByLabelText("hours") as HTMLSelectElement).value).toBe("5");
+    expect((getByLabelText("AM/PM") as HTMLSelectElement).value).toBe("PM");
   });
 
   it("targets the chosen end of a range via the index prop", () => {

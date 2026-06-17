@@ -78,6 +78,51 @@ describe("DatePickerProvider — time", () => {
       expect(end.getHours()).toBe(18);
     });
 
+    it("keeps the range ordered when the start's time is set past the end (same day)", () => {
+      const onChange = vi.fn();
+      const { result } = renderProvider({
+        isRange: true,
+        initialValue: [
+          new Date(2024, 6, 15, 9, 0, 0),
+          new Date(2024, 6, 15, 17, 0, 0),
+        ],
+        onChange,
+      });
+
+      // push the start (index 0) to 20:00, later than the end's 17:00
+      act(() => result.current.handleChangeTime?.({ hours: 20 }, 0));
+
+      const [start, end] = result.current.selectedDay as Date[];
+      // the two ends are re-sorted so start is never after end
+      expect(start.getTime()).toBeLessThanOrEqual(end.getTime());
+      expect(start.getHours()).toBe(17);
+      expect(end.getHours()).toBe(20);
+
+      // onChange receives the ordered range, not an inverted one
+      const delivered = onChange.mock.lastCall?.[0] as Date[];
+      expect(delivered[0].getTime()).toBeLessThanOrEqual(
+        delivered[1].getTime()
+      );
+    });
+
+    it("keeps the range ordered when the end's time is set before the start (same day)", () => {
+      const { result } = renderProvider({
+        isRange: true,
+        initialValue: [
+          new Date(2024, 6, 15, 9, 0, 0),
+          new Date(2024, 6, 15, 17, 0, 0),
+        ],
+      });
+
+      // pull the end (index 1) back to 06:00, earlier than the start's 09:00
+      act(() => result.current.handleChangeTime?.({ hours: 6 }, 1));
+
+      const [start, end] = result.current.selectedDay as Date[];
+      expect(start.getTime()).toBeLessThanOrEqual(end.getTime());
+      expect(start.getHours()).toBe(6);
+      expect(end.getHours()).toBe(9);
+    });
+
     it("does not leave a hole when the end's time is set before a start exists", () => {
       const { result } = renderProvider({
         isRange: true,

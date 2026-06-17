@@ -146,4 +146,29 @@ describe("PanelHeader component", () => {
     // Enter on next moves forward without throwing
     fireEvent.keyDown(next!, { key: "Enter" });
   });
+
+  it("navigates with the keyboard (Enter) on the prev arrow and ignores other keys", () => {
+    const { container, getByText } = render(
+      <DatePickerProvider
+        initialValue={new Date("2024-12-01T00:00:00.000Z")}
+        config={{ yearRangeFrom: 2020, yearRangeTo: 2030 }}
+      >
+        <PanelHeader prevButtonClassName="prevBtn">
+          <div>day body</div>
+        </PanelHeader>
+      </DatePickerProvider>
+    );
+
+    const prev = container.querySelector(".prevBtn");
+
+    // a non-Enter key is ignored (still December 2024)
+    fireEvent.keyDown(prev!, { key: "ArrowLeft" });
+    expect(getByText("December")).toBeInTheDocument();
+    expect(getByText("2024")).toBeInTheDocument();
+
+    // Enter on prev steps back a month (Dec 2024 -> Nov 2024)
+    fireEvent.keyDown(prev!, { key: "Enter" });
+    expect(getByText("November")).toBeInTheDocument();
+    expect(getByText("2024")).toBeInTheDocument();
+  });
 });
