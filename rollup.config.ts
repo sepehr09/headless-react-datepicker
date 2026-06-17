@@ -6,7 +6,7 @@ import typescript from "rollup-plugin-typescript2";
 export default [
   {
     input: "src/index.ts",
-    output: [{ dir: "dist/esm", format: "esm" }],
+    output: [{ dir: "dist/esm", format: "esm", exports: "named" }],
     external: [
       "react",
       "react-dom",
@@ -35,7 +35,7 @@ export default [
   {
     input: "src/index.ts",
     output: [
-      { dir: "dist/cjs", format: "cjs", entryFileNames: "index.cjs" },
+      { dir: "dist/cjs", format: "cjs", entryFileNames: "index.cjs", exports: "named" },
     ],
     external: [
       "react",
