@@ -16,7 +16,7 @@ import TimePicker from "../components/timePicker/TimePicker";
 import Title from "../components/title/Title";
 import WeekDays from "../components/weekDays/WeekDays";
 import { baseMeta } from "./constants";
-import { Card } from "./_shared";
+import { componentSource } from "./_source";
 
 /**
  * The library is **headless** and built from small, independent pieces. Every
@@ -58,6 +58,7 @@ const baseArgs: Story["args"] = {
  */
 export const TitleOnly: Story = {
   name: "Title",
+  parameters: componentSource(["Title"], `<Title />`),
   render: (args) => (
     <DatePickerProvider {...args}>
       <Title />
@@ -73,6 +74,7 @@ export const TitleOnly: Story = {
  */
 export const HeaderOnly: Story = {
   name: "Header",
+  parameters: componentSource(["Header"], `<Header />`),
   render: (args) => (
     <DatePickerProvider {...args}>
       <Header />
@@ -88,6 +90,7 @@ export const HeaderOnly: Story = {
  */
 export const HeaderPrevButtonOnly: Story = {
   name: "HeaderPrevButton",
+  parameters: componentSource(["HeaderPrevButton"], `<HeaderPrevButton />`),
   render: (args) => (
     <DatePickerProvider {...args}>
       <HeaderPrevButton />
@@ -101,6 +104,7 @@ export const HeaderPrevButtonOnly: Story = {
  */
 export const HeaderNextButtonOnly: Story = {
   name: "HeaderNextButton",
+  parameters: componentSource(["HeaderNextButton"], `<HeaderNextButton />`),
   render: (args) => (
     <DatePickerProvider {...args}>
       <HeaderNextButton />
@@ -114,6 +118,7 @@ export const HeaderNextButtonOnly: Story = {
  */
 export const HeaderMonthSelectOnly: Story = {
   name: "HeaderMonthSelect",
+  parameters: componentSource(["HeaderMonthSelect"], `<HeaderMonthSelect />`),
   render: (args) => (
     <DatePickerProvider {...args}>
       <HeaderMonthSelect />
@@ -127,6 +132,7 @@ export const HeaderMonthSelectOnly: Story = {
  */
 export const HeaderYearSelectOnly: Story = {
   name: "HeaderYearSelect",
+  parameters: componentSource(["HeaderYearSelect"], `<HeaderYearSelect />`),
   render: (args) => (
     <DatePickerProvider {...args}>
       <HeaderYearSelect />
@@ -143,6 +149,7 @@ export const HeaderYearSelectOnly: Story = {
  */
 export const PanelHeaderOnly: Story = {
   name: "Panel Header",
+  parameters: componentSource(["PanelHeader"], `<PanelHeader />`),
   render: (args) => (
     <DatePickerProvider {...args}>
       <PanelHeader />
@@ -158,6 +165,10 @@ export const PanelHeaderOnly: Story = {
  */
 export const PanelHeaderLabelOnly: Story = {
   name: "PanelHeaderLabel",
+  parameters: componentSource(
+    ["PanelHeaderProvider", "PanelHeaderLabel"],
+    `<PanelHeaderProvider>\n  <PanelHeaderLabel />\n</PanelHeaderProvider>`,
+  ),
   render: (args) => (
     <DatePickerProvider {...args}>
       <PanelHeaderProvider>
@@ -174,6 +185,10 @@ export const PanelHeaderLabelOnly: Story = {
  */
 export const PanelHeaderPrevButtonOnly: Story = {
   name: "PanelHeaderPrevButton",
+  parameters: componentSource(
+    ["PanelHeaderProvider", "PanelHeaderPrevButton"],
+    `<PanelHeaderProvider>\n  <PanelHeaderPrevButton />\n</PanelHeaderProvider>`,
+  ),
   render: (args) => (
     <DatePickerProvider {...args}>
       <PanelHeaderProvider>
@@ -190,6 +205,10 @@ export const PanelHeaderPrevButtonOnly: Story = {
  */
 export const PanelHeaderNextButtonOnly: Story = {
   name: "PanelHeaderNextButton",
+  parameters: componentSource(
+    ["PanelHeaderProvider", "PanelHeaderNextButton"],
+    `<PanelHeaderProvider>\n  <PanelHeaderNextButton />\n</PanelHeaderProvider>`,
+  ),
   render: (args) => (
     <DatePickerProvider {...args}>
       <PanelHeaderProvider>
@@ -207,6 +226,22 @@ export const PanelHeaderNextButtonOnly: Story = {
  */
 export const PanelHeaderBodyOnly: Story = {
   name: "PanelHeaderBody",
+  parameters: componentSource(
+    [
+      "PanelHeaderProvider",
+      "PanelHeaderLabel",
+      "PanelHeaderBody",
+      "WeekDays",
+      "DaySlots",
+    ],
+    `<PanelHeaderProvider>
+  <PanelHeaderLabel />
+  <PanelHeaderBody>
+    <WeekDays />
+    <DaySlots />
+  </PanelHeaderBody>
+</PanelHeaderProvider>`,
+  ),
   render: (args) => (
     <DatePickerProvider {...args}>
       <PanelHeaderProvider>
@@ -228,6 +263,7 @@ export const PanelHeaderBodyOnly: Story = {
  */
 export const WeekDaysOnly: Story = {
   name: "WeekDays",
+  parameters: componentSource(["WeekDays"], `<WeekDays />`),
   render: (args) => (
     <DatePickerProvider {...args}>
       <WeekDays />
@@ -243,6 +279,7 @@ export const WeekDaysOnly: Story = {
  */
 export const DaySlotsOnly: Story = {
   name: "DaySlots",
+  parameters: componentSource(["DaySlots"], `<DaySlots />`),
   render: (args) => (
     <DatePickerProvider {...args}>
       <DaySlots />
@@ -258,6 +295,10 @@ export const DaySlotsOnly: Story = {
  */
 export const TimePickerOnly: Story = {
   name: "TimePicker",
+  parameters: componentSource(
+    ["TimePicker"],
+    `<TimePicker showSeconds use12Hours />`,
+  ),
   render: (args) => (
     <DatePickerProvider {...args}>
       <TimePicker showSeconds use12Hours />

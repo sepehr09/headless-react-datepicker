@@ -10,6 +10,37 @@ import WeekDays from "../components/weekDays/WeekDays";
 import { Card, RenderPanelDatePicker } from "./_shared";
 import { rtlDecorator } from "./rtlDecorator";
 import { baseMeta } from "./constants";
+import { panelSource, source } from "./_source";
+
+/** Standalone panel parts: label on the left, both arrows on the right. */
+const panelCustomLayoutSource = source(
+  [
+    "PanelHeaderProvider",
+    "PanelHeaderPrevButton",
+    "PanelHeaderNextButton",
+    "PanelHeaderLabel",
+    "PanelHeaderBody",
+    "WeekDays",
+    "DaySlots",
+  ],
+  `<PanelHeaderProvider>
+  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+    {/* left: month / year label */}
+    <PanelHeaderLabel />
+
+    {/* right: both arrows next to each other */}
+    <div style={{ display: "flex", gap: 4 }}>
+      <PanelHeaderPrevButton />
+      <PanelHeaderNextButton />
+    </div>
+  </div>
+
+  <PanelHeaderBody>
+    <WeekDays />
+    <DaySlots />
+  </PanelHeaderBody>
+</PanelHeaderProvider>`,
+);
 
 const meta = {
   title: "Example/Calendar/Panel Header",
@@ -21,6 +52,7 @@ type Story = StoryObj<typeof meta>;
 
 export const PanelMonthYearPicker: Story = {
   render: RenderPanelDatePicker,
+  parameters: panelSource,
   args: {
     isRange: false,
     initialValue: new Date(),
@@ -41,6 +73,7 @@ export const PanelMonthYearPicker: Story = {
 export const PanelMonthYearPickerPersian: Story = {
   render: RenderPanelDatePicker,
   decorators: [rtlDecorator],
+  parameters: panelSource,
   args: {
     isRange: false,
     initialValue: new Date(),
@@ -91,6 +124,7 @@ const partsArgs: Story["args"] = {
  */
 export const CustomLayout: Story = {
   name: "Custom layout (label left, arrows right)",
+  parameters: panelCustomLayoutSource,
   render: (args) => (
     <Card>
       <DatePickerProvider {...args}>

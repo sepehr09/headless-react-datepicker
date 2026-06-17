@@ -22,7 +22,7 @@
 ## Live demo
 
 - **Storybook:** https://sepehr09.github.io/headless-react-datepicker/
-- **Theme Builder:** [open the story](https://sepehr09.github.io/headless-react-datepicker/?path=/story/example-theme-builder--builder)
+- **Theme Builder:** [open the story](https://sepehr09.github.io/headless-react-datepicker/iframe.html?id=example-theme-builder--builder&viewMode=story)
 - **CodeSandbox:** [![Edit headless-react-datepicker](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/headless-react-datepicker-kxjnlr)
 
 ## Table of contents
@@ -147,7 +147,7 @@ Because they cascade, you can theme a single subtree (e.g. a dark panel) by
 setting the variables on a wrapping element, or scope them to `:root` for the
 whole app.
 
-[Try the Theme Builder story](https://sepehr09.github.io/headless-react-datepicker/?path=/story/example-theme-builder--builder)
+[Try the Theme Builder story](https://sepehr09.github.io/headless-react-datepicker/iframe.html?id=example-theme-builder--builder&viewMode=story)
 
 ![Theme builder for headless-react-datepicker](documentation/assets/theme-builder.png "Theme builder")
 

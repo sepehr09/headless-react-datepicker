@@ -3,6 +3,7 @@ import DatePickerProvider from "../DatePickerProvider";
 import { RenderDatePicker } from "./_shared";
 import { rtlDecorator } from "./rtlDecorator";
 import { baseMeta } from "./constants";
+import { basicSource } from "./_source";
 
 const meta = {
   title: "Example/Localization",
@@ -15,6 +16,7 @@ type Story = StoryObj<typeof meta>;
 export const Persian: Story = {
   render: RenderDatePicker,
   decorators: [rtlDecorator],
+  parameters: basicSource,
   args: {
     isRange: false,
     initialValue: new Date("2025-04-17T00:00:00"),
@@ -33,6 +35,7 @@ export const Persian: Story = {
 
 export const Islamic: Story = {
   render: RenderDatePicker,
+  parameters: basicSource,
   args: {
     isRange: false,
     initialValue: new Date("2024-02-06"),
@@ -52,6 +55,7 @@ export const Islamic: Story = {
 export const GregoryInFa_IR: Story = {
   render: RenderDatePicker,
   decorators: [rtlDecorator],
+  parameters: basicSource,
   args: {
     isRange: false,
     initialValue: new Date("2025-04-17T00:00:00"),
@@ -70,6 +74,7 @@ export const GregoryInFa_IR: Story = {
 
 export const PersianInEn_US: Story = {
   render: RenderDatePicker,
+  parameters: basicSource,
   args: {
     isRange: false,
     initialValue: new Date("2025-04-17T00:00:00"),

@@ -3,6 +3,38 @@ import type { InputType } from "storybook/internal/types";
 import DatePickerProvider from "../DatePickerProvider";
 
 export const argTypes: Record<string, InputType> = {
+  // `children` is the composed calendar parts and `value` is driven internally
+  // by the demo stories — neither is meaningfully editable, so hide them.
+  children: {
+    table: { disable: true },
+  },
+  value: {
+    table: { disable: true },
+  },
+  calendar: {
+    control: "select",
+    options: [
+      "gregory",
+      "persian",
+      "islamic",
+      "islamic-umalqura",
+      "islamic-tbla",
+      "islamic-civil",
+      "islamic-rgsa",
+      "iso8601",
+      "japanese",
+      "islamicc",
+      "roc",
+      "chinese",
+      "indian",
+      "buddhist",
+      "coptic",
+      "dangi",
+      "ethioaa",
+      "ethiopic",
+      "hebrew",
+    ],
+  },
   config: {
     control: false,
   },
@@ -31,6 +63,8 @@ export const argTypes: Record<string, InputType> = {
   },
   "config.otherDaysSelectable": {
     control: "boolean",
+    // Only has an effect when other-month days are actually rendered.
+    if: { arg: "config.showOtherDays", truthy: true },
   },
   "config.dayFormat": {
     control: "select",
@@ -65,9 +99,13 @@ export const argTypes: Record<string, InputType> = {
   },
   "config.holidaySelectable": {
     control: "boolean",
+    // Only relevant when the calendar actually has holidays.
+    if: { arg: "config.holidays", truthy: true },
   },
   "config.allowBackwardRange": {
     control: "boolean",
+    // Backward ranges only apply to range pickers.
+    if: { arg: "isRange", truthy: true },
   },
 };
 

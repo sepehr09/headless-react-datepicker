@@ -3,6 +3,7 @@ import { buildCss, buildJsx } from "./codegen";
 import CodeOutput from "./CodeOutput";
 import Dashboard from "./Dashboard";
 import Preview from "./Preview";
+import QuickInstall from "./QuickInstall";
 import { stateFromPreset, PRESETS } from "./presets";
 import { ALL_VARS, initialState } from "./tokens";
 import type { Preset, ThemeState, TokenState } from "./types";
@@ -150,6 +151,8 @@ const ThemeBuilder = () => {
         selector={selector}
         setSelector={setSelector}
       />
+
+      <QuickInstall />
     </div>
   );
 };

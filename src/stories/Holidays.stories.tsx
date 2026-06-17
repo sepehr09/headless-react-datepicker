@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import DatePickerProvider from "../DatePickerProvider";
 import { RenderDatePicker } from "./_shared";
 import { baseMeta } from "./constants";
+import { basicSource } from "./_source";
 
 const meta = {
   title: "Example/Calendar/Holidays",
@@ -13,6 +14,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Holidays: Story = {
   render: RenderDatePicker,
+  parameters: basicSource,
   args: {
     isRange: false,
     initialValue: new Date("2024-02-06"),

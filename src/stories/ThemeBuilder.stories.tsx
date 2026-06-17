@@ -28,4 +28,12 @@ type Story = StoryObj<typeof meta>;
  */
 export const Builder: Story = {
   render: () => <ThemeBuilder />,
+  parameters: {
+    // This story renders its own full-screen UI, so hide the whole addons
+    // panel (Controls, Actions, Code, …) for the Theme Builder only.
+    options: { showPanel: false },
+    controls: { disable: true },
+    actions: { disable: true },
+    docs: { source: { disable: true }, codePanel: false },
+  },
 };

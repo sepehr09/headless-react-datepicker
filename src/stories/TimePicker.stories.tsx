@@ -6,6 +6,14 @@ import {
 } from "../components/timePicker/types";
 import { RenderDateTimePicker } from "./_shared";
 import { baseMeta } from "./constants";
+import { source } from "./_source";
+
+/** A calendar + a `TimePicker` configured with `timePickerJsx`. */
+const timeSource = (timePickerJsx: string) =>
+  source(
+    ["Title", "Header", "WeekDays", "DaySlots", "TimePicker"],
+    `<Title />\n<Header />\n<WeekDays />\n<DaySlots />\n${timePickerJsx}`,
+  );
 
 const meta = {
   title: "Example/TimePicker",
@@ -103,6 +111,7 @@ const MyCustomClock = ({
  */
 export const HoursAndMinutes: Story = {
   render: withTimePicker(),
+  parameters: timeSource(`<TimePicker />`),
   args: {
     isRange: false,
     initialValue: new Date(new Date().setHours(9, 30, 0, 0)),
@@ -116,6 +125,7 @@ export const HoursAndMinutes: Story = {
  */
 export const TwelveHour: Story = {
   render: withTimePicker({ use12Hours: true }),
+  parameters: timeSource(`<TimePicker use12Hours />`),
   args: {
     isRange: false,
     initialValue: new Date(new Date().setHours(14, 15, 0, 0)),
@@ -129,6 +139,7 @@ export const TwelveHour: Story = {
  */
 export const WithSeconds: Story = {
   render: withTimePicker({ showSeconds: true }),
+  parameters: timeSource(`<TimePicker showSeconds />`),
   args: {
     isRange: false,
     initialValue: new Date(new Date().setHours(9, 30, 45, 0)),
@@ -146,6 +157,10 @@ export const CustomRenderer: Story = {
   render: withTimePicker({
     renderer: (args) => <MyCustomClock {...args} />,
   }),
+  parameters: timeSource(
+    `{/* MyCustomClock is your own component built from the renderer args */}
+<TimePicker renderer={(args) => <MyCustomClock {...args} />} />`,
+  ),
   args: {
     isRange: false,
     initialValue: new Date(new Date().setHours(9, 30, 0, 0)),

@@ -8,6 +8,34 @@ import HeaderYearSelect from "../components/header/HeaderYearSelect";
 import WeekDays from "../components/weekDays/WeekDays";
 import { baseMeta } from "./constants";
 import { Card } from "./_shared";
+import { source } from "./_source";
+
+/** Standalone header parts: month + year selects left, both arrows right. */
+const headerCustomLayoutSource = source(
+  [
+    "HeaderMonthSelect",
+    "HeaderYearSelect",
+    "HeaderPrevButton",
+    "HeaderNextButton",
+    "WeekDays",
+    "DaySlots",
+  ],
+  `<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+  {/* left: month + year dropdowns */}
+  <div style={{ display: "flex", gap: 4 }}>
+    <HeaderMonthSelect />
+    <HeaderYearSelect />
+  </div>
+
+  {/* right: both arrows next to each other */}
+  <div style={{ display: "flex", gap: 4 }}>
+    <HeaderPrevButton />
+    <HeaderNextButton />
+  </div>
+</div>
+<WeekDays />
+<DaySlots />`,
+);
 
 /**
  * The pieces that make up `Header` — the prev/next **arrows** and the **month**
@@ -51,6 +79,7 @@ const baseArgs: Story["args"] = {
  */
 export const CustomLayout: Story = {
   name: "Custom layout (selects left, arrows right)",
+  parameters: headerCustomLayoutSource,
   render: (args) => (
     <Card>
       <DatePickerProvider {...args}>
