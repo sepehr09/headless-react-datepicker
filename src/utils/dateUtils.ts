@@ -60,7 +60,7 @@ export function endOfWeek(date: Date, weekStartsOn: number | undefined = 0) {
   // Calculate the end of the week by adding 6 days to the start of the week
   const endOfWeekDate = new Date(start);
   endOfWeekDate.setDate(start.getDate() + 6);
-  endOfWeekDate.setHours(23, 59, 59, 0); // reset time to midnight
+  endOfWeekDate.setHours(23, 59, 59, 0); // end of the day
 
   return endOfWeekDate;
 }

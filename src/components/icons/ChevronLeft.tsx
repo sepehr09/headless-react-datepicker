@@ -6,7 +6,7 @@ function ChevronLeft() {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className="rhmdp-w-6 rhmdp-h-6 rtl:rhmdp-rotate-180"
+
     >
       <path
         strokeLinecap="round"

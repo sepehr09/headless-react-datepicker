@@ -23,4 +23,15 @@ describe("normalizeTemporal", () => {
 
     expect(normalizeTemporal(newDate)).toBe("2024-03-20");
   });
+
+  it("zero-pads single-digit year, month and day", () => {
+    const newDate = Temporal.PlainDate.from({
+      year: 5,
+      month: 3,
+      day: 7,
+      calendar: "gregory",
+    }).getISOFields();
+
+    expect(normalizeTemporal(newDate)).toBe("05-03-07");
+  });
 });

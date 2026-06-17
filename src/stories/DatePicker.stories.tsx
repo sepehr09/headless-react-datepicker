@@ -1,135 +1,44 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { ReactNode, useState } from "react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import DatePickerProvider from "../DatePickerProvider";
-import DaySlots from "../components/daySlots/DaySlots";
-import Header from "../components/header/Header";
-import Title from "../components/title/Title";
-import WeekDays from "../components/weekDays/WeekDays";
-import { TDatePickerOnChange, TDatePickerProps } from "../types";
-import { argTypes } from "./constants";
+import {
+  RenderControlledDatePicker,
+  RenderCustomIconsDatePicker,
+  RenderDatePicker,
+} from "./_shared";
+import { baseMeta } from "./constants";
+import { basicSource, controlledSource, source } from "./_source";
+
+/** Clean snippet for the custom-chevron story (the SVGs that replace the arrows). */
+const customIconsSource = source(
+  ["Title", "Header", "WeekDays", "DaySlots"],
+  `<Title />
+<Header
+  leftIcon={
+    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+    </svg>
+  }
+  rightIcon={
+    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+    </svg>
+  }
+/>
+<WeekDays />
+<DaySlots />`,
+);
 
 const meta = {
   title: "Example/Calendar",
-  component: DatePickerProvider,
-  parameters: {
-    // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout
-    layout: "fullscreen",
-    deepControls: { enabled: true },
-  },
-  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
-  tags: ["autodocs"],
-  argTypes: argTypes,
+  ...baseMeta,
 } satisfies Meta<typeof DatePickerProvider>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const Card = ({ children }: { children: ReactNode }) => {
-  return (
-    <div
-      style={{
-        background: "#fff",
-        boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-        width: "300px",
-        borderRadius: "0px",
-        margin: "30px auto",
-        padding: "10px",
-      }}
-    >
-      {children}
-    </div>
-  );
-};
-
-const RenderDatePicker = <T extends boolean>(props: TDatePickerProps<T>) => {
-  return (
-    <Card>
-      <DatePickerProvider {...props}>
-        <Title />
-        <Header
-          monthSelectStyles={{
-            backgroundColor: "#f0f0f0",
-            color: "#000",
-            padding: "5px",
-            borderRadius: "5px",
-          }}
-          yearSelectStyles={{
-            backgroundColor: "#f0f0f0",
-            color: "#000",
-            padding: "5px",
-            borderRadius: "5px",
-          }}
-        />
-        <WeekDays />
-        <DaySlots />
-      </DatePickerProvider>
-    </Card>
-  );
-};
-
-const RenderControlledDatePicker = <T extends boolean>(
-  props: TDatePickerProps<T>
-) => {
-  const [value, setValue] = useState(props?.initialValue);
-
-  const onChange: TDatePickerOnChange<T> = (e) => {
-    props?.onChange?.(e);
-    console.log("onChange: ", e);
-    setValue(e);
-  };
-
-  return (
-    <>
-      <Card>
-        <DatePickerProvider
-          {...props}
-          initialValue={value}
-          value={value}
-          onChange={onChange}
-        >
-          <Title />
-          <Header
-            monthSelectStyles={{
-              backgroundColor: "#f0f0f0",
-              color: "#000",
-              padding: "5px",
-              borderRadius: "5px",
-            }}
-            yearSelectStyles={{
-              backgroundColor: "#f0f0f0",
-              color: "#000",
-              padding: "5px",
-              borderRadius: "5px",
-            }}
-          />
-          <WeekDays />
-          <DaySlots
-            onClickSlot={(v) => {
-              console.log("onClickSlot", v);
-            }}
-          />
-        </DatePickerProvider>
-      </Card>
-      <div style={{ width: 300, margin: "auto" }}>
-        <button
-          onClick={() =>
-            setValue(
-              (props.isRange
-                ? [new Date("2024-06-24"), new Date("2024-06-28")]
-                : new Date("2024-06-24")) as TDatePickerProps<T>["value"]
-            )
-          }
-          style={{ background: "#ddd", padding: 7, borderRadius: 7 }}
-        >
-          Set Custom Value to 2024-06-24
-        </button>
-      </div>
-    </>
-  );
-};
-
 export const SingleSelection: Story = {
   render: RenderDatePicker,
+  parameters: basicSource,
   args: {
     isRange: false,
     initialValue: new Date(),
@@ -154,6 +63,7 @@ export const SingleSelection: Story = {
 
 export const RangeSelection: Story = {
   render: RenderDatePicker,
+  parameters: basicSource,
   args: {
     isRange: true,
     initialValue: [new Date("2024-02-06"), new Date("2024-02-08")],
@@ -166,103 +76,37 @@ export const RangeSelection: Story = {
       weekdayFormat: "narrow",
       dayFormat: "numeric",
       weekends: ["saturday", "sunday"],
-      // yearRangeFrom: 1330,
-      // yearRangeTo: 1400,
-      // minDate: new Date("2024-01-01T00:00:00.000Z"),
-      // maxDate: new Date(),
     },
   },
 };
 
-export const Persian: Story = {
-  render: RenderDatePicker,
+/**
+ * Replace the default header chevrons with your own icons via `Header`'s
+ * `leftIcon` / `rightIcon` props (any `ReactNode` — SVG, emoji, icon component).
+ */
+export const CustomIcons: Story = {
+  render: RenderCustomIconsDatePicker,
+  parameters: customIconsSource,
   args: {
     isRange: false,
-    initialValue: new Date("2025-04-17T00:00:00"),
-    calendar: "persian",
-    config: {
-      locale: "fa-IR",
-      weekStartsOn: "saturday",
-      showOtherDays: false,
-      otherDaysSelectable: false,
-      weekdayFormat: "narrow",
-      dayFormat: "numeric",
-      weekends: ["thursday", "friday"],
-
-      // yearRangeFrom: 1330,
-      // yearRangeTo: 1400,
-      // minDate: new Date("2024-01-01T00:00:00.000Z"),
-      // maxDate: new Date(),
-    },
-  },
-};
-
-export const Islamic: Story = {
-  render: RenderDatePicker,
-  args: {
-    isRange: false,
-    initialValue: new Date("2024-02-06"),
-    calendar: "islamic-umalqura",
-    config: {
-      locale: "ar-EG",
-      weekStartsOn: "saturday",
-      showOtherDays: false,
-      otherDaysSelectable: false,
-      weekdayFormat: "narrow",
-      dayFormat: "numeric",
-      weekends: ["friday", "saturday"],
-
-      // yearRangeFrom: 1330,
-      // yearRangeTo: 1400,
-      // minDate: new Date("2024-01-01T00:00:00.000Z"),
-      // maxDate: new Date(),
-    },
-  },
-};
-
-export const GregoryInFa_IR: Story = {
-  render: RenderDatePicker,
-  args: {
-    isRange: false,
-    initialValue: new Date("2025-04-17T00:00:00"),
+    initialValue: new Date(),
     calendar: "gregory",
     config: {
-      locale: "fa-IR",
-      weekStartsOn: "saturday",
-      showOtherDays: false,
-      otherDaysSelectable: false,
-      weekdayFormat: "narrow",
-      dayFormat: "numeric",
-      weekends: ["thursday", "friday"],
-    },
-  },
-};
-
-export const PersianInEn_US: Story = {
-  render: RenderDatePicker,
-  args: {
-    isRange: false,
-    initialValue: new Date("2025-04-17T00:00:00"),
-    calendar: "persian",
-    config: {
       locale: "en-US",
-      weekStartsOn: "saturday",
+      weekStartsOn: "monday",
       showOtherDays: false,
       otherDaysSelectable: false,
-      weekdayFormat: "narrow",
+      weekdayFormat: "short",
       dayFormat: "numeric",
-      weekends: ["thursday", "friday"],
-
-      // yearRangeFrom: 1330,
-      // yearRangeTo: 1400,
-      // minDate: new Date("2024-01-01T00:00:00.000Z"),
-      // maxDate: new Date(),
+      weekends: ["saturday", "sunday"],
+      weekendSelectable: true,
     },
   },
 };
 
 export const ControlledComponent: Story = {
   render: RenderControlledDatePicker,
+  parameters: controlledSource,
   args: {
     isRange: false,
     initialValue: new Date("2024-02-06"),
@@ -276,41 +120,6 @@ export const ControlledComponent: Story = {
       dayFormat: "numeric",
       weekends: ["saturday", "sunday"],
       weekendSelectable: true,
-      // yearRangeFrom: 1330,
-      // yearRangeTo: 1400,
-      // minDate: new Date("2024-01-01T00:00:00.000Z"),
-      // maxDate: new Date(),
-    },
-  },
-};
-export const Holidays: Story = {
-  render: RenderDatePicker,
-  args: {
-    isRange: false,
-    initialValue: new Date("2024-02-06"),
-    calendar: "gregory",
-    config: {
-      locale: "en-US",
-      weekStartsOn: "monday",
-      showOtherDays: false,
-      otherDaysSelectable: false,
-      weekdayFormat: "short",
-      dayFormat: "numeric",
-      weekends: ["saturday", "sunday"],
-      weekendSelectable: true,
-      holidays: [
-        new Date("2024-02-08"),
-        new Date("2024-02-09"),
-        new Date("2024-02-10"),
-        new Date("2024-02-12"),
-        new Date("2024-02-21"),
-        new Date("2024-02-27"),
-      ],
-      holidaySelectable: false,
-      // yearRangeFrom: 1330,
-      // yearRangeTo: 1400,
-      // minDate: new Date("2024-01-01T00:00:00.000Z"),
-      // maxDate: new Date(),
     },
   },
 };

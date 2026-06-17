@@ -67,6 +67,21 @@ describe("Title component", () => {
     expect(titleElement).toHaveTextContent(mockCurrentMonthTitle);
   });
 
+  it("ignores non-Enter key presses", () => {
+    const { getByText } = render(
+      <DatePickerProvider initialValue={new Date("2024-08-01T00:00:00.000Z")}>
+        <Title />
+      </DatePickerProvider>
+    );
+
+    const titleElement = getByText("Aug 2024");
+
+    // a key other than Enter must not jump to the current month
+    fireEvent.keyDown(titleElement, { key: "ArrowDown" });
+
+    expect(titleElement).toHaveTextContent("Aug 2024");
+  });
+
   it("renders with custom className and style", () => {
     const { getByText } = render(
       <DatePickerProvider initialValue={new Date("2024-08-01T00:00:00.000Z")}>
@@ -90,5 +105,15 @@ describe("Title component", () => {
     const titleElement = getByText("August 24");
 
     expect(titleElement).toBeInTheDocument();
+  });
+
+  it("shows an offset month when monthOffset is provided (side-by-side calendars)", () => {
+    const { getByText } = render(
+      <DatePickerProvider initialValue={new Date("2024-08-01T00:00:00.000Z")}>
+        <Title monthOffset={1} />
+      </DatePickerProvider>
+    );
+
+    expect(getByText("Sep 2024")).toBeInTheDocument();
   });
 });

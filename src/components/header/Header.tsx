@@ -1,11 +1,20 @@
-import { useContext } from "react";
-import { PickerContext } from "../../store/pickerContext";
+import { HEADER } from "../../constants/classNames";
 import { classJoin } from "../../utils/classJoin";
-import ChevronLeft from "../icons/ChevronLeft";
-import ChevronRight from "../icons/ChevronRight";
+import HeaderMonthSelect from "./HeaderMonthSelect";
+import HeaderNextButton from "./HeaderNextButton";
+import HeaderPrevButton from "./HeaderPrevButton";
+import HeaderYearSelect from "./HeaderYearSelect";
 import { THeaderProps } from "./types";
 
+/**
+ * The default header: prev/next arrows + month/year `<select>` dropdowns in a
+ * fixed row. It is a thin composition over the standalone parts
+ * (`HeaderPrevButton`, `HeaderMonthSelect`, `HeaderYearSelect`,
+ * `HeaderNextButton`) — render those individually instead if you need a custom
+ * order/layout. Props and behaviour here are unchanged.
+ */
 function Header({
+  navigationStep = 1,
   rootClassName,
   rootStyles,
   prevButtonStyles,
@@ -27,108 +36,36 @@ function Header({
   yearSelectedOptionClassName,
   yearSelectedOptionStyles,
 }: THeaderProps) {
-  const {
-    goToNextMonth,
-    goToPrevMonth,
-    goToMonth,
-    goToYear,
-    monthInTheCalendar,
-    yearInTheCalendar,
-    monthsList,
-    yearsList,
-  } = useContext(PickerContext);
-
   return (
-    <div
-      className={classJoin(
-        "rhmdp-flex rhmdp-items-center rhmdp-justify-between rhmdp-py-4 rhmdp-select-none",
-        rootClassName
-      )}
-      style={rootStyles}
-    >
-      <div
-        className={classJoin("rhmdp-cursor-pointer", prevButtonClassName)}
-        style={prevButtonStyles}
-        role="button"
-        tabIndex={0}
-        aria-label="Previous Month"
-        onClick={() => goToPrevMonth?.()}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") goToPrevMonth?.();
-        }}
-      >
-        {leftIcon || <ChevronLeft />}
-      </div>
-      <select
-        onChange={(v) => {
-          goToMonth(parseInt(v.target.value, 10));
-        }}
-        style={monthSelectStyles}
+    <div className={classJoin(HEADER, rootClassName)} style={rootStyles}>
+      <HeaderPrevButton
+        navigationStep={navigationStep}
+        className={prevButtonClassName}
+        styles={prevButtonStyles}
+        icon={leftIcon}
+      />
+      <HeaderMonthSelect
         className={monthSelectClassName}
-        value={monthInTheCalendar}
-      >
-        {monthsList?.map((month) => (
-          <option
-            key={month.value}
-            value={month.value}
-            style={{
-              ...monthOptionStyles,
-              ...(month.value === monthInTheCalendar
-                ? monthSelectedOptionStyles
-                : {}),
-            }}
-            className={classJoin(
-              monthOptionClassName,
-              month.value === monthInTheCalendar
-                ? monthSelectedOptionClassName
-                : ""
-            )}
-          >
-            {month.label}
-          </option>
-        ))}
-      </select>
-
-      <select
-        onChange={(v) => {
-          goToYear(parseInt(v.target.value, 10));
-        }}
+        styles={monthSelectStyles}
+        optionClassName={monthOptionClassName}
+        optionStyles={monthOptionStyles}
+        selectedOptionClassName={monthSelectedOptionClassName}
+        selectedOptionStyles={monthSelectedOptionStyles}
+      />
+      <HeaderYearSelect
         className={yearSelectClassName}
-        style={yearSelectStyles}
-        value={yearInTheCalendar}
-      >
-        {yearsList?.map((year) => {
-          return (
-            <option
-              key={year}
-              value={year}
-              style={{
-                ...yearOptionStyles,
-                ...(year === yearInTheCalendar ? yearSelectedOptionStyles : {}),
-              }}
-              className={classJoin(
-                yearOptionClassName,
-                year === yearInTheCalendar ? yearSelectedOptionClassName : ""
-              )}
-            >
-              {year}
-            </option>
-          );
-        })}
-      </select>
-      <div
-        className={classJoin("rhmdp-cursor-pointer", nextButtonClassName)}
-        style={nextButtonStyles}
-        aria-label="Next Month"
-        role="button"
-        tabIndex={0}
-        onClick={() => goToNextMonth?.()}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") goToNextMonth?.();
-        }}
-      >
-        {rightIcon || <ChevronRight />}
-      </div>
+        styles={yearSelectStyles}
+        optionClassName={yearOptionClassName}
+        optionStyles={yearOptionStyles}
+        selectedOptionClassName={yearSelectedOptionClassName}
+        selectedOptionStyles={yearSelectedOptionStyles}
+      />
+      <HeaderNextButton
+        navigationStep={navigationStep}
+        className={nextButtonClassName}
+        styles={nextButtonStyles}
+        icon={rightIcon}
+      />
     </div>
   );
 }

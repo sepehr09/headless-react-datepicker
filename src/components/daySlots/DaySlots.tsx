@@ -3,15 +3,52 @@ import {
   KeyboardEvent,
   ReactNode,
   useContext,
+  useMemo,
   useRef,
-  useState,
 } from "react";
 import { defaultWeekStartsOn } from "../../constants/defaults";
 import { bindWeekDayToNumber } from "../../constants/weekdays";
 import { PickerContext } from "../../store/pickerContext";
 import { Day } from "../../types";
+import {
+  DAY_SLOTS,
+  DAY_SLOTS_CELL,
+  DAY_SLOTS_CELL_DISABLED,
+  DAY_SLOTS_CELL_EMPTY,
+  DAY_SLOTS_CELL_FIRST_OF_MONTH,
+  DAY_SLOTS_CELL_HOLIDAY,
+  DAY_SLOTS_CELL_IN_HOVERED_RANGE,
+  DAY_SLOTS_CELL_IN_RANGE,
+  DAY_SLOTS_CELL_OTHER_MONTH,
+  DAY_SLOTS_CELL_RANGE_END,
+  DAY_SLOTS_CELL_RANGE_START,
+  DAY_SLOTS_CELL_SELECTABLE,
+  DAY_SLOTS_CELL_SELECTED,
+  DAY_SLOTS_CELL_TODAY,
+  DAY_SLOTS_CELL_WEEKEND,
+  DAY_SLOTS_DAY,
+  DAY_SLOTS_DAY_DISABLED,
+  DAY_SLOTS_DAY_FIRST_OF_MONTH,
+  DAY_SLOTS_DAY_HOLIDAY,
+  DAY_SLOTS_DAY_IN_HOVERED_RANGE,
+  DAY_SLOTS_DAY_IN_RANGE,
+  DAY_SLOTS_DAY_OTHER_MONTH,
+  DAY_SLOTS_DAY_RANGE_END,
+  DAY_SLOTS_DAY_RANGE_START,
+  DAY_SLOTS_DAY_SELECTABLE,
+  DAY_SLOTS_DAY_SELECTED,
+  DAY_SLOTS_DAY_TODAY,
+  DAY_SLOTS_DAY_WEEKEND,
+  DAY_SLOTS_PLACEHOLDER,
+} from "../../constants/classNames";
 import { classJoin } from "../../utils/classJoin";
-import { isSameDay, isToday, isWithinInterval } from "../../utils/dateUtils";
+import { addCalendarMonths, getMonthSlots } from "../../utils/datePicker";
+import {
+  isSameDay,
+  isToday,
+  isWithinInterval,
+  startOfDay,
+} from "../../utils/dateUtils";
 import { IsSameMonth } from "../../utils/jalali";
 import { TDaySlots } from "./types";
 
@@ -19,6 +56,7 @@ function DaySlots(props: TDaySlots) {
   const {
     dayRenderer,
     onClickSlot: onClickSlotProp,
+    monthOffset,
     parentClassName,
     parentStyles,
     slotParentClassName,
@@ -78,16 +116,16 @@ function DaySlots(props: TDaySlots) {
   } = props;
 
   const {
-    daysOfMonth,
+    daysOfMonth: contextDaysOfMonth,
     config,
     selectedDay,
     handleClickSlot,
     calendar,
-    monthInTheCalendar,
-    firstDayOfMonth,
+    monthInTheCalendar: contextMonthInTheCalendar,
+    firstDayOfMonth: contextFirstDayOfMonth,
+    hoveredDate: hoveredItem,
+    handleHoverSlot,
   } = useContext(PickerContext);
-
-  const [hoveredItem, setHoveredItem] = useState<Date | undefined>(undefined);
 
   const {
     locale,
@@ -103,6 +141,31 @@ function DaySlots(props: TDaySlots) {
     weekStartsOn = defaultWeekStartsOn,
     allowBackwardRange,
   } = config || {};
+
+  /**
+   * When `monthOffset` is provided, this calendar renders a month other than
+   * the one in the context (offset by `monthOffset` months) so multiple
+   * calendars can be shown side-by-side. The shared state (selection, hover,
+   * navigation) still lives in the context, so everything stays in sync.
+   */
+  const offsetSlots = useMemo(() => {
+    if (!monthOffset || !contextFirstDayOfMonth || !calendar) return undefined;
+    return getMonthSlots({
+      currentDate: addCalendarMonths(
+        contextFirstDayOfMonth,
+        monthOffset,
+        calendar
+      ),
+      calendar,
+      weekStartsOn,
+    });
+  }, [monthOffset, contextFirstDayOfMonth, calendar, weekStartsOn]);
+
+  const daysOfMonth = offsetSlots?.daysOfMonth ?? contextDaysOfMonth;
+  const monthInTheCalendar =
+    offsetSlots?.monthInTheCalendar ?? contextMonthInTheCalendar;
+  const firstDayOfMonth =
+    offsetSlots?.firstDayOfMonth ?? contextFirstDayOfMonth;
 
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -143,8 +206,10 @@ function DaySlots(props: TDaySlots) {
   const IsRangeSelected = (date: Date) => {
     if (Array.isArray(selectedDay) && selectedDay?.[0] && selectedDay?.[1]) {
       return isWithinInterval(date, {
-        start: selectedDay[0].setHours(0, 0, 0, 0),
-        end: selectedDay[selectedDay?.length - 1].setHours(0, 0, 0, 0),
+        // `startOfDay` returns a new Date so we never mutate the stored
+        // selection (which would wipe the time set via `TimePicker`).
+        start: startOfDay(selectedDay[0]),
+        end: startOfDay(selectedDay[selectedDay.length - 1]),
       });
     }
     return false;
@@ -169,35 +234,30 @@ function DaySlots(props: TDaySlots) {
   };
 
   /**
-   * (otherDays and weekends) can be Enabled but NOT Selectable
+   * (otherDays and weekends) can be Enabled but NOT Selectable.
+   *
+   * This must mirror the guard order in `onClickSlot` exactly, otherwise a day
+   * can be styled as selectable (cursor: pointer) while clicks are ignored.
+   * In particular an other-month day is never selectable when
+   * `otherDaysSelectable` is false, even if it also falls on a (selectable)
+   * weekend or holiday.
    */
   const IsSelectable = ({
     isInWeekend,
     isInHoliday,
     isOtherMonth,
-    isDisabled,
+    isOutOfRange,
   }: {
     isInWeekend: boolean;
     isInHoliday: boolean;
     isOtherMonth: boolean;
-    isDisabled: boolean;
+    isOutOfRange: boolean;
   }): boolean => {
-    if (isOtherMonth) {
-      if (isInHoliday) {
-        return holidaySelectable;
-      }
-      if (isInWeekend) {
-        return weekendSelectable;
-      }
-      return otherDaysSelectable || false;
-    }
-    if (isInHoliday) {
-      return holidaySelectable;
-    }
-    if (isInWeekend) {
-      return weekendSelectable;
-    }
-    return !isDisabled;
+    if (isOtherMonth && !otherDaysSelectable) return false;
+    if (isOutOfRange) return false;
+    if (isInHoliday) return holidaySelectable;
+    if (isInWeekend) return weekendSelectable;
+    return true;
   };
 
   const IsInWeekend = (date: Date) => {
@@ -225,11 +285,18 @@ function DaySlots(props: TDaySlots) {
     }
 
     // check if hovered date is before the selected date
-    if (hoveredItem < selectedDay?.[0] && !allowBackwardRange) return false;
+    if (
+      startOfDay(hoveredItem) < startOfDay(selectedDay[0]) &&
+      !allowBackwardRange
+    ) {
+      return false;
+    }
 
+    // `startOfDay` returns a new Date so we never mutate the stored selection
+    // or the hovered date (which would wipe their time portion).
     return isWithinInterval(date, {
-      start: selectedDay[0].setHours(0, 0, 0, 0),
-      end: hoveredItem.setHours(0, 0, 0, 0),
+      start: startOfDay(selectedDay[0]),
+      end: startOfDay(hoveredItem),
     });
   };
 
@@ -296,26 +363,19 @@ function DaySlots(props: TDaySlots) {
     (daysOfMonth?.[0]?.getDay() - bindWeekDayToNumber[weekStartsOn] + 7) % 7;
 
   const handleMouseEnter = (date: Date) => {
-    if (
-      !Array.isArray(selectedDay) ||
-      (Array.isArray(selectedDay) && selectedDay?.[0] && selectedDay?.[1])
-    ) {
-      return;
-    }
-
-    setHoveredItem(date);
+    handleHoverSlot?.(date);
   };
 
   const handleMouseLeave = () => {
     if (!hoveredItem) return;
 
-    setHoveredItem(undefined);
+    handleHoverSlot?.(undefined);
   };
 
   return (
     <div
       className={classJoin(
-        "rhmdp-grid rhmdp-grid-cols-7 *:rhmdp-text-center",
+        DAY_SLOTS,
         parentClassName
       )}
       role="presentation"
@@ -324,7 +384,10 @@ function DaySlots(props: TDaySlots) {
     >
       {!!diff &&
         Array.from({ length: diff }, (_, i) => i).reduce<ReactNode[]>(
-          (acc) => [...acc, <div key={acc.length} style={{ height: 42 }} />],
+          (acc) => [
+            ...acc,
+            <div key={acc.length} className={DAY_SLOTS_PLACEHOLDER} />,
+          ],
           []
         )}
 
@@ -337,6 +400,8 @@ function DaySlots(props: TDaySlots) {
         const isStartOfRange = IsStartOfRange(date);
         const isEndOfRange = IsEndOfRange(date);
         const isDisabled = IsDisabled(date, isOtherMonth);
+        const isOutOfRange =
+          !!(minDate && date < minDate) || !!(maxDate && date > maxDate);
         const isInWeekend = IsInWeekend(date);
         const isInHoliday = IsInHoliday(date);
         const isFirstDayOfMonth = IsFirstDayOfMonth(date);
@@ -344,13 +409,19 @@ function DaySlots(props: TDaySlots) {
           isInWeekend,
           isInHoliday,
           isOtherMonth,
-          isDisabled,
+          isOutOfRange,
         });
 
         const formattedDay = dayFormatter(date);
         const ariaFormattedDay = ariaDayFormatter(date);
 
-        if (!showOtherDays && isOtherMonth) return <div key={date.getTime()} />;
+        if (!showOtherDays && isOtherMonth)
+          return (
+            <div
+              key={date.getTime()}
+              className={classJoin(DAY_SLOTS_CELL, DAY_SLOTS_CELL_EMPTY)}
+            />
+          );
 
         /* -------------------------------------------------------------------------- */
         /*                     render custom component if provided                    */
@@ -404,45 +475,61 @@ function DaySlots(props: TDaySlots) {
           ...(isDisabled && disableStyles),
         };
 
+        // State text color, range fills and rounded range-ends are all styled
+        // from `src/styles.css` via the BEM modifier classes below (the day
+        // cell's color priority — other-month > disabled > holiday > weekend >
+        // today > base — is encoded by the rule order there).
         const parentClassNames = classJoin(
-          "rhmdp-border rhmdp-border-transparent rhmdp-h-max",
+          DAY_SLOTS_CELL,
           slotParentClassName,
-          IsToday && "rhmdp-text-blue-600",
+          IsToday && DAY_SLOTS_CELL_TODAY,
           IsToday && todayParentClassName,
+          isSelectable && DAY_SLOTS_CELL_SELECTABLE,
           isSelectable && selectableParentClassName,
+          isSelected && DAY_SLOTS_CELL_SELECTED,
           isSelected && selectedParentClassName,
-          isInSelectedRange && "rhmdp-bg-[#EAEAEC]",
+          isInSelectedRange && DAY_SLOTS_CELL_IN_RANGE,
           isInSelectedRange && inSelectedRangeParentClassName,
-          isInHoveredRange && "rhmdp-bg-[#EAEAEC]",
+          isInHoveredRange && DAY_SLOTS_CELL_IN_HOVERED_RANGE,
           isInHoveredRange && inHoveredRangeParentClassName,
-          isStartOfRange && "rhmdp-rounded-s-lg",
+          isStartOfRange && DAY_SLOTS_CELL_RANGE_START,
           isStartOfRange && startOfRangeParentClassName,
-          isEndOfRange && "rhmdp-rounded-e-lg",
+          isEndOfRange && DAY_SLOTS_CELL_RANGE_END,
           isEndOfRange && endOfRangeParentClassName,
-          isInWeekend && "rhmdp-text-red-500",
+          isInWeekend && DAY_SLOTS_CELL_WEEKEND,
           isInWeekend && weekendParentClassName,
-          isInHoliday && "rhmdp-text-red-500",
+          isInHoliday && DAY_SLOTS_CELL_HOLIDAY,
           isInHoliday && holidayParentClassName,
-          isDisabled && "rhmdp-text-gray-400",
+          isOtherMonth && DAY_SLOTS_CELL_OTHER_MONTH,
+          isFirstDayOfMonth && DAY_SLOTS_CELL_FIRST_OF_MONTH,
+          isDisabled && DAY_SLOTS_CELL_DISABLED,
           isDisabled && disableParentClassName
         );
 
         const dayClassNames = classJoin(
-          "rhmdp-p-2 rhmdp-rounded-lg rhmdp-h-full",
+          DAY_SLOTS_DAY,
           slotClassName,
+          IsToday && DAY_SLOTS_DAY_TODAY,
           IsToday && todayClassName,
-          isSelectable ? "rhmdp-cursor-pointer" : "rhmdp-cursor-not-allowed",
-          isSelectable && !isSelected && "hover:rhmdp-bg-gray-300",
+          isSelectable && DAY_SLOTS_DAY_SELECTABLE,
           isSelectable && selectableClassName,
-          isSelected &&
-            "rhmdp-bg-blue-500 hover:rhmdp-bg-blue-500 rhmdp-text-white",
+          isSelected && DAY_SLOTS_DAY_SELECTED,
           isSelected && selectedClassName,
+          isInSelectedRange && DAY_SLOTS_DAY_IN_RANGE,
           isInSelectedRange && inSelectedRangeClassName,
+          isInHoveredRange && DAY_SLOTS_DAY_IN_HOVERED_RANGE,
           isInHoveredRange && inHoveredRangeClassName,
+          isStartOfRange && DAY_SLOTS_DAY_RANGE_START,
           isStartOfRange && startOfRangeClassName,
+          isEndOfRange && DAY_SLOTS_DAY_RANGE_END,
           isEndOfRange && endOfRangeClassName,
+          isInWeekend && DAY_SLOTS_DAY_WEEKEND,
           isInWeekend && weekendClassName,
+          isInHoliday && DAY_SLOTS_DAY_HOLIDAY,
           isInHoliday && holidayClassName,
+          isOtherMonth && DAY_SLOTS_DAY_OTHER_MONTH,
+          isFirstDayOfMonth && DAY_SLOTS_DAY_FIRST_OF_MONTH,
+          isDisabled && DAY_SLOTS_DAY_DISABLED,
           isDisabled && disableClassName
         );
 

@@ -1,16 +1,19 @@
 import { createContext } from "react";
 import { TDatePickerProps, TMonthListItem } from "../types";
+import { TTimeParts } from "../utils/time";
 
 export type TPickerContext<IsRange extends boolean> = {
   /**
    * Function to navigate to the next month
+   * @param step number of months to move forward (default: 1)
    */
-  goToNextMonth: () => void;
+  goToNextMonth: (step?: number) => void;
 
   /**
    * Function to navigate to the previous month
+   * @param step number of months to move backward (default: 1)
    */
-  goToPrevMonth: () => void;
+  goToPrevMonth: (step?: number) => void;
 
   /**
    * Function to navigate to a specific date
@@ -76,11 +79,36 @@ export type TPickerContext<IsRange extends boolean> = {
   selectedDay?: Date | Date[] | undefined;
 
   /**
+   * The date currently being hovered while picking a range. Shared across all
+   * `DaySlots` so the hovered range preview spans side-by-side calendars.
+   * @type {Date | undefined}
+   */
+  hoveredDate?: Date | undefined;
+
+  /**
+   * Callback when a day slot is hovered while picking a range. Pass `undefined`
+   * to clear the hover. Shared across side-by-side calendars.
+   * @param date the hovered date, or `undefined` to clear
+   */
+  handleHoverSlot?: (date: Date | undefined) => void;
+
+  /**
    * Callback function when a date is clicked
    * @param date
    * @returns
    */
   handleClickSlot?: (date: Date) => void;
+
+  /**
+   * Update the time (hours/minutes/seconds) of the current selection while
+   * keeping its calendar day. Any part left out keeps its current value. For a
+   * range picker, `index` chooses which end to update (`0` = start, `1` = end).
+   * If nothing is selected yet, the time is applied to the day currently shown
+   * in the calendar.
+   * @param time the time parts to set
+   * @param index which end of a range to update (default `0`)
+   */
+  handleChangeTime?: (time: Partial<TTimeParts>, index?: number) => void;
 
   /**
    * Current month in the calendar

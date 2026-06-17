@@ -1,41 +1,25 @@
-const prefixesList = [
-  "hover:",
-  "p-",
-  "bg-",
-  "rounded-",
-  "text-",
-  "h-",
-  "border-",
-  "cursor-",
-  "font-",
-  "grid-",
-];
-
-/** used for concatenating multiple classNames */
+/**
+ * Combines multiple classNames into a single string.
+ *
+ * Falsy values (so `condition && "class"` works) are ignored and exact
+ * duplicates are removed. It intentionally does NOT resolve tailwind conflicts
+ * (e.g. `text-sm` vs `text-lg`) — non-conflicting utilities that share a prefix
+ * like `text-green-500` and `text-2xl` are all kept, and conflicting ones are
+ * left for the cascade to resolve. Components must therefore avoid emitting two
+ * conflicting utilities for the same element themselves.
+ */
 export const classJoin = (
   ...classes: (string | false | undefined | null)[]
 ): string => {
-  const classMap: { [key: string]: string } = {};
+  const seen = new Set<string>();
 
-  const splitClasses = classes.map((c) => c && c?.split(" ")).flat();
-
-  splitClasses.filter(Boolean).forEach((className) => {
-    if (!className) return;
-
-    const prefix = prefixesList.find(
-      (p) => className.startsWith(p) || className.startsWith(`rhmdp-${p}`)
-      // we also check for rhmdp- prefix
-      // because we use custom tailwind prefix (rhmdp-)
-      // so if user uses the default tailwind prefix (e.g. bg-)
-      // we should also remove the rhmdp-bg- to avoid duplication
-    );
-
-    if (prefix) {
-      classMap[prefix] = className;
-    } else {
-      classMap[className] = className;
+  for (const group of classes) {
+    if (!group) continue;
+    for (const className of group.split(" ")) {
+      const trimmed = className.trim();
+      if (trimmed) seen.add(trimmed);
     }
-  });
+  }
 
-  return Object.values(classMap).join(" ").trim();
+  return Array.from(seen).join(" ");
 };

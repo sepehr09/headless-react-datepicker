@@ -1,0 +1,1 @@
+import{j as r}from"./jsx-runtime-BToJpacT.js";const t=o=>r.jsx("div",{dir:"rtl",children:r.jsx(o,{})});t.__docgenInfo={description:"Wraps a story in an RTL container so it renders right-to-left synchronously\n(no effect/flash). Apply to Persian (and other RTL) stories via\n`decorators: [rtlDecorator]`.",methods:[],displayName:"rtlDecorator"};export{t as r};

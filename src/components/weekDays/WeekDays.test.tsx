@@ -63,6 +63,30 @@ describe("WeekDays component", () => {
     });
   });
 
+  it("marks configured weekend days with the weekend modifier class", () => {
+    const { container } = render(
+      <DatePickerProvider
+        initialValue={new Date("2024-08-01T00:00:00.000Z")}
+        config={{ weekdayFormat: "long", weekends: ["friday", "saturday"] }}
+      >
+        <WeekDays rootClassName="root" />
+      </DatePickerProvider>
+    );
+
+    const weekendDays = container.querySelectorAll(
+      ".rhmdp-weekDays__day--weekend"
+    );
+    expect(weekendDays).toHaveLength(2);
+
+    // the two weekend columns are exactly friday and saturday
+    expect(
+      container.querySelector(".rhmdp-weekDays__day--friday")
+    ).toHaveClass("rhmdp-weekDays__day--weekend");
+    expect(
+      container.querySelector(".rhmdp-weekDays__day--saturday")
+    ).toHaveClass("rhmdp-weekDays__day--weekend");
+  });
+
   it("renderer prop", () => {
     const mockRenderer = vitest.fn();
 

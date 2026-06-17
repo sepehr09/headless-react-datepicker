@@ -1,1 +1,18 @@
-@tailwind base;
+/* Minimal reset for the Storybook demo pages (replaces Tailwind's preflight,
+   which the library no longer depends on). Not shipped with the package. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Demo-only font for the Storybook pages. The shipped `styles.css` inherits the
+   host app's font (via `--rhmdp-font-family`, default `inherit`), so the system
+   stack that used to live there now lives here — it styles the showcase without
+   the package imposing a font on consumers. */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, ui-sans-serif, system-ui,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
+}

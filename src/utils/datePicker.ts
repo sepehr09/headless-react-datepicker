@@ -1,7 +1,60 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { defaultWeekStartsOn } from "../constants/defaults";
 import { bindWeekDayToNumber } from "../constants/weekdays";
 import { TCalendar, TDay } from "../types";
 import { eachDayOfInterval, endOfWeek, startOfWeek } from "./dateUtils";
+
+/**
+ * Build the gregorian `Date` at local midnight on the first day of the given
+ * month/year in `calendar`. Constructed from numeric components (not a parsed
+ * date string) so it is unambiguously local time regardless of the host
+ * timezone — see the note on `addCalendarMonths`.
+ */
+export function firstDayOfCalendarMonth(
+  year: number,
+  month: number,
+  calendar: TCalendar
+): Date {
+  const { isoYear, isoMonth, isoDay } = Temporal.PlainDate.from({
+    year,
+    month,
+    day: 1,
+    calendar,
+  }).getISOFields();
+
+  return new Date(isoYear, isoMonth - 1, isoDay);
+}
+
+/**
+ * Add (or subtract) a number of months to a date, respecting the given
+ * calendar (e.g. persian, islamic, ...). Returns the gregorian `Date` that
+ * lands on the first day of the resulting month in that calendar.
+ *
+ * Useful for rendering side-by-side calendars where the second calendar shows
+ * the month after the first one.
+ *
+ * @example
+ * // Show the month after the currently displayed persian month:
+ * addCalendarMonths(firstDayOfMonth, 1, "persian")
+ */
+export function addCalendarMonths(
+  date: Date,
+  months: number,
+  calendar: TCalendar
+): Date {
+  const { year, month } = getMonthInfo(date, calendar);
+
+  const shifted = Temporal.PlainDate.from({
+    year,
+    month,
+    day: 1,
+    calendar,
+  })
+    .add({ months })
+    .getISOFields();
+
+  return new Date(shifted.isoYear, shifted.isoMonth - 1, shifted.isoDay);
+}
 
 export function getMonthInfo(date: Date, calendar: TCalendar) {
   const startDate = new Date(new Date(date).setHours(0, 0, 0, 0));

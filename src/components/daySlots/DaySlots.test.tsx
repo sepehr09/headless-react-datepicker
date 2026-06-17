@@ -609,6 +609,176 @@ describe("DaySlots component", () => {
     });
   });
 
+  it("should className and styles be applied on holidays and click disabled when holidaySelectable is false", () => {
+    const mockOnChange = vitest.fn();
+
+    const { container } = render(
+      <DatePickerProvider
+        defaultStartDate={new Date("2024-08-01T00:00:00.000Z")}
+        onChange={mockOnChange}
+        config={{
+          holidays: [new Date("2024-08-15T00:00:00.000Z")],
+          holidaySelectable: false,
+        }}
+      >
+        <DaySlots
+          slotParentClassName="slotParentClassName"
+          holidayParentClassName="holidayParentClassName"
+          holidayParentStyles={{ backgroundColor: "#e1e1e1" }}
+          holidayClassName="holidayClassName"
+          holidayStyles={{ backgroundColor: "#e2e2e2" }}
+        />
+      </DatePickerProvider>
+    );
+
+    const slotParentElements = container.querySelectorAll(
+      ".slotParentClassName"
+    );
+
+    const holiday = slotParentElements[14]; // August 15, 2024
+
+    // parent element
+    expect(holiday).toHaveClass("holidayParentClassName");
+    expect(holiday).toHaveStyle("background-color: #e1e1e1"); // holidayParentStyles
+
+    // slot element
+    expect(holiday.firstChild).toHaveClass("holidayClassName");
+    expect(holiday.firstChild).toHaveStyle("background-color: #e2e2e2"); // holidayStyles
+
+    fireEvent.click(holiday.firstChild!);
+    expect(mockOnChange).not.toHaveBeenCalled();
+  });
+
+  it("should allow selecting a holiday when holidaySelectable is true", () => {
+    const mockOnChange = vitest.fn();
+
+    const { container } = render(
+      <DatePickerProvider
+        defaultStartDate={new Date("2024-08-01T00:00:00.000Z")}
+        onChange={mockOnChange}
+        config={{
+          holidays: [new Date("2024-08-15T00:00:00.000Z")],
+          holidaySelectable: true,
+        }}
+      >
+        <DaySlots slotParentClassName="slotParentClassName" />
+      </DatePickerProvider>
+    );
+
+    const slotParentElements = container.querySelectorAll(
+      ".slotParentClassName"
+    );
+
+    fireEvent.click(slotParentElements[14].firstChild!); // August 15, 2024
+
+    expect(mockOnChange).toHaveBeenCalledWith(
+      new Date("2024-08-15T00:00:00.000Z")
+    );
+  });
+
+  it("should preview a hovered range while picking and clear it on mouse leave", () => {
+    const { container } = render(
+      <DatePickerProvider
+        defaultStartDate={new Date("2024-08-01T00:00:00.000Z")}
+        isRange
+      >
+        <DaySlots
+          slotParentClassName="slotParentClassName"
+          inHoveredRangeParentClassName="inHoveredRangeParentClassName"
+          inHoveredRangeClassName="inHoveredRangeClassName"
+        />
+      </DatePickerProvider>
+    );
+
+    const slotParentElements = container.querySelectorAll(
+      ".slotParentClassName"
+    );
+
+    // start a range on August 7, 2024
+    fireEvent.click(slotParentElements[6].firstChild!);
+
+    // hover August 11, 2024 -> days in between get the hovered-range styles
+    fireEvent.mouseEnter(slotParentElements[10]);
+
+    const inBetween = slotParentElements[8]; // August 9, 2024
+    expect(inBetween).toHaveClass("inHoveredRangeParentClassName");
+    expect(inBetween.firstChild).toHaveClass("inHoveredRangeClassName");
+
+    // leaving clears the hovered range preview
+    fireEvent.mouseLeave(slotParentElements[10]);
+    expect(inBetween).not.toHaveClass("inHoveredRangeParentClassName");
+  });
+
+  it("does not preview a backward hover when allowBackwardRange is false", () => {
+    const { container } = render(
+      <DatePickerProvider
+        defaultStartDate={new Date("2024-08-01T00:00:00.000Z")}
+        isRange
+        config={{ allowBackwardRange: false }}
+      >
+        <DaySlots
+          slotParentClassName="slotParentClassName"
+          inHoveredRangeParentClassName="inHoveredRangeParentClassName"
+        />
+      </DatePickerProvider>
+    );
+
+    const slotParentElements = container.querySelectorAll(
+      ".slotParentClassName"
+    );
+
+    // start a range on August 15, 2024
+    fireEvent.click(slotParentElements[14].firstChild!);
+
+    // hover August 9, 2024 (before the start) -> no preview
+    fireEvent.mouseEnter(slotParentElements[8]);
+
+    const before = slotParentElements[10]; // August 11, 2024
+    expect(before).not.toHaveClass("inHoveredRangeParentClassName");
+  });
+
+  it("does not preview a hovered range once both ends are selected", () => {
+    const { container } = render(
+      <DatePickerProvider
+        defaultStartDate={new Date("2024-08-01T00:00:00.000Z")}
+        isRange
+      >
+        <DaySlots
+          slotParentClassName="slotParentClassName"
+          inHoveredRangeParentClassName="inHoveredRangeParentClassName"
+        />
+      </DatePickerProvider>
+    );
+
+    const slotParentElements = container.querySelectorAll(
+      ".slotParentClassName"
+    );
+
+    // complete a range: August 7 -> August 11
+    fireEvent.click(slotParentElements[6].firstChild!);
+    fireEvent.click(slotParentElements[10].firstChild!);
+
+    // hovering after the range is complete adds no preview styles
+    fireEvent.mouseEnter(slotParentElements[14]);
+
+    const inBetween = slotParentElements[8]; // August 9, 2024
+    expect(inBetween).not.toHaveClass("inHoveredRangeParentClassName");
+  });
+
+  it("renders an offset month when monthOffset is provided (side-by-side calendars)", () => {
+    const { container } = render(
+      <DatePickerProvider initialValue={new Date("2024-08-01T00:00:00.000Z")}>
+        <DaySlots monthOffset={1} slotClassName="slotClassName" />
+      </DatePickerProvider>
+    );
+
+    const slotElements = container.querySelectorAll(".slotClassName");
+
+    // September 2024 has 30 days
+    expect(slotElements).toHaveLength(30);
+    expect(slotElements[0]).toHaveAttribute("aria-label", "September 1, 2024");
+  });
+
   it("should up, down, left, right arrow keys works when focus on selected slot", () => {
     const mockOnChange = vitest.fn();
 
@@ -661,5 +831,58 @@ describe("DaySlots component", () => {
 
     const upSlot = getByLabelText(container, "August 1, 2024");
     expect(upSlot).toHaveFocus();
+  });
+
+  it("emits stable BEM class hooks for CSS-only styling", () => {
+    const { container } = render(
+      <DatePickerProvider
+        isRange
+        value={[new Date(2024, 7, 10), new Date(2024, 7, 20)]}
+      >
+        <DaySlots />
+      </DatePickerProvider>
+    );
+
+    // root + a stable day hook on every rendered day
+    expect(container.querySelector(".rhmdp-daySlots")).toBeInTheDocument();
+    expect(
+      container.querySelectorAll(".rhmdp-daySlots__day").length
+    ).toBeGreaterThan(0);
+
+    // state modifiers for the range
+    expect(
+      container.querySelector(".rhmdp-daySlots__day--range-start")
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector(".rhmdp-daySlots__day--range-end")
+    ).toBeInTheDocument();
+    expect(
+      container.querySelectorAll(".rhmdp-daySlots__day--in-range").length
+    ).toBeGreaterThan(0);
+    // both the cell (parent) and the day expose the selected hook
+    expect(
+      container.querySelector(".rhmdp-daySlots__cell--selected")
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector(".rhmdp-daySlots__day--selected")
+    ).toBeInTheDocument();
+  });
+
+  it("does not mutate the selected range dates' time while rendering", () => {
+    // Rendering the range used to call `.setHours(0,0,0,0)` on the selected
+    // dates in place, wiping the time portion (breaking TimePicker).
+    const start = new Date(2024, 7, 10, 9, 30, 0);
+    const end = new Date(2024, 7, 20, 18, 45, 0);
+
+    render(
+      <DatePickerProvider isRange value={[start, end]}>
+        <DaySlots slotClassName="slotClassName" />
+      </DatePickerProvider>
+    );
+
+    expect(start.getHours()).toBe(9);
+    expect(start.getMinutes()).toBe(30);
+    expect(end.getHours()).toBe(18);
+    expect(end.getMinutes()).toBe(45);
   });
 });

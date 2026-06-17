@@ -7,29 +7,59 @@ export default [
   {
     input: "src/index.ts",
     output: [{ dir: "dist/esm", format: "esm" }],
-    external: ["react", "react-dom", "react/jsx-runtime"],
+    external: [
+      "react",
+      "react-dom",
+      "react/jsx-runtime",
+      "@js-temporal/polyfill",
+    ],
     plugins: [
       nodeResolve(),
       typescript({
         tsconfig: "./tsconfig.json",
         useTsconfigDeclarationDir: true,
+        include: ["src/**/*.ts", "src/**/*.tsx"],
+        // keep test/story files out of the published bundle's typecheck
+        tsconfigOverride: {
+          exclude: [
+            "src/**/*.test.ts",
+            "src/**/*.test.tsx",
+            "src/**/*.stories.tsx",
+            "src/stories",
+          ],
+        },
       }),
       terser(),
     ],
   },
   {
     input: "src/index.ts",
-    output: [{ dir: "dist/cjs", format: "cjs" }],
-    external: ["react", "react-dom", "react/jsx-runtime"],
+    output: [
+      { dir: "dist/cjs", format: "cjs", entryFileNames: "index.cjs" },
+    ],
+    external: [
+      "react",
+      "react-dom",
+      "react/jsx-runtime",
+      "@js-temporal/polyfill",
+    ],
     plugins: [
       nodeResolve(),
       typescript({
         tsconfig: "./tsconfig.cjs.json",
         useTsconfigDeclarationDir: true,
+        include: ["src/**/*.ts", "src/**/*.tsx"],
         tsconfigOverride: {
           compilerOptions: {
             module: "esnext",
           },
+          // keep test/story files out of the published bundle's typecheck
+          exclude: [
+            "src/**/*.test.ts",
+            "src/**/*.test.tsx",
+            "src/**/*.stories.tsx",
+            "src/stories",
+          ],
         },
       }),
       terser(),
@@ -44,7 +74,7 @@ export default [
     ],
     plugins: [
       postcss({
-        plugins: [require("tailwindcss"), require("autoprefixer")],
+        plugins: [require("autoprefixer")],
         extract: true,
         minimize: true,
         config: false,

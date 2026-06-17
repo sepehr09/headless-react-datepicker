@@ -1,3 +1,422 @@
-/* @tailwind base; */
-@tailwind components;
-@tailwind utilities;
+/**
+ * Default styles for react-headless-jalali-datepicker.
+ *
+ * This file is plain CSS (no Tailwind). Every rule targets the BEM class hooks
+ * exported from `src/constants/classNames.ts`, and every color / size / spacing
+ * reads from a `--rhmdp-*` CSS variable with the original default as a fallback.
+ * Re-theme by setting any variable up the tree — no `className` / inline-style
+ * overrides needed. See the README "Theming with CSS variables".
+ *
+ * Variable names follow `--rhmdp-<scope>-[state-]<property>` (scope ∈ day |
+ * weekday | title | arrow | header | time | panel).
+ *
+ * ── Override model ──────────────────────────────────────────────────────────
+ * The whole file lives in a single low-priority cascade layer (`@layer rhmdp`)
+ * and every themeable rule is wrapped in `:where(...)` so it contributes ZERO
+ * specificity. Together this means the default look is a genuine *fallback*:
+ *   - any consumer `className` (e.g. a Tailwind utility) or inline `style` wins,
+ *     even though `styles.css` is usually imported AFTER the consumer's CSS;
+ *   - unlayered consumer styles (and later cascade layers, e.g. Tailwind v4's
+ *     `@layer utilities`) always beat these defaults regardless of load order.
+ * CSS-variable theming is unaffected — custom-property resolution is independent
+ * of selector specificity, so `var(--token, default)` still themes everything.
+ * Internal precedence (e.g. today > weekend > holiday > disabled > other-month)
+ * still works because, at equal (zero) specificity, source order decides.
+ *
+ * Consumers using native cascade layers (Tailwind v4) can pin the order with:
+ *   @layer rhmdp, theme, base, components, utilities;
+ */
+
+@layer rhmdp;
+
+@layer rhmdp {
+  /* ----------------------------- scoped reset ------------------------------ */
+  /* Structural baseline kept at normal specificity (not `:where()`) so the
+     library's border-box model isn't accidentally lost. */
+  .rhmdp-daySlots,
+  .rhmdp-daySlots *,
+  .rhmdp-weekDays,
+  .rhmdp-weekDays *,
+  .rhmdp-header,
+  .rhmdp-header *,
+  .rhmdp-panelHeader,
+  .rhmdp-panelHeader *,
+  .rhmdp-timePicker,
+  .rhmdp-timePicker *,
+  .rhmdp-title {
+    box-sizing: border-box;
+    line-height: 1.5;
+  }
+
+  /* Base font — inherits the host app's font by default (consistent with every
+     other typographic token here, all of which default to `inherit`). Set
+     `--rhmdp-font-family` up the tree to give the calendar its own stack, e.g. an
+     iOS/system-native one: `-apple-system, BlinkMacSystemFont, ui-sans-serif,
+     system-ui, sans-serif`. */
+  :where(
+      .rhmdp-title,
+      .rhmdp-weekDays,
+      .rhmdp-header,
+      .rhmdp-header__monthSelect,
+      .rhmdp-header__yearSelect,
+      .rhmdp-timePicker__value,
+      .rhmdp-timePicker__button,
+      .rhmdp-panelHeader,
+      .rhmdp-panelHeader__label,
+      .rhmdp-daySlots,
+      .rhmdp-timePicker,
+      .rhmdp-panelHeader__grid
+    ) {
+    font-family: var(--rhmdp-font-family, inherit);
+  }
+
+  /* -------------------------------- Title ---------------------------------- */
+  :where(.rhmdp-title) {
+    cursor: pointer;
+    color: var(--rhmdp-title-text, inherit);
+    font-weight: var(--rhmdp-title-weight, 600);
+    font-size: var(--rhmdp-title-size, 1.5rem);
+    line-height: 2rem;
+  }
+
+  /* -------------------------------- WeekDays -------------------------------- */
+  :where(.rhmdp-weekDays) {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  :where(.rhmdp-weekDays__day) {
+    text-align: center;
+    color: var(--rhmdp-weekday-text, inherit);
+    font-weight: var(--rhmdp-weekday-weight, 600);
+    font-size: var(--rhmdp-weekday-size, inherit);
+  }
+
+  /* -------------------------------- DaySlots -------------------------------- */
+  /* By default cells SHARE single borders: each cell draws only its start + top
+     edge (width `--rhmdp-day-border-width`) and the grid supplies the missing end +
+     bottom edge, so adjacent borders never double up (needs cells touching —
+     default `--rhmdp-day-gap` is 0 — which also keeps range fills continuous).
+
+     `--rhmdp-day-full-border-width` adds a FULL border on every cell (all four
+     sides). It's a width, not a real boolean: 0 = off (default, shared borders),
+     set it to your border width (typically the same as `--rhmdp-day-border-width`)
+     = on. Intended for gapped / card grids (e.g. the Crimson Grid theme): with a
+     gap the cells are separated so full borders don't double, and the grid's own
+     trailing edge is removed via the calc below (border-width minus full-width). */
+  :where(.rhmdp-daySlots) {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: var(--rhmdp-day-gap, 0px);
+    border-inline-end: calc(
+        var(--rhmdp-day-border-width, 1px) -
+          var(--rhmdp-day-full-border-width, 0px)
+      )
+      solid var(--rhmdp-day-border, transparent);
+    border-block-end: calc(
+        var(--rhmdp-day-border-width, 1px) -
+          var(--rhmdp-day-full-border-width, 0px)
+      )
+      solid var(--rhmdp-day-border, transparent);
+  }
+
+  :where(.rhmdp-daySlots > *) {
+    text-align: center;
+  }
+
+  /* cell = the grid square (holds range fill, border and state text color) */
+  :where(.rhmdp-daySlots__cell) {
+    height: max-content;
+    border-inline-start: var(--rhmdp-day-border-width, 1px) solid
+      var(--rhmdp-day-border, transparent);
+    border-block-start: var(--rhmdp-day-border-width, 1px) solid
+      var(--rhmdp-day-border, transparent);
+    border-inline-end: var(--rhmdp-day-full-border-width, 0px) solid
+      var(--rhmdp-day-border, transparent);
+    border-block-end: var(--rhmdp-day-full-border-width, 0px) solid
+      var(--rhmdp-day-border, transparent);
+    color: var(--rhmdp-day-text, inherit);
+  }
+
+  /* state text colors — ordered low→high priority so the later rule wins for a
+     cell that matches several (other-month > disabled > holiday > weekend > today) */
+  :where(.rhmdp-daySlots__cell--today) {
+    color: var(--rhmdp-day-today-text, #007aff);
+  }
+  :where(.rhmdp-daySlots__cell--weekend) {
+    color: var(--rhmdp-day-weekend-text, #8e8e93);
+  }
+  :where(.rhmdp-daySlots__cell--holiday) {
+    color: var(--rhmdp-day-holiday-text, #ff3b30);
+  }
+  :where(.rhmdp-daySlots__cell--disabled) {
+    color: var(--rhmdp-day-disabled-text, #c7c7cc);
+  }
+  :where(.rhmdp-daySlots__cell--other-month) {
+    color: var(--rhmdp-day-muted-text, #c7c7cc);
+  }
+
+  /* range fills sit on the cell so they span edge-to-edge */
+  :where(.rhmdp-daySlots__cell--in-range) {
+    background-color: var(--rhmdp-day-range-bg, #e6f0ff);
+  }
+  :where(.rhmdp-daySlots__cell--in-hovered-range) {
+    background-color: var(--rhmdp-day-range-hover-bg, #f2f7ff);
+  }
+
+  /* the cell currently under the cursor is the tentative end of the hovered-range
+     preview — round its end side so the fill matches the hovered day's pill */
+  :where(.rhmdp-daySlots__cell--in-hovered-range:hover) {
+    border-start-end-radius: var(--rhmdp-day-radius, 8px);
+    border-end-end-radius: var(--rhmdp-day-radius, 8px);
+  }
+
+  /* rounded range ends (logical, so they flip in RTL) */
+  :where(.rhmdp-daySlots__cell--range-start) {
+    border-start-start-radius: var(--rhmdp-day-radius, 8px);
+    border-end-start-radius: var(--rhmdp-day-radius, 8px);
+  }
+  :where(.rhmdp-daySlots__cell--range-end) {
+    border-start-end-radius: var(--rhmdp-day-radius, 8px);
+    border-end-end-radius: var(--rhmdp-day-radius, 8px);
+  }
+
+  /* day = the inner pill (padding, radius, hover / selected background)
+     `line-height` is pinned in the scoped reset (unitless, so the line box
+     scales with font-size, not the font's glyph metrics) — otherwise Persian
+     numerals (taller Arabic-script line box) make the cells grow vs. Latin
+     digits. Centering + `min-height` keep every calendar's cells uniform and
+     aligned with the leading placeholders. */
+  :where(.rhmdp-daySlots__day) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: var(--rhmdp-day-height, 1.75rem);
+    padding: var(--rhmdp-day-padding, 0.5rem);
+    border-radius: var(--rhmdp-day-radius, 8px);
+    font-weight: var(--rhmdp-day-weight, inherit);
+    font-size: var(--rhmdp-day-size, inherit);
+    cursor: not-allowed;
+  }
+
+  /* leading empty cells before the 1st of the month — match the day height so
+     the first row aligns with the rest of the grid */
+  :where(.rhmdp-daySlots__placeholder) {
+    height: var(--rhmdp-day-height, 1.75rem);
+  }
+
+  :where(.rhmdp-daySlots__day--selectable) {
+    cursor: pointer;
+  }
+
+  /* hover on a selectable, not-yet-selected day */
+  :where(
+      .rhmdp-daySlots__day--selectable:not(.rhmdp-daySlots__day--selected):hover
+    ) {
+    background-color: var(--rhmdp-day-hover-bg, inherit);
+    color: var(--rhmdp-day-hover-text, inherit);
+  }
+
+  /* selected day (keeps its background on hover too). `position: relative` lifts
+     it into the positioned paint phase — above the static sibling cells — so a
+     box-shadow / glow on the range ends isn't clipped by the next cell's fill.
+     No offsets are set, so layout is unchanged. */
+  :where(.rhmdp-daySlots__day--selected) {
+    position: relative;
+    background-color: var(--rhmdp-day-selected-bg, #007aff);
+    color: var(--rhmdp-day-selected-text, #ffffff);
+  }
+
+  /* --------------------------- Header / PanelHeader ------------------------- */
+  :where(.rhmdp-header, .rhmdp-panelHeader) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    user-select: none;
+  }
+
+  /* prev / next arrow buttons — shared `arrow` tokens */
+  :where(
+      .rhmdp-header__prevButton,
+      .rhmdp-header__nextButton,
+      .rhmdp-panelHeader__prevButton,
+      .rhmdp-panelHeader__nextButton
+    ) {
+    display: flex;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    color: var(--rhmdp-arrow-text, inherit);
+    background-color: var(--rhmdp-arrow-bg, transparent);
+    width: fit-content;
+  }
+
+  :where(
+      .rhmdp-header__prevButton:hover,
+      .rhmdp-header__nextButton:hover,
+      .rhmdp-panelHeader__prevButton:hover,
+      .rhmdp-panelHeader__nextButton:hover
+    ) {
+    background-color: var(--rhmdp-arrow-hover-bg, #f2f2f7);
+    color: var(--rhmdp-arrow-hover-text, inherit);
+  }
+
+  /* arrow icons (default chevrons) */
+  :where(
+      .rhmdp-header__prevButton svg,
+      .rhmdp-header__nextButton svg,
+      .rhmdp-panelHeader__prevButton svg,
+      .rhmdp-panelHeader__nextButton svg
+    ) {
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  /* in RTL the prev/next chevrons point the other way */
+  :where(
+      [dir="rtl"] .rhmdp-header__prevButton svg,
+      [dir="rtl"] .rhmdp-header__nextButton svg,
+      [dir="rtl"] .rhmdp-panelHeader__prevButton svg,
+      [dir="rtl"] .rhmdp-panelHeader__nextButton svg
+    ) {
+    transform: rotate(180deg);
+  }
+
+  /* Header month / year native <select> dropdowns.
+     `radius` / `padding` / `size` fall back to `revert` so an unset token keeps
+     the browser's native control look (rather than forcing it to 0 / inherit). */
+  :where(.rhmdp-header__monthSelect, .rhmdp-header__yearSelect) {
+    font-weight: var(--rhmdp-header-weight, 600);
+    font-size: var(--rhmdp-header-select-size, revert);
+    color: var(--rhmdp-header-select-text, inherit);
+    background-color: var(--rhmdp-header-select-bg, transparent);
+    border: 1px solid var(--rhmdp-header-select-border, transparent);
+    border-radius: var(--rhmdp-header-select-radius, revert);
+    padding: var(--rhmdp-header-select-padding, revert);
+  }
+
+  /* PanelHeader month / year label — it stands in for the `Title`, so it shares
+     the `--rhmdp-title-*` tokens (its own defaults keep the current look). */
+  :where(.rhmdp-panelHeader__label) {
+    cursor: pointer;
+    user-select: none;
+    color: var(--rhmdp-title-text, inherit);
+    font-weight: var(--rhmdp-title-weight, 600);
+    font-size: var(--rhmdp-title-size, inherit);
+  }
+
+  /* wrapper around the month + year labels in the "days" view */
+  :where(.rhmdp-panelHeader__labelGroup) {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+  }
+
+  /* PanelHeader month / year grid */
+  :where(.rhmdp-panelHeader__grid) {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  :where(.rhmdp-panelHeader__cell) {
+    cursor: pointer;
+    text-align: center;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: var(--rhmdp-panel-cell-bg, transparent);
+    color: var(--rhmdp-panel-cell-text, inherit);
+    font-size: var(--rhmdp-panel-cell-size, inherit);
+    font-weight: var(--rhmdp-panel-cell-weight, inherit);
+  }
+
+  /* hover on a non-selected month/year cell */
+  :where(
+      .rhmdp-panelHeader__cell:not(.rhmdp-panelHeader__cell--selected):hover
+    ) {
+    background-color: var(--rhmdp-panel-cell-hover-bg, #f2f2f7);
+    color: var(--rhmdp-panel-cell-hover-text, inherit);
+  }
+
+  :where(.rhmdp-panelHeader__cell--selected) {
+    background-color: var(--rhmdp-panel-selected-bg, #007aff);
+    color: var(--rhmdp-panel-selected-text, #ffffff);
+  }
+
+  /* ------------------------------- TimePicker ------------------------------- */
+  :where(.rhmdp-timePicker) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  :where(.rhmdp-timePicker__column) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    user-select: none;
+  }
+
+  /* up / down stepper buttons — shared `arrow` tokens.
+     These are real <button>s, so reset the native chrome (border / padding /
+     system background) that Tailwind's preflight used to strip. */
+  :where(.rhmdp-timePicker__button) {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    line-height: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    color: var(--rhmdp-arrow-text, inherit);
+    background-color: var(--rhmdp-arrow-bg, transparent);
+  }
+
+  :where(.rhmdp-timePicker__button:hover) {
+    background-color: var(--rhmdp-arrow-hover-bg, #f2f2f7);
+    color: var(--rhmdp-arrow-hover-text, inherit);
+  }
+
+  :where(.rhmdp-timePicker__button svg) {
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  /* the value (a <select> in dropdown mode, otherwise a <div>) */
+  :where(.rhmdp-timePicker__value) {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    text-align: center;
+    color: var(--rhmdp-time-text, inherit);
+    font-weight: var(--rhmdp-time-weight, 600);
+    font-size: var(--rhmdp-time-size, 1.25rem);
+    line-height: 1.75rem;
+    font-variant-numeric: tabular-nums;
+    background-color: transparent;
+    border: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  :where(select.rhmdp-timePicker__value) {
+    cursor: pointer;
+  }
+
+  :where(.rhmdp-timePicker__separator) {
+    color: var(--rhmdp-time-text, inherit);
+    font-weight: var(--rhmdp-time-weight, 600);
+    font-size: var(--rhmdp-time-size, 1.25rem);
+    line-height: 1.75rem;
+  }
+}
