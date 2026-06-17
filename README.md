@@ -63,6 +63,7 @@
   - [Date picker context](#date-picker-context)
     - [Returned values](#returned-values)
   - [Dependencies](#dependencies)
+  - [Browser support](#browser-support)
   - [Contributing](#contributing)
   - [Changelog](#changelog)
   - [License](#license)
@@ -83,6 +84,17 @@ yarn add headless-react-datepicker
 
 ```jsx
 import "headless-react-datepicker/styles.css";
+```
+
+This default stylesheet is a **safe fallback**: it lives in a low CSS cascade
+layer (`@layer rhmdp`) and every rule is zero-specificity (`:where(...)`), so any
+`className` (e.g. a Tailwind utility) or inline `style` you apply **always wins**
+— even though you import it after your own CSS. Theming via `--rhmdp-*` variables
+is unaffected. If you use [Tailwind v4](https://tailwindcss.com/)'s native cascade
+layers, you can pin the order explicitly:
+
+```css
+@layer rhmdp, theme, base, components, utilities;
 ```
 
 ## Usage
@@ -278,7 +290,9 @@ only carries the default look) and target the hooks yourself:
 | **TimePicker**  | `.rhmdp-timePicker`, `__column`, `__button`, `__value`, `__option`, `__separator`                                   | `__column--hours` / `--minutes` / `--seconds` / `--period`; `__button--up` / `--down`                                                                                                                                                        |
 
 > These hooks are additive — the `className` / `style` props and the default
-> styles keep working exactly as before.
+> styles keep working exactly as before. Because the default stylesheet is a
+> zero-specificity, low-layer fallback (see [Import the CSS file](#2-import-the-css-file)),
+> your overrides win without `!important`, regardless of import order.
 
 ## Two side-by-side calendars
 
@@ -816,6 +830,21 @@ const MyCustomAwesomeHeader = () => {
 Uses the native [Intl API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) (the ECMAScript Internationalization API) with [excellent browser support](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat#browser_compatibility), and depends on the [Temporal polyfill](https://www.npmjs.com/package/@js-temporal/polyfill) to convert other calendars to Gregorian.
 
 The polyfill is the library's only runtime dependency and is **not bundled** into the package — it's installed automatically and resolved (de-duplicated) from your `node_modules`, so the library's own bundle stays tiny. The package ships both ESM and CommonJS builds with a modern `exports` map and `sideEffects` metadata for clean tree-shaking.
+
+## Browser support
+
+All modern evergreen browsers (roughly **March 2022+**). The default stylesheet
+is the limiting factor — it uses CSS cascade layers and `:where()` — while the
+JavaScript runs on much older engines.
+
+| Browser              | Minimum version |
+| -------------------- | --------------- |
+| Chrome / Edge        | **99+**         |
+| Firefox              | **97+**         |
+| Safari (macOS & iOS) | **15.4+**       |
+
+Skip `dist/styles.css` and style via the [class hooks](#styling-with-plain-css)
+to lift this requirement. Internet Explorer is not supported.
 
 ## Contributing
 
