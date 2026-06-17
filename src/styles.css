@@ -167,7 +167,7 @@
   justify-content: center;
   height: 100%;
   min-height: var(--rhmdp-day-height, 2.5rem);
-  line-height: 1.5rem;
+  line-height: 1rem;
   padding: var(--rhmdp-day-padding, 0.5rem);
   border-radius: var(--rhmdp-day-radius, 999px);
   font-weight: var(--rhmdp-day-weight, inherit);
