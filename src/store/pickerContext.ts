@@ -1,19 +1,21 @@
-import { createContext } from "react";
+import { createContext, type SyntheticEvent } from "react";
 import { TDatePickerProps, TMonthListItem } from "../types";
 import { TTimeParts } from "../utils/time";
+
+export type TNavigationMonthStep = number | SyntheticEvent;
 
 export type TPickerContext<IsRange extends boolean> = {
   /**
    * Function to navigate to the next month
-   * @param step number of months to move forward (default: 1)
+   * @param step number of months to move forward (default: 1). React events are ignored for direct onClick usage.
    */
-  goToNextMonth: (step?: number) => void;
+  goToNextMonth: (step?: TNavigationMonthStep) => void;
 
   /**
    * Function to navigate to the previous month
-   * @param step number of months to move backward (default: 1)
+   * @param step number of months to move backward (default: 1). React events are ignored for direct onClick usage.
    */
-  goToPrevMonth: (step?: number) => void;
+  goToPrevMonth: (step?: TNavigationMonthStep) => void;
 
   /**
    * Function to navigate to a specific date

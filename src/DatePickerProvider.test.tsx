@@ -15,7 +15,22 @@ const renderProvider = (props: any = {}) =>
     wrapper: createWrapper(props),
   });
 
+const DirectNavigationButtonUsage = () => {
+  const { goToNextMonth, goToPrevMonth } = useDatePickerContext();
+
+  return (
+    <>
+      <button onClick={goToPrevMonth}>Previous</button>
+      <button onClick={goToNextMonth}>Next</button>
+    </>
+  );
+};
+
 describe("DatePickerProvider", () => {
+  it("allows month navigation functions to be passed directly to onClick", () => {
+    expect(DirectNavigationButtonUsage).toBeDefined();
+  });
+
   describe("initial value", () => {
     it("uses a single initialValue for both selection and displayed month", () => {
       const { result } = renderProvider({
@@ -77,12 +92,30 @@ describe("DatePickerProvider", () => {
       expect(result.current.monthInTheCalendar).toBe(3);
     });
 
+    it("goToNextMonth ignores React click events for direct onClick usage", () => {
+      const { result } = renderProvider({
+        defaultStartDate: new Date("2024-01-15T00:00:00.000Z"),
+      });
+
+      act(() => result.current.goToNextMonth({ type: "click" } as any));
+      expect(result.current.monthInTheCalendar).toBe(2);
+    });
+
     it("goToPrevMonth moves backward by one month", () => {
       const { result } = renderProvider({
         defaultStartDate: new Date("2024-03-15T00:00:00.000Z"),
       });
 
       act(() => result.current.goToPrevMonth());
+      expect(result.current.monthInTheCalendar).toBe(2);
+    });
+
+    it("goToPrevMonth ignores React click events for direct onClick usage", () => {
+      const { result } = renderProvider({
+        defaultStartDate: new Date("2024-03-15T00:00:00.000Z"),
+      });
+
+      act(() => result.current.goToPrevMonth({ type: "click" } as any));
       expect(result.current.monthInTheCalendar).toBe(2);
     });
 
@@ -187,7 +220,7 @@ describe("DatePickerProvider", () => {
       });
 
       const date = new Date("2024-07-10T00:00:00.000Z");
-      act(() => result.current.handleClickSlot(date));
+      act(() => result.current.handleClickSlot!(date));
 
       expect(onChange).toHaveBeenCalledWith(date);
       expect(result.current.selectedDay).toEqual(date);
@@ -206,10 +239,10 @@ describe("DatePickerProvider", () => {
       const start = new Date("2024-07-10T00:00:00.000Z");
       const end = new Date("2024-07-20T00:00:00.000Z");
 
-      act(() => result.current.handleClickSlot(start));
+      act(() => result.current.handleClickSlot!(start));
       expect(result.current.selectedDay).toEqual([start]);
 
-      act(() => result.current.handleClickSlot(end));
+      act(() => result.current.handleClickSlot!(end));
       expect(result.current.selectedDay).toEqual([start, end]);
       expect(onChange).toHaveBeenLastCalledWith([start, end]);
     });
@@ -223,8 +256,8 @@ describe("DatePickerProvider", () => {
       const start = new Date("2024-07-20T00:00:00.000Z");
       const earlier = new Date("2024-07-10T00:00:00.000Z");
 
-      act(() => result.current.handleClickSlot(start));
-      act(() => result.current.handleClickSlot(earlier));
+      act(() => result.current.handleClickSlot!(start));
+      act(() => result.current.handleClickSlot!(earlier));
 
       expect(result.current.selectedDay).toEqual([earlier]);
     });
@@ -239,8 +272,8 @@ describe("DatePickerProvider", () => {
       const start = new Date("2024-07-20T00:00:00.000Z");
       const earlier = new Date("2024-07-10T00:00:00.000Z");
 
-      act(() => result.current.handleClickSlot(start));
-      act(() => result.current.handleClickSlot(earlier));
+      act(() => result.current.handleClickSlot!(start));
+      act(() => result.current.handleClickSlot!(earlier));
 
       expect(result.current.selectedDay).toEqual([earlier, start]);
     });
@@ -255,9 +288,9 @@ describe("DatePickerProvider", () => {
       const end = new Date("2024-07-20T00:00:00.000Z");
       const next = new Date("2024-07-25T00:00:00.000Z");
 
-      act(() => result.current.handleClickSlot(start));
-      act(() => result.current.handleClickSlot(end));
-      act(() => result.current.handleClickSlot(next));
+      act(() => result.current.handleClickSlot!(start));
+      act(() => result.current.handleClickSlot!(end));
+      act(() => result.current.handleClickSlot!(next));
 
       expect(result.current.selectedDay).toEqual([next]);
     });
@@ -273,18 +306,18 @@ describe("DatePickerProvider", () => {
       const hovered = new Date("2024-07-15T00:00:00.000Z");
 
       // no range started yet => hover ignored
-      act(() => result.current.handleHoverSlot(hovered));
+      act(() => result.current.handleHoverSlot!(hovered));
       expect(result.current.hoveredDate).toBeUndefined();
 
       // start a range, then hover is previewed
       act(() =>
-        result.current.handleClickSlot(new Date("2024-07-10T00:00:00.000Z"))
+        result.current.handleClickSlot!(new Date("2024-07-10T00:00:00.000Z"))
       );
-      act(() => result.current.handleHoverSlot(hovered));
+      act(() => result.current.handleHoverSlot!(hovered));
       expect(result.current.hoveredDate).toEqual(hovered);
 
       // clearing always works
-      act(() => result.current.handleHoverSlot(undefined));
+      act(() => result.current.handleHoverSlot!(undefined));
       expect(result.current.hoveredDate).toBeUndefined();
     });
   });
@@ -309,7 +342,7 @@ describe("DatePickerProvider", () => {
       const { result } = renderProvider({ value, onChange });
 
       const clicked = new Date("2024-07-20T00:00:00.000Z");
-      act(() => result.current.handleClickSlot(clicked));
+      act(() => result.current.handleClickSlot!(clicked));
 
       expect(onChange).toHaveBeenCalledWith(clicked);
       // selectedDay stays tied to the controlled value prop

@@ -13,6 +13,9 @@ import { getAllMonths, startOfDay } from "./utils/dateUtils";
 import { normalizeTemporal } from "./utils/temporal";
 import { getTimeParts, setTimeParts, TTimeParts } from "./utils/time";
 
+const normalizeNavigationStep = (step?: unknown) =>
+  typeof step === "number" && Number.isFinite(step) ? step : 1;
+
 function DatePickerProvider<IsRange extends boolean>(
   props: TDatePickerProps<IsRange>
 ) {
@@ -154,8 +157,13 @@ function DatePickerProvider<IsRange extends boolean>(
     [currentDate, calendar, weekStartsOn]
   );
 
-  const goToNextMonth = (step = 1) => {
-    let updatedDate = addCalendarMonths(firstDayOfMonth, step, calendar);
+  const goToNextMonth = (step?: unknown) => {
+    const normalizedStep = normalizeNavigationStep(step);
+    let updatedDate = addCalendarMonths(
+      firstDayOfMonth,
+      normalizedStep,
+      calendar
+    );
 
     // Clamp to `yearRangeTo` (December of that year). Done against the target
     // rather than the current month so multi-month steps can't overshoot the
@@ -170,8 +178,13 @@ function DatePickerProvider<IsRange extends boolean>(
     setCurrentDate(updatedDate);
   };
 
-  const goToPrevMonth = (step = 1) => {
-    let updatedDate = addCalendarMonths(firstDayOfMonth, -step, calendar);
+  const goToPrevMonth = (step?: unknown) => {
+    const normalizedStep = normalizeNavigationStep(step);
+    let updatedDate = addCalendarMonths(
+      firstDayOfMonth,
+      -normalizedStep,
+      calendar
+    );
 
     // Clamp to `yearRangeFrom` (January of that year). Done against the target
     // rather than the current month so multi-month steps can't overshoot the

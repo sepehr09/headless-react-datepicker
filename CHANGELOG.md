@@ -1,5 +1,9 @@
 # Changelog
 
+### version 2.0.1
+
+- fix: `goToNextMonth` and `goToPrevMonth` can be passed directly to React `onClick` handlers again; the optional `step` parameter now ignores click events and defaults to `1`.
+
 ### version 2.0.0
 
 **Highlights**
@@ -26,7 +30,7 @@
 **Chores**
 
 - chore: migrate the package manager from yarn to pnpm.
-- chore: the stylesheet can now be imported as `headless-react-datepicker/styles.css` (the existing `headless-react-datepicker/dist/styles.css` path keeps working).
+- chore: the stylesheet can now be imported as `headless-react-datepicker/styles.css`; the legacy `headless-react-datepicker/dist/styles.css` import remains supported for backward compatibility, but is deprecated.
 - perf: the `@js-temporal/polyfill` is no longer inlined into the build — it stays an external dependency that's resolved (and de-duplicated) from your `node_modules`. This drops the published runtime bundle size without losing any feature.
 - perf: bumped the compile `target` from ES5 to ES2019, removing the iterator/spread helper boilerplate from the output.
 
