@@ -788,9 +788,16 @@ context, so you can customize and build your own components easily.
 import { useDatePickerContext } from "headless-react-datepicker";
 
 const MyCustomAwesomeHeader = () => {
-  const { goToCurrentMonth, yearInTheCalendar } = useDatePickerContext();
+  const { goToPrevMonth, goToCurrentMonth, yearInTheCalendar } =
+    useDatePickerContext();
 
-  return <div onClick={goToCurrentMonth}>{yearInTheCalendar}</div>;
+  return (
+    <>
+      <button onClick={goToPrevMonth}>Previous month</button>
+      <button onClick={() => goToPrevMonth(2)}>Previous 2 months</button>
+      <div onClick={goToCurrentMonth}>{yearInTheCalendar}</div>
+    </>
+  );
 };
 ```
 
@@ -798,8 +805,8 @@ const MyCustomAwesomeHeader = () => {
 
 | Name                      | Type                                                                                   | Description                                                                                                |
 | ------------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| goToNextMonth             | (step?: number) => void                                                                | Navigate to the next month (`step` months forward, default `1`).                                           |
-| goToPrevMonth             | (step?: number) => void                                                                | Navigate to the previous month (`step` months back, default `1`).                                          |
+| goToNextMonth             | (step?: number \| React.SyntheticEvent) => void                                        | Navigate to the next month (`step` months forward, default `1`). Can be passed directly to `onClick`.      |
+| goToPrevMonth             | (step?: number \| React.SyntheticEvent) => void                                        | Navigate to the previous month (`step` months back, default `1`). Can be passed directly to `onClick`.     |
 | goToDate                  | (date: Date) => void                                                                   | Navigate to a specific date.                                                                               |
 | goToCurrentMonth          | () => void                                                                             | Navigate to the current month.                                                                             |
 | goToMonth                 | (month: number) => void                                                                | Go to a month (in the selected calendar).                                                                  |

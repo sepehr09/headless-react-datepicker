@@ -18,6 +18,7 @@
     "isolatedModules": true,
     "removeComments": false,
     "jsx": "react-jsx",
+    "ignoreDeprecations": "6.0",
     "downlevelIteration": true,
     "types": ["node", "jsdom", "vitest/globals", "@testing-library/jest-dom"]
   },
