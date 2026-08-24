@@ -1,4 +1,4 @@
-import{j as e}from"./jsx-runtime-BToJpacT.js";import{D as a,d as Ye,H as Ce,c as Fe,i as Ie,b as Ue,a as _e,P as v,e as Ee,h as Ve,W as Re,g as qe,j as ze,f as Ge,k as Je,T as Ke}from"./WeekDays-CZiqpDVX.js";import{b as Qe}from"./constants-DHfTKTE3.js";import{a as n}from"./_source-CMrf7hAM.js";import"./iframe-DOzeBBPB.js";import"./preload-helper-C1FmrZbK.js";const nr={title:"Example/Components",...Qe,parameters:{docs:{description:{component:`The library is **headless** and built from small, independent pieces. Every
+import{j as e}from"./jsx-runtime-BjG_zV1W.js";import{D as a,d as Ye,H as Ce,c as Fe,i as Ie,b as Ue,a as _e,P as v,e as Ee,h as Ve,W as Re,g as qe,j as ze,f as Ge,k as Je,T as Ke}from"./WeekDays-BUE9uAn0.js";import{b as Qe}from"./constants-DpqBcZhi.js";import{a as n}from"./_source-CMrf7hAM.js";import"./iframe-BYJejkH2.js";import"./preload-helper-C1FmrZbK.js";const nr={title:"Example/Components",...Qe,parameters:{docs:{description:{component:`The library is **headless** and built from small, independent pieces. Every
 component below shares a single \`DatePickerProvider\` for state, so you can
 compose just the parts you need.
 
