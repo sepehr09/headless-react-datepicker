@@ -366,6 +366,36 @@ describe("DatePickerProvider", () => {
       expect(result.current.monthInTheCalendar).toBe(7);
     });
 
+    it("clears a controlled single value without changing the displayed month", () => {
+      let controlledValue: Date | undefined = new Date(
+        "2024-07-15T00:00:00.000Z",
+      );
+      const { result, rerender } = renderHook(() => useDatePickerContext(), {
+        wrapper: ({ children }) => (
+          <DatePickerProvider value={controlledValue}>
+            {children}
+          </DatePickerProvider>
+        ),
+      });
+
+      controlledValue = undefined;
+      rerender();
+
+      expect(result.current.selectedDay).toBeUndefined();
+      expect(result.current.monthInTheCalendar).toBe(7);
+    });
+
+    it("treats an explicitly undefined value as controlled", () => {
+      const onChange = vi.fn();
+      const { result } = renderProvider({ value: undefined, onChange });
+      const clicked = new Date("2024-07-20T00:00:00.000Z");
+
+      act(() => result.current.handleClickSlot!(clicked));
+
+      expect(onChange).toHaveBeenCalledWith(clicked);
+      expect(result.current.selectedDay).toBeUndefined();
+    });
+
     it("does not mutate internal state on click when controlled, but still fires onChange", () => {
       const onChange = vi.fn();
       const value = new Date("2024-07-15T00:00:00.000Z");

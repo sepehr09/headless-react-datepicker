@@ -1,4 +1,4 @@
-import{d as l}from"./_shared-DolNX_9q.js";import{r as c}from"./rtlDecorator-DBRyLA-X.js";import{b as m}from"./constants-DpqBcZhi.js";import{s as y}from"./_source-CMrf7hAM.js";import"./jsx-runtime-BjG_zV1W.js";import"./iframe-BYJejkH2.js";import"./preload-helper-C1FmrZbK.js";import"./WeekDays-BUE9uAn0.js";const i=y(["Title","Header","WeekDays","DaySlots"],`{/* one header navigates both months (2 months per click) */}
+import{d as l}from"./_shared-BfY79H4s.js";import{r as c}from"./rtlDecorator-DBRyLA-X.js";import{b as m}from"./constants-CvS-_ClV.js";import{s as y}from"./_source-CMrf7hAM.js";import"./jsx-runtime-BjG_zV1W.js";import"./iframe-C8vF1WH5.js";import"./preload-helper-C1FmrZbK.js";import"./WeekDays-DGkE7nhW.js";const i=y(["Title","Header","WeekDays","DaySlots"],`{/* one header navigates both months (2 months per click) */}
 <Header navigationStep={2} />
 
 <div style={{ display: "flex", gap: 24 }}>

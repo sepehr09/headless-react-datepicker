@@ -21,8 +21,8 @@ const cloneDatePickerValue = (dateValue: DatePickerValue): DatePickerValue =>
   Array.isArray(dateValue)
     ? dateValue.map((date) => new Date(date))
     : dateValue
-      ? new Date(dateValue)
-      : undefined;
+    ? new Date(dateValue)
+    : undefined;
 
 const areDatePickerValuesEqual = (
   first: DatePickerValue,
@@ -64,9 +64,11 @@ function DatePickerProvider<IsRange extends boolean>(
     allowBackwardRange,
   } = config || {};
 
+  const isControlled = Object.prototype.hasOwnProperty.call(props, "value");
+
   const finalInitialValue = useMemo(
-    () => cloneDatePickerValue(value ?? initialValue),
-    [initialValue, value],
+    () => cloneDatePickerValue(isControlled ? value : initialValue),
+    [initialValue, isControlled, value],
   );
 
   const finalInitialDate = useMemo(() => {
@@ -74,7 +76,7 @@ function DatePickerProvider<IsRange extends boolean>(
       return new Date(defaultStartDate);
     }
 
-    const initialDateValue = value ?? initialValue;
+    const initialDateValue = isControlled ? value : initialValue;
     if (initialDateValue) {
       const first = (
         Array.isArray(initialDateValue) ? initialDateValue[0] : initialDateValue
@@ -83,7 +85,7 @@ function DatePickerProvider<IsRange extends boolean>(
     }
 
     return new Date();
-  }, [defaultStartDate, initialValue, value]);
+  }, [defaultStartDate, initialValue, isControlled, value]);
 
   /**
    * used to show the month in the calendar
@@ -109,7 +111,7 @@ function DatePickerProvider<IsRange extends boolean>(
    * immediately retries this component before rendering its children, keeping
    * the selection and visible month in sync without a cascading Effect render.
    */
-  if (value && !areDatePickerValuesEqual(value, internalValue)) {
+  if (isControlled && !areDatePickerValuesEqual(value, internalValue)) {
     const nextValue = cloneDatePickerValue(value);
     setInternalValue(nextValue);
 
@@ -121,7 +123,7 @@ function DatePickerProvider<IsRange extends boolean>(
     }
   }
 
-  const finalValue = value ?? internalValue;
+  const finalValue = isControlled ? value : internalValue;
 
   /**
    * Keep the context callback synchronized with the latest handler passed by
@@ -253,7 +255,7 @@ function DatePickerProvider<IsRange extends boolean>(
      */
     onChange?.(finalValue! as IsRange extends true ? Date[] : Date);
 
-    if (!value) {
+    if (!isControlled) {
       setInternalValue(finalValue);
     }
   };
@@ -306,7 +308,7 @@ function DatePickerProvider<IsRange extends boolean>(
 
     onChange?.(nextValue as IsRange extends true ? Date[] : Date);
 
-    if (!value) {
+    if (!isControlled) {
       setInternalValue(nextValue);
     }
   };

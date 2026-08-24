@@ -79,8 +79,8 @@
     "test:coverage": "TZ=UTC vitest --coverage"
   },
   "peerDependencies": {
-    "react": "^16.8.0 || ^17 || ^18 || ^19",
-    "react-dom": "^16.8.0 || ^17 || ^18 || ^19"
+    "react": "^16.14.0 || ^17 || ^18 || ^19",
+    "react-dom": "^16.14.0 || ^17 || ^18 || ^19"
   },
   "dependencies": {
     "@js-temporal/polyfill": "^0.5.1"
