@@ -324,16 +324,76 @@ describe("DatePickerProvider", () => {
 
   describe("controlled value", () => {
     it("reflects the value prop and updates the displayed month when it changes", () => {
-      const { result } = renderHook(() => useDatePickerContext(), {
-        wrapper: createWrapper({
-          value: new Date("2024-07-15T00:00:00.000Z"),
-        }),
+      let controlledValue = new Date("2024-07-15T00:00:00.000Z");
+      const { result, rerender } = renderHook(() => useDatePickerContext(), {
+        wrapper: ({ children }) => (
+          <DatePickerProvider value={controlledValue}>
+            {children}
+          </DatePickerProvider>
+        ),
       });
 
-      expect(result.current.selectedDay).toEqual(
-        new Date("2024-07-15T00:00:00.000Z")
-      );
+      expect(result.current.selectedDay).toEqual(controlledValue);
       expect(result.current.monthInTheCalendar).toBe(7);
+
+      controlledValue = new Date("2024-10-20T00:00:00.000Z");
+      rerender();
+
+      expect(result.current.selectedDay).toEqual(controlledValue);
+      expect(result.current.monthInTheCalendar).toBe(10);
+    });
+
+    it("keeps the displayed month when a controlled range is cleared", () => {
+      let controlledValue = [
+        new Date("2024-07-15T00:00:00.000Z"),
+        new Date("2024-07-20T00:00:00.000Z"),
+      ];
+      const { result, rerender } = renderHook(() => useDatePickerContext(), {
+        wrapper: ({ children }) => (
+          <DatePickerProvider isRange value={controlledValue}>
+            {children}
+          </DatePickerProvider>
+        ),
+      });
+
+      expect(result.current.selectedDay).toEqual(controlledValue);
+      expect(result.current.monthInTheCalendar).toBe(7);
+
+      controlledValue = [];
+      rerender();
+
+      expect(result.current.selectedDay).toEqual([]);
+      expect(result.current.monthInTheCalendar).toBe(7);
+    });
+
+    it("clears a controlled single value without changing the displayed month", () => {
+      let controlledValue: Date | undefined = new Date(
+        "2024-07-15T00:00:00.000Z",
+      );
+      const { result, rerender } = renderHook(() => useDatePickerContext(), {
+        wrapper: ({ children }) => (
+          <DatePickerProvider value={controlledValue}>
+            {children}
+          </DatePickerProvider>
+        ),
+      });
+
+      controlledValue = undefined;
+      rerender();
+
+      expect(result.current.selectedDay).toBeUndefined();
+      expect(result.current.monthInTheCalendar).toBe(7);
+    });
+
+    it("treats an explicitly undefined value as controlled", () => {
+      const onChange = vi.fn();
+      const { result } = renderProvider({ value: undefined, onChange });
+      const clicked = new Date("2024-07-20T00:00:00.000Z");
+
+      act(() => result.current.handleClickSlot!(clicked));
+
+      expect(onChange).toHaveBeenCalledWith(clicked);
+      expect(result.current.selectedDay).toBeUndefined();
     });
 
     it("does not mutate internal state on click when controlled, but still fires onChange", () => {

@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { PickerContext } from "../../store/pickerContext";
 import { PanelHeaderContext } from "./panelHeaderContext";
-import { TPanelHeaderProviderProps, TPanelView } from "./types";
+import type { TPanelHeaderProviderProps, TPanelView } from "./types";
 
 /**
  * Provides the shared view state (days / months / years + year-page paging) for
@@ -43,7 +43,7 @@ function PanelHeaderProvider({
   const [view, setView] = useState<TPanelView>("days");
   // first year shown in the current year-picker page
   const [yearPageStart, setYearPageStart] = useState(
-    () => currentYear - halfPage
+    () => currentYear - halfPage,
   );
 
   const openYearsView = () => {

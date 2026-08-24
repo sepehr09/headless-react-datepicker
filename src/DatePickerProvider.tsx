@@ -1,8 +1,7 @@
-import { Temporal } from "@js-temporal/polyfill";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { defaultWeekStartsOn } from "./constants/defaults";
 import { PickerContext } from "./store/pickerContext";
-import { TDatePickerProps } from "./types";
+import type { TDatePickerProps } from "./types";
 import {
   addCalendarMonths,
   firstDayOfCalendarMonth,
@@ -11,13 +10,38 @@ import {
 } from "./utils/datePicker";
 import { getAllMonths, startOfDay } from "./utils/dateUtils";
 import { normalizeTemporal } from "./utils/temporal";
-import { getTimeParts, setTimeParts, TTimeParts } from "./utils/time";
+import { getTimeParts, setTimeParts, type TTimeParts } from "./utils/time";
 
 const normalizeNavigationStep = (step?: unknown) =>
   typeof step === "number" && Number.isFinite(step) ? step : 1;
 
+type DatePickerValue = Date | Date[] | undefined;
+
+const cloneDatePickerValue = (dateValue: DatePickerValue): DatePickerValue =>
+  Array.isArray(dateValue)
+    ? dateValue.map((date) => new Date(date))
+    : dateValue
+    ? new Date(dateValue)
+    : undefined;
+
+const areDatePickerValuesEqual = (
+  first: DatePickerValue,
+  second: DatePickerValue,
+) => {
+  if (Array.isArray(first) || Array.isArray(second)) {
+    return (
+      Array.isArray(first) &&
+      Array.isArray(second) &&
+      first.length === second.length &&
+      first.every((date, index) => date.getTime() === second[index]?.getTime())
+    );
+  }
+
+  return first?.getTime() === second?.getTime();
+};
+
 function DatePickerProvider<IsRange extends boolean>(
-  props: TDatePickerProps<IsRange>
+  props: TDatePickerProps<IsRange>,
 ) {
   const {
     value,
@@ -40,29 +64,28 @@ function DatePickerProvider<IsRange extends boolean>(
     allowBackwardRange,
   } = config || {};
 
-  const finalInitialValue = useMemo(() => {
-    if (initialValue) {
-      return Array.isArray(initialValue)
-        ? initialValue.map((v) => new Date(v))
-        : new Date(initialValue);
-    }
-    return undefined;
-  }, [initialValue]);
+  const isControlled = Object.prototype.hasOwnProperty.call(props, "value");
+
+  const finalInitialValue = useMemo(
+    () => cloneDatePickerValue(isControlled ? value : initialValue),
+    [initialValue, isControlled, value],
+  );
 
   const finalInitialDate = useMemo(() => {
     if (defaultStartDate) {
       return new Date(defaultStartDate);
     }
 
-    if (initialValue) {
+    const initialDateValue = isControlled ? value : initialValue;
+    if (initialDateValue) {
       const first = (
-        Array.isArray(initialValue) ? initialValue[0] : initialValue
+        Array.isArray(initialDateValue) ? initialDateValue[0] : initialDateValue
       ) as Date | undefined;
       if (first) return new Date(first);
     }
 
     return new Date();
-  }, [defaultStartDate, initialValue]);
+  }, [defaultStartDate, initialValue, isControlled, value]);
 
   /**
    * used to show the month in the calendar
@@ -73,7 +96,7 @@ function DatePickerProvider<IsRange extends boolean>(
    * internal value (selected day or range of days)
    */
   const [internalValue, setInternalValue] = useState<Date[] | Date | undefined>(
-    finalInitialValue
+    finalInitialValue,
   );
 
   /**
@@ -83,60 +106,33 @@ function DatePickerProvider<IsRange extends boolean>(
    */
   const [hoveredDate, setHoveredDate] = useState<Date | undefined>(undefined);
 
-  const finalValue = value || internalValue;
-
-  /**
-   * Keep a stable `onChange` identity (so it can safely live in context) while
-   * always invoking the latest handler the consumer passed — avoids capturing a
-   * stale closure when `onChange` is an inline/recreated function.
+  /*
+   * Adjust state while rendering when a controlled value changes. React
+   * immediately retries this component before rendering its children, keeping
+   * the selection and visible month in sync without a cascading Effect render.
    */
-  const onChangeRef = useRef(onChangeProp);
-  onChangeRef.current = onChangeProp;
-  const onChange = useCallback(
-    (val: IsRange extends true ? Date[] : Date) => onChangeRef.current?.(val),
-    []
-  );
+  if (isControlled && !areDatePickerValuesEqual(value, internalValue)) {
+    const nextValue = cloneDatePickerValue(value);
+    setInternalValue(nextValue);
 
-  /**
-   * Update internalValue if `value` prop is changed (controlled component).
-   * Intentionally keyed only on `value`: `internalValue`/`defaultStartDate` are
-   * read inside but must NOT retrigger this effect (doing so would loop).
-   */
-  useEffect(() => {
-    if (value) {
-      // prevent loop if value is same as selectedDay
-      if (
-        internalValue &&
-        (Array.isArray(internalValue)
-          ? internalValue?.[0]?.toISOString() ===
-              (value as Date[])?.[0]?.toISOString() &&
-            internalValue?.[1]?.toISOString() ===
-              (value as Date[])?.[1]?.toISOString()
-          : internalValue?.toISOString() === (value as Date)?.toISOString())
-      ) {
-        return;
-      }
-
-      const finalValue = value
-        ? Array.isArray(value)
-          ? value?.map((v) => new Date(v))
-          : new Date(value)
-        : undefined;
-
-      setInternalValue(finalValue);
-
-      if (!defaultStartDate) {
-        setCurrentDate(
-          finalValue
-            ? Array.isArray(finalValue)
-              ? finalValue[1] || finalValue[0]
-              : finalValue
-            : new Date(new Date().toISOString())
-        );
-      }
+    const nextCurrentDate = Array.isArray(nextValue)
+      ? nextValue[1] || nextValue[0]
+      : nextValue;
+    if (!defaultStartDate && nextCurrentDate) {
+      setCurrentDate(nextCurrentDate);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  }
+
+  const finalValue = isControlled ? value : internalValue;
+
+  /**
+   * Keep the context callback synchronized with the latest handler passed by
+   * the consumer.
+   */
+  const onChange = useCallback(
+    (val: IsRange extends true ? Date[] : Date) => onChangeProp?.(val),
+    [onChangeProp],
+  );
 
   const {
     startDateIncludeOtherDays,
@@ -154,7 +150,7 @@ function DatePickerProvider<IsRange extends boolean>(
         weekStartsOn,
         calendar,
       }),
-    [currentDate, calendar, weekStartsOn]
+    [currentDate, calendar, weekStartsOn],
   );
 
   const goToNextMonth = (step?: unknown) => {
@@ -162,7 +158,7 @@ function DatePickerProvider<IsRange extends boolean>(
     let updatedDate = addCalendarMonths(
       firstDayOfMonth,
       normalizedStep,
-      calendar
+      calendar,
     );
 
     // Clamp to `yearRangeTo` (December of that year). Done against the target
@@ -183,7 +179,7 @@ function DatePickerProvider<IsRange extends boolean>(
     let updatedDate = addCalendarMonths(
       firstDayOfMonth,
       -normalizedStep,
-      calendar
+      calendar,
     );
 
     // Clamp to `yearRangeFrom` (January of that year). Done against the target
@@ -209,32 +205,32 @@ function DatePickerProvider<IsRange extends boolean>(
 
   const getSingleSelectionValue = (date: Date) => {
     // Carry over a previously-picked time so changing the day keeps the time.
-    if (internalValue && !Array.isArray(internalValue)) {
-      return setTimeParts(date, getTimeParts(internalValue));
+    if (finalValue && !Array.isArray(finalValue)) {
+      return setTimeParts(date, getTimeParts(finalValue));
     }
     return date;
   };
 
   const getRangeSelectionValue = (date: Date) => {
-    if (internalValue !== undefined && !Array.isArray(internalValue)) return;
+    if (finalValue !== undefined && !Array.isArray(finalValue)) return;
 
     // Range (from)
     if (
-      !internalValue?.length ||
-      internalValue.length === 2 ||
+      !finalValue?.length ||
+      finalValue.length === 2 ||
       (!allowBackwardRange &&
-        new Date(internalValue[0]).getTime() > new Date(date).getTime())
+        new Date(finalValue[0]).getTime() > new Date(date).getTime())
     ) {
       // Carry over the previous start's time onto the new start.
-      const prevStart = internalValue?.[0];
+      const prevStart = finalValue?.[0];
       return [prevStart ? setTimeParts(date, getTimeParts(prevStart)) : date];
     }
 
     // Range (To) — carry over the previous end's time onto the new end.
-    const prevEnd = internalValue?.[1];
+    const prevEnd = finalValue?.[1];
     const end = prevEnd ? setTimeParts(date, getTimeParts(prevEnd)) : date;
-    return [internalValue[0], end].sort(
-      (a, b) => new Date(a).getTime() - new Date(b).getTime()
+    return [finalValue[0], end].sort(
+      (a, b) => new Date(a).getTime() - new Date(b).getTime(),
     );
   };
 
@@ -259,7 +255,7 @@ function DatePickerProvider<IsRange extends boolean>(
      */
     onChange?.(finalValue! as IsRange extends true ? Date[] : Date);
 
-    if (!value) {
+    if (!isControlled) {
       setInternalValue(finalValue);
     }
   };
@@ -290,7 +286,7 @@ function DatePickerProvider<IsRange extends boolean>(
     let nextValue: Date | Date[];
 
     if (isRange) {
-      const current = Array.isArray(internalValue) ? [...internalValue] : [];
+      const current = Array.isArray(finalValue) ? [...finalValue] : [];
       // Fill any earlier end that hasn't been picked yet, so setting the end's
       // time before a start exists can't leave a hole (`[undefined, date]`).
       for (let i = 0; i < index; i++) {
@@ -306,15 +302,13 @@ function DatePickerProvider<IsRange extends boolean>(
       nextValue = current;
     } else {
       const base =
-        internalValue && !Array.isArray(internalValue)
-          ? internalValue
-          : startOfDay(currentDate);
+        finalValue instanceof Date ? finalValue : startOfDay(currentDate);
       nextValue = setTimeParts(base, time);
     }
 
     onChange?.(nextValue as IsRange extends true ? Date[] : Date);
 
-    if (!value) {
+    if (!isControlled) {
       setInternalValue(nextValue);
     }
   };
@@ -325,12 +319,12 @@ function DatePickerProvider<IsRange extends boolean>(
    * @example 1 // means Farvardin (persian calendar)
    */
   const goToMonth = (month: number) => {
-    const newDate = Temporal.PlainDate.from({
+    const newDate = {
       year: yearInTheCalendar,
       month: month,
       day: 1,
       calendar: calendar,
-    }).getISOFields();
+    };
 
     const date = new Date(`${normalizeTemporal(newDate)}T00:00:00`);
     goToDate?.(date);
@@ -342,12 +336,12 @@ function DatePickerProvider<IsRange extends boolean>(
    * @example 1395 // (persian calendar)
    */
   const goToYear = (year: number) => {
-    const newDate = Temporal.PlainDate.from({
+    const newDate = {
       year: year,
       month: monthInTheCalendar,
       day: 1,
       calendar: calendar,
-    }).getISOFields();
+    };
 
     const date = new Date(`${normalizeTemporal(newDate)}T00:00:00`);
     goToDate?.(date);
@@ -355,7 +349,7 @@ function DatePickerProvider<IsRange extends boolean>(
 
   const monthsList = useMemo(
     () => getAllMonths({ locale: locale!, calendar }),
-    [calendar, locale]
+    [calendar, locale],
   );
 
   /**

@@ -3,6 +3,7 @@ import DatePickerProvider from "../DatePickerProvider";
 import { RenderDatePicker } from "./_shared";
 import { rtlDecorator } from "./rtlDecorator";
 import { baseMeta } from "./constants";
+import { createLocalDate } from "./dates";
 import { basicSource } from "./_source";
 
 const meta = {
@@ -19,7 +20,7 @@ export const Persian: Story = {
   parameters: basicSource,
   args: {
     isRange: false,
-    initialValue: new Date("2025-04-17T00:00:00"),
+    initialValue: createLocalDate(2025, 4, 17),
     calendar: "persian",
     config: {
       locale: "fa-IR",
@@ -38,7 +39,7 @@ export const Islamic: Story = {
   parameters: basicSource,
   args: {
     isRange: false,
-    initialValue: new Date("2024-02-06"),
+    initialValue: createLocalDate(2024, 2, 6),
     calendar: "islamic-umalqura",
     config: {
       locale: "ar-EG",
@@ -58,7 +59,7 @@ export const GregoryInFa_IR: Story = {
   parameters: basicSource,
   args: {
     isRange: false,
-    initialValue: new Date("2025-04-17T00:00:00"),
+    initialValue: createLocalDate(2025, 4, 17),
     calendar: "gregory",
     config: {
       locale: "fa-IR",
@@ -77,7 +78,7 @@ export const PersianInEn_US: Story = {
   parameters: basicSource,
   args: {
     isRange: false,
-    initialValue: new Date("2025-04-17T00:00:00"),
+    initialValue: createLocalDate(2025, 4, 17),
     calendar: "persian",
     config: {
       locale: "en-US",

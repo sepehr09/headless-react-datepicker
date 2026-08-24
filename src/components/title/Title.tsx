@@ -3,7 +3,7 @@ import { PickerContext } from "../../store/pickerContext";
 import { TITLE } from "../../constants/classNames";
 import { classJoin } from "../../utils/classJoin";
 import { addCalendarMonths } from "../../utils/datePicker";
-import { TTitleProps } from "./types";
+import type { TTitleProps } from "./types";
 
 function Title({
   yearFormat = "numeric",

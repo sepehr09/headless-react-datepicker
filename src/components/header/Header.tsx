@@ -4,7 +4,7 @@ import HeaderMonthSelect from "./HeaderMonthSelect";
 import HeaderNextButton from "./HeaderNextButton";
 import HeaderPrevButton from "./HeaderPrevButton";
 import HeaderYearSelect from "./HeaderYearSelect";
-import { THeaderProps } from "./types";
+import type { THeaderProps } from "./types";
 
 /**
  * The default header: prev/next arrows + month/year `<select>` dropdowns in a

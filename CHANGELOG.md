@@ -1,5 +1,15 @@
 # Changelog
 
+### version 2.0.2
+
+- new: add React 19 support.
+- fix: upgrade `@js-temporal/polyfill` to 0.5.1 and migrate removed APIs.
+- fix: keep controlled selections, time updates, and the displayed month synchronized with the latest `value` prop; clearing a controlled single value with `undefined` or a range with `[]` now preserves the current month.
+- fix: correct the React 16 peer dependency floor to 16.14, the first React 16 release that provides `react/jsx-runtime`.
+- perf: centralize Temporal usage for better tree-shaking.
+- chore: update development dependencies.
+- chore: upgrade to ESLint 10, migrate to flat config, and update the TypeScript, React Hooks, and React Refresh lint plugins.
+
 ### version 2.0.1
 
 - fix: `goToNextMonth` and `goToPrevMonth` can be passed directly to React `onClick` handlers again; the optional `step` parameter now ignores click events and defaults to `1`.

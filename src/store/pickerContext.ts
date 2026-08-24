@@ -1,6 +1,6 @@
 import { createContext, type SyntheticEvent } from "react";
-import { TDatePickerProps, TMonthListItem } from "../types";
-import { TTimeParts } from "../utils/time";
+import type { TDatePickerProps, TMonthListItem } from "../types";
+import type { TTimeParts } from "../utils/time";
 
 export type TNavigationMonthStep = number | SyntheticEvent;
 

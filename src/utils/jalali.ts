@@ -1,9 +1,9 @@
-import { TCalendar } from "../types";
+import type { TCalendar } from "../types";
 
 export const IsSameMonth = (
   date1: Date,
   month: number,
-  calendar: TCalendar
+  calendar: TCalendar,
 ) => {
   const date1Month = Intl.DateTimeFormat("en-US", {
     month: "2-digit",

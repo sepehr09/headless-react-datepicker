@@ -8,6 +8,7 @@ import HeaderYearSelect from "../components/header/HeaderYearSelect";
 import WeekDays from "../components/weekDays/WeekDays";
 import { baseMeta } from "./constants";
 import { Card } from "./_shared";
+import { createLocalDate } from "./dates";
 import { source } from "./_source";
 
 /** Standalone header parts: month + year selects left, both arrows right. */
@@ -61,7 +62,7 @@ type Story = StoryObj<typeof meta>;
 
 const baseArgs: Story["args"] = {
   isRange: false,
-  initialValue: new Date(),
+  initialValue: createLocalDate(2025, 4, 17),
   calendar: "gregory",
   config: {
     locale: "en-US",

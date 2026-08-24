@@ -1,15 +1,14 @@
 import {
-  CSSProperties,
-  KeyboardEvent,
-  ReactNode,
+  type CSSProperties,
+  type KeyboardEvent,
+  type ReactNode,
   useContext,
   useMemo,
-  useRef,
 } from "react";
 import { defaultWeekStartsOn } from "../../constants/defaults";
 import { bindWeekDayToNumber } from "../../constants/weekdays";
 import { PickerContext } from "../../store/pickerContext";
-import { Day } from "../../types";
+import type { Day } from "../../types";
 import {
   DAY_SLOTS,
   DAY_SLOTS_CELL,
@@ -154,7 +153,7 @@ function DaySlots(props: TDaySlots) {
       currentDate: addCalendarMonths(
         contextFirstDayOfMonth,
         monthOffset,
-        calendar
+        calendar,
       ),
       calendar,
       weekStartsOn,
@@ -166,8 +165,6 @@ function DaySlots(props: TDaySlots) {
     offsetSlots?.monthInTheCalendar ?? contextMonthInTheCalendar;
   const firstDayOfMonth =
     offsetSlots?.firstDayOfMonth ?? contextFirstDayOfMonth;
-
-  const gridRef = useRef<HTMLDivElement>(null);
 
   const dayFormatter = (day: Date) => {
     return new Intl.DateTimeFormat(locale, {
@@ -322,14 +319,14 @@ function DaySlots(props: TDaySlots) {
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>, date?: Date) => {
     if (event.key === "Enter" && date) onClickSlot?.(date);
 
-    const grid = gridRef.current;
+    const grid = event.currentTarget.closest<HTMLElement>(`.${DAY_SLOTS}`);
     if (!grid) return;
 
     const activeElement = document.activeElement as HTMLElement;
     if (!activeElement || !grid.contains(activeElement)) return;
 
     const items = Array.from(
-      grid.querySelectorAll("[role='button']")
+      grid.querySelectorAll("[role='button']"),
     ) as HTMLElement[];
     const currentIndex = items.indexOf(activeElement);
 
@@ -374,13 +371,9 @@ function DaySlots(props: TDaySlots) {
 
   return (
     <div
-      className={classJoin(
-        DAY_SLOTS,
-        parentClassName
-      )}
+      className={classJoin(DAY_SLOTS, parentClassName)}
       role="presentation"
       style={parentStyles}
-      ref={gridRef}
     >
       {!!diff &&
         Array.from({ length: diff }, (_, i) => i).reduce<ReactNode[]>(
@@ -388,7 +381,7 @@ function DaySlots(props: TDaySlots) {
             ...acc,
             <div key={acc.length} className={DAY_SLOTS_PLACEHOLDER} />,
           ],
-          []
+          [],
         )}
 
       {daysOfMonth?.map((date) => {
@@ -503,7 +496,7 @@ function DaySlots(props: TDaySlots) {
           isOtherMonth && DAY_SLOTS_CELL_OTHER_MONTH,
           isFirstDayOfMonth && DAY_SLOTS_CELL_FIRST_OF_MONTH,
           isDisabled && DAY_SLOTS_CELL_DISABLED,
-          isDisabled && disableParentClassName
+          isDisabled && disableParentClassName,
         );
 
         const dayClassNames = classJoin(
@@ -530,7 +523,7 @@ function DaySlots(props: TDaySlots) {
           isOtherMonth && DAY_SLOTS_DAY_OTHER_MONTH,
           isFirstDayOfMonth && DAY_SLOTS_DAY_FIRST_OF_MONTH,
           isDisabled && DAY_SLOTS_DAY_DISABLED,
-          isDisabled && disableClassName
+          isDisabled && disableClassName,
         );
 
         return (

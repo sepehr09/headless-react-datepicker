@@ -6,7 +6,7 @@ import {
 } from "../../constants/classNames";
 import { PickerContext } from "../../store/pickerContext";
 import { classJoin } from "../../utils/classJoin";
-import { THeaderYearSelectProps } from "./types";
+import type { THeaderYearSelectProps } from "./types";
 
 /**
  * Standalone year `<select>` dropdown extracted from `Header`. Render it on its
@@ -47,7 +47,7 @@ function HeaderYearSelect({
             HEADER_YEAR_OPTION,
             year === yearInTheCalendar && HEADER_YEAR_OPTION_SELECTED,
             optionClassName,
-            year === yearInTheCalendar ? selectedOptionClassName : ""
+            year === yearInTheCalendar ? selectedOptionClassName : "",
           )}
         >
           {year}

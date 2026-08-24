@@ -6,7 +6,7 @@ import {
 } from "../../constants/classNames";
 import { PickerContext } from "../../store/pickerContext";
 import { classJoin } from "../../utils/classJoin";
-import { THeaderMonthSelectProps } from "./types";
+import type { THeaderMonthSelectProps } from "./types";
 
 /**
  * Standalone month `<select>` dropdown extracted from `Header`. Render it on its
@@ -48,7 +48,7 @@ function HeaderMonthSelect({
             HEADER_MONTH_OPTION,
             month.value === monthInTheCalendar && HEADER_MONTH_OPTION_SELECTED,
             optionClassName,
-            month.value === monthInTheCalendar ? selectedOptionClassName : ""
+            month.value === monthInTheCalendar ? selectedOptionClassName : "",
           )}
         >
           {month.label}

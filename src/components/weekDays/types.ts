@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import { TDay } from "../../types";
+import type { ReactNode } from "react";
+import type { TDay } from "../../types";
 
 export type TWeekDaysRendererArgs = {
   /**

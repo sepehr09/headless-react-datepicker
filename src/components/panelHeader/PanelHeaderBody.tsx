@@ -7,7 +7,7 @@ import {
 import { PickerContext } from "../../store/pickerContext";
 import { classJoin } from "../../utils/classJoin";
 import { PanelHeaderContext } from "./panelHeaderContext";
-import { TPanelHeaderBodyProps } from "./types";
+import type { TPanelHeaderBodyProps } from "./types";
 
 /**
  * Standalone body for `PanelHeader`. It renders the day-view content
@@ -42,7 +42,7 @@ function PanelHeaderBody({
       PANEL_HEADER_CELL,
       active && PANEL_HEADER_CELL_SELECTED,
       cellClassName,
-      active ? selectedCellClassName : ""
+      active ? selectedCellClassName : "",
     );
 
   const cellStyle = (active: boolean): React.CSSProperties => ({
@@ -83,7 +83,7 @@ function PanelHeaderBody({
   // years view
   const years = Array.from(
     { length: yearsPerPage },
-    (_, i) => yearPageStart + i
+    (_, i) => yearPageStart + i,
   );
   return (
     <div

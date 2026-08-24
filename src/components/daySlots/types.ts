@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 export type TDaySlotsDayRendererArgs = {
   date: Date;

@@ -3,7 +3,7 @@ import { HEADER_NEXT_BUTTON } from "../../constants/classNames";
 import { PickerContext } from "../../store/pickerContext";
 import { classJoin } from "../../utils/classJoin";
 import ChevronRight from "../icons/ChevronRight";
-import { THeaderArrowProps } from "./types";
+import type { THeaderArrowProps } from "./types";
 
 /**
  * Standalone "next month" arrow extracted from `Header`. Render it on its own to

@@ -6,6 +6,7 @@ import {
 } from "../components/timePicker/types";
 import { RenderDateTimePicker } from "./_shared";
 import { baseMeta } from "./constants";
+import { createLocalDate } from "./dates";
 import { source } from "./_source";
 
 /** A calendar + a `TimePicker` configured with `timePickerJsx`. */
@@ -114,7 +115,7 @@ export const HoursAndMinutes: Story = {
   parameters: timeSource(`<TimePicker />`),
   args: {
     isRange: false,
-    initialValue: new Date(new Date().setHours(9, 30, 0, 0)),
+    initialValue: createLocalDate(2025, 4, 17, 9, 30),
     calendar: "gregory",
     config: baseConfig,
   },
@@ -128,7 +129,7 @@ export const TwelveHour: Story = {
   parameters: timeSource(`<TimePicker use12Hours />`),
   args: {
     isRange: false,
-    initialValue: new Date(new Date().setHours(14, 15, 0, 0)),
+    initialValue: createLocalDate(2025, 4, 17, 14, 15),
     calendar: "gregory",
     config: baseConfig,
   },
@@ -142,7 +143,7 @@ export const WithSeconds: Story = {
   parameters: timeSource(`<TimePicker showSeconds />`),
   args: {
     isRange: false,
-    initialValue: new Date(new Date().setHours(9, 30, 45, 0)),
+    initialValue: createLocalDate(2025, 4, 17, 9, 30, 45),
     calendar: "gregory",
     config: baseConfig,
   },
@@ -163,7 +164,7 @@ export const CustomRenderer: Story = {
   ),
   args: {
     isRange: false,
-    initialValue: new Date(new Date().setHours(9, 30, 0, 0)),
+    initialValue: createLocalDate(2025, 4, 17, 9, 30),
     calendar: "gregory",
     config: baseConfig,
   },

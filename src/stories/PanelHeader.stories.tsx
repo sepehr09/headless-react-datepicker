@@ -10,6 +10,7 @@ import WeekDays from "../components/weekDays/WeekDays";
 import { Card, RenderPanelDatePicker } from "./_shared";
 import { rtlDecorator } from "./rtlDecorator";
 import { baseMeta } from "./constants";
+import { createLocalDate } from "./dates";
 import { panelSource, source } from "./_source";
 
 /** Standalone panel parts: label on the left, both arrows on the right. */
@@ -55,7 +56,7 @@ export const PanelMonthYearPicker: Story = {
   parameters: panelSource,
   args: {
     isRange: false,
-    initialValue: new Date(),
+    initialValue: createLocalDate(2025, 4, 17),
     calendar: "gregory",
     config: {
       locale: "en-US",
@@ -76,7 +77,7 @@ export const PanelMonthYearPickerPersian: Story = {
   parameters: panelSource,
   args: {
     isRange: false,
-    initialValue: new Date(),
+    initialValue: createLocalDate(2025, 4, 17),
     calendar: "persian",
     config: {
       locale: "fa-IR",
@@ -93,7 +94,7 @@ export const PanelMonthYearPickerPersian: Story = {
 
 const partsArgs: Story["args"] = {
   isRange: false,
-  initialValue: new Date(),
+  initialValue: createLocalDate(2025, 4, 17),
   calendar: "gregory",
   config: {
     locale: "en-US",
