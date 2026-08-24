@@ -6,7 +6,7 @@ import {
 import { PickerContext } from "../../store/pickerContext";
 import { classJoin } from "../../utils/classJoin";
 import { PanelHeaderContext } from "./panelHeaderContext";
-import { TPanelHeaderLabelProps } from "./types";
+import type { TPanelHeaderLabelProps } from "./types";
 
 /**
  * Standalone center label(s) for `PanelHeader`. It changes with the active view

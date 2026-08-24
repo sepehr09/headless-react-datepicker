@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode, useContext } from "react";
+import { type CSSProperties, type ReactNode, useContext } from "react";
 import {
   TIME_PICKER,
   TIME_PICKER_BUTTON,
@@ -11,10 +11,16 @@ import {
 } from "../../constants/classNames";
 import { PickerContext } from "../../store/pickerContext";
 import { classJoin } from "../../utils/classJoin";
-import { from12Hour, getTimeParts, to12Hour, TPeriod, wrap } from "../../utils/time";
+import {
+  from12Hour,
+  getTimeParts,
+  to12Hour,
+  type TPeriod,
+  wrap,
+} from "../../utils/time";
 import ChevronDown from "../icons/ChevronDown";
 import ChevronUp from "../icons/ChevronUp";
-import { TTimePickerProps, TTimePickerUnit } from "./types";
+import type { TTimePickerProps, TTimePickerUnit } from "./types";
 
 type TOption = { value: string; label: string };
 
@@ -88,9 +94,11 @@ function TimePicker({
   const displayedHour = use12Hours ? hours12 : hours;
 
   const formatted =
-    [fmt(displayedHour), fmt(minutes), ...(showSeconds ? [fmt(seconds)] : [])].join(
-      ":"
-    ) + (use12Hours ? ` ${periodLabel(period)}` : "");
+    [
+      fmt(displayedHour),
+      fmt(minutes),
+      ...(showSeconds ? [fmt(seconds)] : []),
+    ].join(":") + (use12Hours ? ` ${periodLabel(period)}` : "");
 
   /* ------------------------------- setters -------------------------------- */
 
@@ -144,9 +152,7 @@ function TimePicker({
       return { value: String(n), label: fmt(n) };
     });
 
-  const hourOptions = use12Hours
-    ? numberOptions(12, 1)
-    : numberOptions(24, 0);
+  const hourOptions = use12Hours ? numberOptions(12, 1) : numberOptions(24, 0);
   const minuteOptions = numberOptions(60, 0);
   const secondOptions = numberOptions(60, 0);
   const periodOptions: TOption[] = [
@@ -172,7 +178,7 @@ function TimePicker({
     extraColumnClassName?: string,
     extraColumnStyles?: CSSProperties,
     upAriaLabel = `Increase ${label}`,
-    downAriaLabel = `Decrease ${label}`
+    downAriaLabel = `Decrease ${label}`,
   ): ReactNode => (
     <div
       key={key}
@@ -180,7 +186,7 @@ function TimePicker({
         TIME_PICKER_COLUMN,
         `${TIME_PICKER_COLUMN}--${key}`,
         columnClassName,
-        extraColumnClassName
+        extraColumnClassName,
       )}
       style={{ ...columnStyles, ...extraColumnStyles }}
     >
@@ -192,7 +198,7 @@ function TimePicker({
           TIME_PICKER_BUTTON,
           TIME_PICKER_BUTTON_UP,
           buttonClassName,
-          upButtonClassName
+          upButtonClassName,
         )}
         style={{ ...buttonStyles, ...upButtonStyles }}
       >
@@ -204,10 +210,7 @@ function TimePicker({
           aria-label={label}
           value={selectValue}
           onChange={(e) => onSelect(e.target.value)}
-          className={classJoin(
-            TIME_PICKER_VALUE,
-            valueClassName
-          )}
+          className={classJoin(TIME_PICKER_VALUE, valueClassName)}
           style={valueStyles}
         >
           {options.map((o) => (
@@ -223,10 +226,7 @@ function TimePicker({
         </select>
       ) : (
         <div
-          className={classJoin(
-            TIME_PICKER_VALUE,
-            valueClassName
-          )}
+          className={classJoin(TIME_PICKER_VALUE, valueClassName)}
           style={valueStyles}
           aria-label={label}
           aria-live="polite"
@@ -243,7 +243,7 @@ function TimePicker({
           TIME_PICKER_BUTTON,
           TIME_PICKER_BUTTON_DOWN,
           buttonClassName,
-          downButtonClassName
+          downButtonClassName,
         )}
         style={{ ...buttonStyles, ...downButtonStyles }}
       >
@@ -256,10 +256,7 @@ function TimePicker({
     <div
       key={key}
       aria-hidden="true"
-      className={classJoin(
-        TIME_PICKER_SEPARATOR,
-        separatorClassName
-      )}
+      className={classJoin(TIME_PICKER_SEPARATOR, separatorClassName)}
       style={separatorStyles}
     >
       :
@@ -270,10 +267,7 @@ function TimePicker({
 
   return (
     <div
-      className={classJoin(
-        TIME_PICKER,
-        rootClassName
-      )}
+      className={classJoin(TIME_PICKER, rootClassName)}
       style={rootStyles}
       role="group"
       aria-label="Time picker"
@@ -286,7 +280,7 @@ function TimePicker({
         hourOptions,
         onSelectHour,
         () => increment("hours"),
-        () => decrement("hours")
+        () => decrement("hours"),
       )}
 
       {renderSeparator("sep-1")}
@@ -299,7 +293,7 @@ function TimePicker({
         minuteOptions,
         (v) => setMinutes(parseInt(v, 10)),
         () => increment("minutes"),
-        () => decrement("minutes")
+        () => decrement("minutes"),
       )}
 
       {showSeconds && renderSeparator("sep-2")}
@@ -312,7 +306,7 @@ function TimePicker({
           secondOptions,
           (v) => setSeconds(parseInt(v, 10)),
           () => increment("seconds"),
-          () => decrement("seconds")
+          () => decrement("seconds"),
         )}
 
       {use12Hours &&
@@ -328,7 +322,7 @@ function TimePicker({
           periodClassName,
           periodStyles,
           "Toggle AM/PM",
-          "Toggle AM/PM"
+          "Toggle AM/PM",
         )}
     </div>
   );

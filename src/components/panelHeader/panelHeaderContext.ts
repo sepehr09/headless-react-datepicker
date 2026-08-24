@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { TPanelView } from "./types";
+import type { TPanelView } from "./types";
 
 /**
  * Shared state for the `PanelHeader` parts. The arrows, the center label and the
@@ -24,5 +24,5 @@ export type TPanelHeaderContext = {
 };
 
 export const PanelHeaderContext = createContext<TPanelHeaderContext>(
-  {} as TPanelHeaderContext
+  {} as TPanelHeaderContext,
 );

@@ -3,7 +3,7 @@ import { PANEL_HEADER_NEXT_BUTTON } from "../../constants/classNames";
 import { classJoin } from "../../utils/classJoin";
 import ChevronRight from "../icons/ChevronRight";
 import { PanelHeaderContext } from "./panelHeaderContext";
-import { TPanelHeaderArrowProps } from "./types";
+import type { TPanelHeaderArrowProps } from "./types";
 
 /**
  * Standalone "next" arrow for `PanelHeader`. Its action depends on the active

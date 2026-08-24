@@ -7,7 +7,7 @@ import PanelHeaderLabel from "./PanelHeaderLabel";
 import PanelHeaderNextButton from "./PanelHeaderNextButton";
 import PanelHeaderPrevButton from "./PanelHeaderPrevButton";
 import PanelHeaderProvider from "./PanelHeaderProvider";
-import { TPanelHeaderProps } from "./types";
+import type { TPanelHeaderProps } from "./types";
 
 /**
  * The default panel layout: the prev/label/next row followed by the body. It
@@ -38,7 +38,11 @@ function PanelHeaderDefault({
   return (
     <>
       <div
-        className={classJoin(PANEL_HEADER, `${PANEL_HEADER}--${view}`, rootClassName)}
+        className={classJoin(
+          PANEL_HEADER,
+          `${PANEL_HEADER}--${view}`,
+          rootClassName,
+        )}
         style={rootStyles}
       >
         <PanelHeaderPrevButton

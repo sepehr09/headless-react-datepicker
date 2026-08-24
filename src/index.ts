@@ -1,6 +1,6 @@
 import DatePickerProvider from "./DatePickerProvider";
 import DaySlots from "./components/daySlots/DaySlots";
-import {
+import type {
   TDaySlots,
   TDaySlotsDayRendererArgs,
 } from "./components/daySlots/types";
@@ -9,7 +9,7 @@ import HeaderMonthSelect from "./components/header/HeaderMonthSelect";
 import HeaderNextButton from "./components/header/HeaderNextButton";
 import HeaderPrevButton from "./components/header/HeaderPrevButton";
 import HeaderYearSelect from "./components/header/HeaderYearSelect";
-import {
+import type {
   THeaderArrowProps,
   THeaderMonthSelectProps,
   THeaderProps,
@@ -21,7 +21,7 @@ import PanelHeaderLabel from "./components/panelHeader/PanelHeaderLabel";
 import PanelHeaderNextButton from "./components/panelHeader/PanelHeaderNextButton";
 import PanelHeaderPrevButton from "./components/panelHeader/PanelHeaderPrevButton";
 import PanelHeaderProvider from "./components/panelHeader/PanelHeaderProvider";
-import {
+import type {
   TPanelHeaderArrowProps,
   TPanelHeaderBodyProps,
   TPanelHeaderLabelProps,
@@ -30,21 +30,21 @@ import {
   TPanelView,
 } from "./components/panelHeader/types";
 import TimePicker from "./components/timePicker/TimePicker";
-import {
+import type {
   TTimePickerProps,
   TTimePickerRendererArgs,
   TTimePickerUnit,
 } from "./components/timePicker/types";
 import Title from "./components/title/Title";
-import { TTitleProps } from "./components/title/types";
+import type { TTitleProps } from "./components/title/types";
 import WeekDays from "./components/weekDays/WeekDays";
-import {
+import type {
   TWeekDaysProps,
   TWeekDaysRendererArgs,
 } from "./components/weekDays/types";
 import { useDatePickerContext } from "./hooks/useDatePickerContext";
-import { TPickerContext } from "./store/pickerContext";
-import { TPeriod, TTimeParts } from "./utils/time";
+import type { TPickerContext } from "./store/pickerContext";
+import type { TPeriod, TTimeParts } from "./utils/time";
 
 export default DatePickerProvider;
 

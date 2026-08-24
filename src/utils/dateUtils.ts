@@ -1,4 +1,4 @@
-import { TCalendar } from "../types";
+import type { TCalendar } from "../types";
 
 export function LocalToUTCDate(date: Date) {
   return new Date(
@@ -9,8 +9,8 @@ export function LocalToUTCDate(date: Date) {
       date.getHours(),
       date.getMinutes(),
       date.getSeconds(),
-      date.getMilliseconds()
-    )
+      date.getMilliseconds(),
+    ),
   );
 }
 
@@ -105,7 +105,7 @@ export function getWeekDayName(
   } = {
     locale: "en-US",
     weekdayFormat: "narrow",
-  }
+  },
 ) {
   // Ensure the day number is between 0 and 6
   if (dayNumber < 0 || dayNumber > 6) {
@@ -158,7 +158,7 @@ export function addDays(date: Date | number | string, amount: number): Date {
 
 export function subDays<DateType extends Date>(
   date: DateType | number | string,
-  amount: number
+  amount: number,
 ): Date {
   return addDays(date, -amount);
 }
@@ -185,7 +185,7 @@ export function subDays<DateType extends Date>(
  * //=> Tue Sep 02 2014 00:00:00
  */
 export function startOfDay<DateType extends Date>(
-  date: DateType | number | string
+  date: DateType | number | string,
 ): Date {
   const _date = new Date(date);
   _date.setHours(0, 0, 0, 0);
@@ -225,7 +225,7 @@ export function startOfDay<DateType extends Date>(
  */
 export function isSameDay<DateType extends Date>(
   dateLeft: DateType | number | string,
-  dateRight: DateType | number | string
+  dateRight: DateType | number | string,
 ): boolean {
   const dateLeftStartOfDay = startOfDay(dateLeft);
   const dateRightStartOfDay = startOfDay(dateRight);
@@ -255,7 +255,7 @@ export function isSameDay<DateType extends Date>(
  * //=> true
  */
 export function isToday<DateType extends Date>(
-  date: DateType | number | string
+  date: DateType | number | string,
 ): boolean {
   return isSameDay(date, new Date());
 }
@@ -311,7 +311,7 @@ export interface Interval<DateType extends Date = Date> {
  */
 export function isWithinInterval<DateType extends Date>(
   date: DateType | number | string,
-  interval: Interval<Date>
+  interval: Interval<Date>,
 ): boolean {
   const time = +new Date(date);
   const [startTime, endTime] = [

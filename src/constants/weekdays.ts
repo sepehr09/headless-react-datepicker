@@ -1,4 +1,4 @@
-import { Day, TDay } from "../types";
+import type { Day, TDay } from "../types";
 
 export type TBindWeekDayToNumber = { [k in TDay]: Day };
 

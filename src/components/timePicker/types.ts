@@ -1,5 +1,5 @@
-import { CSSProperties, ReactNode } from "react";
-import { TPeriod } from "../../utils/time";
+import type { CSSProperties, ReactNode } from "react";
+import type { TPeriod } from "../../utils/time";
 
 export type TTimePickerUnit = "hours" | "minutes" | "seconds";
 

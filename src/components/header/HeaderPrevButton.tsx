@@ -3,7 +3,7 @@ import { HEADER_PREV_BUTTON } from "../../constants/classNames";
 import { PickerContext } from "../../store/pickerContext";
 import { classJoin } from "../../utils/classJoin";
 import ChevronLeft from "../icons/ChevronLeft";
-import { THeaderArrowProps } from "./types";
+import type { THeaderArrowProps } from "./types";
 
 /**
  * Standalone "previous month" arrow extracted from `Header`. Render it on its
