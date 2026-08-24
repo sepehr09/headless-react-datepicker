@@ -2,7 +2,7 @@ import { defaultWeekStartsOn } from "../constants/defaults";
 import { bindWeekDayToNumber } from "../constants/weekdays";
 import type { TCalendar, TDay } from "../types";
 import { eachDayOfInterval, endOfWeek, startOfWeek } from "./dateUtils";
-import { calendarDateToISO } from "./temporal";
+import { addMonthsToCalendarDate, calendarDateToISO } from "./temporal";
 
 /**
  * Build the gregorian `Date` at local midnight on the first day of the given
@@ -48,7 +48,9 @@ export function addCalendarMonths(
 ): Date {
   const { year, month } = getMonthInfo(date, calendar);
 
-  const shifted = calendarDateToISO({ year, month, day: 1, calendar }, months);
+  const shifted = calendarDateToISO(
+    addMonthsToCalendarDate({ year, month, day: 1, calendar }, months),
+  );
 
   return new Date(shifted.year, shifted.month - 1, shifted.day);
 }

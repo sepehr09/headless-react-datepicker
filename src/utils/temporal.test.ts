@@ -1,5 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { normalizeTemporal } from "./temporal";
+import { addMonthsToCalendarDate, normalizeTemporal } from "./temporal";
+
+describe("addMonthsToCalendarDate", () => {
+  it("adds months without converting the calendar", () => {
+    expect(
+      addMonthsToCalendarDate(
+        { year: 1403, month: 1, day: 1, calendar: "persian" },
+        1,
+      ),
+    ).toEqual({ year: 1403, month: 2, day: 1, calendar: "persian" });
+  });
+});
 
 describe("normalizeTemporal", () => {
   it("should return gregory formatted string", () => {
