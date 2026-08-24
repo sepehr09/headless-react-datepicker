@@ -4,8 +4,10 @@
 
 - new: add React 19 support.
 - fix: upgrade `@js-temporal/polyfill` to 0.5.1 and migrate removed APIs.
+- fix: keep controlled selections, time updates, and the displayed month synchronized with the latest `value` prop; clearing a controlled range with `[]` now preserves the current month.
 - perf: centralize Temporal usage for better tree-shaking.
 - chore: update development dependencies.
+- chore: upgrade to ESLint 10, migrate to flat config, and update the TypeScript, React Hooks, and React Refresh lint plugins.
 
 ### version 2.0.1
 

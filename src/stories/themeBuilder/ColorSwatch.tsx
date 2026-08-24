@@ -1,4 +1,4 @@
-import { CSSProperties, useEffect, useRef, useState } from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 import { isHex } from "../utils/css";
 
 /**
@@ -8,33 +8,23 @@ import { isHex } from "../utils/css";
  * tracks its live value in cheap local state and only **commits** to the parent
  * on the native `change` event, which fires once when the picker is dismissed.
  */
-const ColorSwatch = ({
-  value,
-  onCommit,
-  style,
-}: {
+type ColorSwatchProps = {
   value: string;
   onCommit: (value: string) => void;
   style?: CSSProperties;
-}) => {
+};
+
+const ColorSwatchInput = ({ value, onCommit, style }: ColorSwatchProps) => {
   const ref = useRef<HTMLInputElement>(null);
   const [draft, setDraft] = useState(value);
-
-  // Keep the live swatch in sync when the value changes from outside (Reset,
-  // typing in the text field, …).
-  useEffect(() => setDraft(value), [value]);
-
-  // Latest `onCommit` without re-subscribing the native listener every render.
-  const commitRef = useRef(onCommit);
-  commitRef.current = onCommit;
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const handleCommit = () => commitRef.current(el.value);
+    const handleCommit = () => onCommit(el.value);
     el.addEventListener("change", handleCommit);
     return () => el.removeEventListener("change", handleCommit);
-  }, []);
+  }, [onCommit]);
 
   return (
     <input
@@ -47,5 +37,11 @@ const ColorSwatch = ({
     />
   );
 };
+
+const ColorSwatch = (props: ColorSwatchProps) => (
+  // Remount the inexpensive native input when an external edit/reset changes
+  // its value, while keeping live color-picker updates local to the input.
+  <ColorSwatchInput key={props.value} {...props} />
+);
 
 export default ColorSwatch;

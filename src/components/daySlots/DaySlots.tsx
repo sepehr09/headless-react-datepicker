@@ -4,7 +4,6 @@ import {
   type ReactNode,
   useContext,
   useMemo,
-  useRef,
 } from "react";
 import { defaultWeekStartsOn } from "../../constants/defaults";
 import { bindWeekDayToNumber } from "../../constants/weekdays";
@@ -167,8 +166,6 @@ function DaySlots(props: TDaySlots) {
   const firstDayOfMonth =
     offsetSlots?.firstDayOfMonth ?? contextFirstDayOfMonth;
 
-  const gridRef = useRef<HTMLDivElement>(null);
-
   const dayFormatter = (day: Date) => {
     return new Intl.DateTimeFormat(locale, {
       day: dayFormat,
@@ -322,7 +319,7 @@ function DaySlots(props: TDaySlots) {
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>, date?: Date) => {
     if (event.key === "Enter" && date) onClickSlot?.(date);
 
-    const grid = gridRef.current;
+    const grid = event.currentTarget.closest<HTMLElement>(`.${DAY_SLOTS}`);
     if (!grid) return;
 
     const activeElement = document.activeElement as HTMLElement;
@@ -377,7 +374,6 @@ function DaySlots(props: TDaySlots) {
       className={classJoin(DAY_SLOTS, parentClassName)}
       role="presentation"
       style={parentStyles}
-      ref={gridRef}
     >
       {!!diff &&
         Array.from({ length: diff }, (_, i) => i).reduce<ReactNode[]>(

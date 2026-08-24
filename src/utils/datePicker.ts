@@ -64,10 +64,9 @@ export function getMonthInfo(date: Date, calendar: TCalendar) {
   let gStartDate = new Date(startDate);
   let gregoryDays = 0;
   let totalDays = 0;
-  let calendarDays = 0;
 
   for (let i = 0; i < 32; i++) {
-    calendarDays = parseInt(
+    const calendarDays = parseInt(
       new Intl.DateTimeFormat(locale, { day: n, calendar }).format(gStartDate),
       10,
     );

@@ -1,13 +1,13 @@
-import { CSSProperties, ReactNode, useState } from "react";
+import { type CSSProperties, type ReactNode, useState } from "react";
 import DatePickerProvider from "../DatePickerProvider";
 import DaySlots from "../components/daySlots/DaySlots";
 import Header from "../components/header/Header";
 import PanelHeader from "../components/panelHeader/PanelHeader";
 import TimePicker from "../components/timePicker/TimePicker";
-import { TTimePickerProps } from "../components/timePicker/types";
+import type { TTimePickerProps } from "../components/timePicker/types";
 import Title from "../components/title/Title";
 import WeekDays from "../components/weekDays/WeekDays";
-import { TDatePickerOnChange, TDatePickerProps } from "../types";
+import type { TDatePickerOnChange, TDatePickerProps } from "../types";
 
 /**
  * Demo theming through the library's own `--rhmdp-*` CSS variables instead of
@@ -15,7 +15,7 @@ import { TDatePickerOnChange, TDatePickerProps } from "../types";
  * part rendered inside — e.g. the `Header` month/year `<select>` dropdowns read
  * `--rhmdp-header-select-bg` / `--rhmdp-header-select-text`.
  */
-export const calendarVars: CSSProperties = {
+const calendarVars: CSSProperties = {
   "--rhmdp-header-select-bg": "#f0f0f0",
   "--rhmdp-header-select-text": "#000",
   "--rhmdp-header-select-radius": "5px",
