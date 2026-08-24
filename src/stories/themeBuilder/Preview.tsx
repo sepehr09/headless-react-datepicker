@@ -7,6 +7,7 @@ import TimePicker from "../../components/timePicker/TimePicker";
 import Title from "../../components/title/Title";
 import WeekDays from "../../components/weekDays/WeekDays";
 import { TCalendarConfig } from "../../types";
+import { createLocalDate } from "../dates";
 import { isHex } from "../utils/css";
 import ColorSwatch from "./ColorSwatch";
 import { panel, toggleLabel } from "./styles";
@@ -17,8 +18,8 @@ const CHECKER =
   "repeating-conic-gradient(#fafafa 0% 25%, #fff 0% 50%) 50% / 22px 22px";
 
 // A fixed month so today/weekend/holiday/range states are all visible.
-const RANGE_VALUE = [new Date("2024-05-07"), new Date("2024-05-24")];
-const SINGLE_VALUE = new Date("2024-05-16T13:30:00");
+const RANGE_VALUE = [createLocalDate(2024, 5, 7), createLocalDate(2024, 5, 24)];
+const SINGLE_VALUE = createLocalDate(2024, 5, 16, 13, 30);
 
 const PREVIEW_CONFIG: TCalendarConfig = {
   locale: "en-US",
@@ -26,7 +27,7 @@ const PREVIEW_CONFIG: TCalendarConfig = {
   weekdayFormat: "short",
   weekends: ["saturday", "sunday"],
   showOtherDays: true,
-  holidays: [new Date("2024-05-27")],
+  holidays: [createLocalDate(2024, 5, 27)],
 };
 
 /**

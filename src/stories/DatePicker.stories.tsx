@@ -6,6 +6,7 @@ import {
   RenderDatePicker,
 } from "./_shared";
 import { baseMeta } from "./constants";
+import { createLocalDate } from "./dates";
 import { basicSource, controlledSource, source } from "./_source";
 
 /** Clean snippet for the custom-chevron story (the SVGs that replace the arrows). */
@@ -41,7 +42,7 @@ export const SingleSelection: Story = {
   parameters: basicSource,
   args: {
     isRange: false,
-    initialValue: new Date(),
+    initialValue: createLocalDate(2025, 4, 17),
     calendar: "gregory",
     config: {
       locale: "en-US",
@@ -55,8 +56,8 @@ export const SingleSelection: Story = {
 
       // yearRangeFrom: 1330,
       // yearRangeTo: 1400,
-      // minDate: new Date("2024-01-01T00:00:00.000Z"),
-      // maxDate: new Date(),
+      // minDate: createLocalDate(2024, 1, 1),
+      // maxDate: createLocalDate(2025, 4, 30),
     },
   },
 };
@@ -66,7 +67,7 @@ export const RangeSelection: Story = {
   parameters: basicSource,
   args: {
     isRange: true,
-    initialValue: [new Date("2024-02-06"), new Date("2024-02-08")],
+    initialValue: [createLocalDate(2024, 2, 6), createLocalDate(2024, 2, 8)],
     calendar: "gregory",
     config: {
       locale: "en-US",
@@ -89,7 +90,7 @@ export const CustomIcons: Story = {
   parameters: customIconsSource,
   args: {
     isRange: false,
-    initialValue: new Date(),
+    initialValue: createLocalDate(2025, 4, 17),
     calendar: "gregory",
     config: {
       locale: "en-US",
@@ -109,7 +110,7 @@ export const ControlledComponent: Story = {
   parameters: controlledSource,
   args: {
     isRange: false,
-    initialValue: new Date("2024-02-06"),
+    initialValue: createLocalDate(2024, 2, 6),
     calendar: "gregory",
     config: {
       locale: "en-US",

@@ -16,6 +16,7 @@ import TimePicker from "../components/timePicker/TimePicker";
 import Title from "../components/title/Title";
 import WeekDays from "../components/weekDays/WeekDays";
 import { baseMeta } from "./constants";
+import { createLocalDate } from "./dates";
 import { componentSource } from "./_source";
 
 /**
@@ -37,7 +38,7 @@ type Story = StoryObj<typeof meta>;
 
 const baseArgs: Story["args"] = {
   isRange: false,
-  initialValue: new Date(),
+  initialValue: createLocalDate(2025, 4, 17),
   calendar: "gregory",
   config: {
     locale: "en-US",

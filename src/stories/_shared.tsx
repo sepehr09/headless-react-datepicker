@@ -8,6 +8,7 @@ import type { TTimePickerProps } from "../components/timePicker/types";
 import Title from "../components/title/Title";
 import WeekDays from "../components/weekDays/WeekDays";
 import type { TDatePickerOnChange, TDatePickerProps } from "../types";
+import { createLocalDate } from "./dates";
 
 /**
  * Demo theming through the library's own `--rhmdp-*` CSS variables instead of
@@ -90,8 +91,8 @@ export const RenderControlledDatePicker = <T extends boolean>(
           onClick={() =>
             setValue(
               (props.isRange
-                ? [new Date("2024-06-24"), new Date("2024-06-28")]
-                : new Date("2024-06-24")) as TDatePickerProps<T>["value"],
+                ? [createLocalDate(2024, 6, 24), createLocalDate(2024, 6, 28)]
+                : createLocalDate(2024, 6, 24)) as TDatePickerProps<T>["value"],
             )
           }
           style={{ background: "#ddd", padding: 7, borderRadius: 7 }}

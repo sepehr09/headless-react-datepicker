@@ -10,6 +10,7 @@ import Title from "../components/title/Title";
 import WeekDays from "../components/weekDays/WeekDays";
 import { TDatePickerProps } from "../types";
 import { baseMeta } from "./constants";
+import { createLocalDate } from "./dates";
 
 /**
  * A gallery of **ready-made, good-looking themes**. Each one re-colors the
@@ -193,7 +194,7 @@ const ThemedCalendar =
 
 const rangeArgs: Story["args"] = {
   isRange: true,
-  initialValue: [new Date("2024-05-07"), new Date("2024-05-24")],
+  initialValue: [createLocalDate(2024, 5, 7), createLocalDate(2024, 5, 24)],
   calendar: "gregory",
   config: {
     locale: "en-US",
@@ -206,7 +207,7 @@ const rangeArgs: Story["args"] = {
 
 const singleArgs: Story["args"] = {
   isRange: false,
-  initialValue: new Date("2024-05-16"),
+  initialValue: createLocalDate(2024, 5, 16),
   calendar: "gregory",
   config: {
     locale: "en-US",
@@ -297,7 +298,7 @@ export const AuroraGlass: Story = {
  * hot-pink weekend accent, and a matching `TimePicker`.
  */
 export const MidnightNeon: Story = {
-  args: { ...singleArgs, initialValue: new Date("2024-05-16T21:30:00") },
+  args: { ...singleArgs, initialValue: createLocalDate(2024, 5, 16, 21, 30) },
   render: ThemedCalendar({
     page: {
       background: "radial-gradient(circle at 30% 20%, #1b2735 0%, #090a0f 70%)",

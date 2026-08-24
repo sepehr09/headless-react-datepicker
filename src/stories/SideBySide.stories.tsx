@@ -3,6 +3,7 @@ import DatePickerProvider from "../DatePickerProvider";
 import { RenderDualDatePicker } from "./_shared";
 import { rtlDecorator } from "./rtlDecorator";
 import { baseMeta } from "./constants";
+import { createLocalDate } from "./dates";
 import { source } from "./_source";
 
 /** Two months driven by one provider; one header moves both (2 per click). */
@@ -41,7 +42,7 @@ export const TwoCalendarsSideBySide: Story = {
   parameters: dualSource,
   args: {
     isRange: true,
-    initialValue: [new Date("2024-02-06"), new Date("2024-03-10")],
+    initialValue: [createLocalDate(2024, 2, 6), createLocalDate(2024, 3, 10)],
     calendar: "gregory",
     config: {
       locale: "en-US",
@@ -63,8 +64,8 @@ export const TwoCalendarsPersian: Story = {
   args: {
     isRange: true,
     initialValue: [
-      new Date("2025-04-17T00:00:00"),
-      new Date("2025-05-20T00:00:00"),
+      createLocalDate(2025, 4, 17),
+      createLocalDate(2025, 5, 20),
     ],
     calendar: "persian",
     config: {
