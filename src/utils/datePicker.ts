@@ -1,8 +1,8 @@
-import { Temporal } from "@js-temporal/polyfill";
 import { defaultWeekStartsOn } from "../constants/defaults";
 import { bindWeekDayToNumber } from "../constants/weekdays";
-import { TCalendar, TDay } from "../types";
+import type { TCalendar, TDay } from "../types";
 import { eachDayOfInterval, endOfWeek, startOfWeek } from "./dateUtils";
+import { calendarDateToISO } from "./temporal";
 
 /**
  * Build the gregorian `Date` at local midnight on the first day of the given
@@ -13,14 +13,18 @@ import { eachDayOfInterval, endOfWeek, startOfWeek } from "./dateUtils";
 export function firstDayOfCalendarMonth(
   year: number,
   month: number,
-  calendar: TCalendar
+  calendar: TCalendar,
 ): Date {
-  const { isoYear, isoMonth, isoDay } = Temporal.PlainDate.from({
+  const {
+    year: isoYear,
+    month: isoMonth,
+    day: isoDay,
+  } = calendarDateToISO({
     year,
     month,
     day: 1,
     calendar,
-  }).getISOFields();
+  });
 
   return new Date(isoYear, isoMonth - 1, isoDay);
 }
@@ -40,20 +44,13 @@ export function firstDayOfCalendarMonth(
 export function addCalendarMonths(
   date: Date,
   months: number,
-  calendar: TCalendar
+  calendar: TCalendar,
 ): Date {
   const { year, month } = getMonthInfo(date, calendar);
 
-  const shifted = Temporal.PlainDate.from({
-    year,
-    month,
-    day: 1,
-    calendar,
-  })
-    .add({ months })
-    .getISOFields();
+  const shifted = calendarDateToISO({ year, month, day: 1, calendar }, months);
 
-  return new Date(shifted.isoYear, shifted.isoMonth - 1, shifted.isoDay);
+  return new Date(shifted.year, shifted.month - 1, shifted.day);
 }
 
 export function getMonthInfo(date: Date, calendar: TCalendar) {
@@ -70,7 +67,7 @@ export function getMonthInfo(date: Date, calendar: TCalendar) {
   for (let i = 0; i < 32; i++) {
     calendarDays = parseInt(
       new Intl.DateTimeFormat(locale, { day: n, calendar }).format(gStartDate),
-      10
+      10,
     );
 
     if (+calendarDays > totalDays) {
@@ -94,20 +91,20 @@ export function getMonthInfo(date: Date, calendar: TCalendar) {
     endOfMonth: gEndT,
     day: parseInt(
       new Intl.DateTimeFormat(locale, { day: n, calendar }).format(startDate),
-      10
+      10,
     ),
     month: parseInt(
       new Intl.DateTimeFormat(locale, {
         month: "numeric",
         calendar,
       }).format(startDate),
-      10
+      10,
     ),
     year: parseInt(
       new Intl.DateTimeFormat(locale, { year: n, calendar })
         .format(startDate)
         .split(" ")[0],
-      10
+      10,
     ),
   };
 }
@@ -140,17 +137,17 @@ export function getMonthSlots({
 
   const startDateIncludeOtherDays = startOfWeek(
     startOfMonth,
-    bindWeekDayToNumber[weekStartsOn]
+    bindWeekDayToNumber[weekStartsOn],
   );
 
   const endDateIncludeOtherDays = endOfWeek(
     endOfMonth,
-    bindWeekDayToNumber[weekStartsOn]
+    bindWeekDayToNumber[weekStartsOn],
   );
 
   const daysOfMonth = eachDayOfInterval(
     startDateIncludeOtherDays,
-    endDateIncludeOtherDays
+    endDateIncludeOtherDays,
   );
 
   return {

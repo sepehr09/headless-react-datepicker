@@ -1,5 +1,12 @@
 # Changelog
 
+### version 2.0.2
+
+- new: add React 19 support.
+- fix: upgrade `@js-temporal/polyfill` to 0.5.1 and migrate removed APIs.
+- perf: centralize Temporal usage for better tree-shaking.
+- chore: update development dependencies.
+
 ### version 2.0.1
 
 - fix: `goToNextMonth` and `goToPrevMonth` can be passed directly to React `onClick` handlers again; the optional `step` parameter now ignores click events and defaults to `1`.

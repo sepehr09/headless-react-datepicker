@@ -1,8 +1,7 @@
-import { Temporal } from "@js-temporal/polyfill";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { defaultWeekStartsOn } from "./constants/defaults";
 import { PickerContext } from "./store/pickerContext";
-import { TDatePickerProps } from "./types";
+import type { TDatePickerProps } from "./types";
 import {
   addCalendarMonths,
   firstDayOfCalendarMonth,
@@ -11,13 +10,13 @@ import {
 } from "./utils/datePicker";
 import { getAllMonths, startOfDay } from "./utils/dateUtils";
 import { normalizeTemporal } from "./utils/temporal";
-import { getTimeParts, setTimeParts, TTimeParts } from "./utils/time";
+import { getTimeParts, setTimeParts, type TTimeParts } from "./utils/time";
 
 const normalizeNavigationStep = (step?: unknown) =>
   typeof step === "number" && Number.isFinite(step) ? step : 1;
 
 function DatePickerProvider<IsRange extends boolean>(
-  props: TDatePickerProps<IsRange>
+  props: TDatePickerProps<IsRange>,
 ) {
   const {
     value,
@@ -73,7 +72,7 @@ function DatePickerProvider<IsRange extends boolean>(
    * internal value (selected day or range of days)
    */
   const [internalValue, setInternalValue] = useState<Date[] | Date | undefined>(
-    finalInitialValue
+    finalInitialValue,
   );
 
   /**
@@ -94,7 +93,7 @@ function DatePickerProvider<IsRange extends boolean>(
   onChangeRef.current = onChangeProp;
   const onChange = useCallback(
     (val: IsRange extends true ? Date[] : Date) => onChangeRef.current?.(val),
-    []
+    [],
   );
 
   /**
@@ -131,7 +130,7 @@ function DatePickerProvider<IsRange extends boolean>(
             ? Array.isArray(finalValue)
               ? finalValue[1] || finalValue[0]
               : finalValue
-            : new Date(new Date().toISOString())
+            : new Date(new Date().toISOString()),
         );
       }
     }
@@ -154,7 +153,7 @@ function DatePickerProvider<IsRange extends boolean>(
         weekStartsOn,
         calendar,
       }),
-    [currentDate, calendar, weekStartsOn]
+    [currentDate, calendar, weekStartsOn],
   );
 
   const goToNextMonth = (step?: unknown) => {
@@ -162,7 +161,7 @@ function DatePickerProvider<IsRange extends boolean>(
     let updatedDate = addCalendarMonths(
       firstDayOfMonth,
       normalizedStep,
-      calendar
+      calendar,
     );
 
     // Clamp to `yearRangeTo` (December of that year). Done against the target
@@ -183,7 +182,7 @@ function DatePickerProvider<IsRange extends boolean>(
     let updatedDate = addCalendarMonths(
       firstDayOfMonth,
       -normalizedStep,
-      calendar
+      calendar,
     );
 
     // Clamp to `yearRangeFrom` (January of that year). Done against the target
@@ -234,7 +233,7 @@ function DatePickerProvider<IsRange extends boolean>(
     const prevEnd = internalValue?.[1];
     const end = prevEnd ? setTimeParts(date, getTimeParts(prevEnd)) : date;
     return [internalValue[0], end].sort(
-      (a, b) => new Date(a).getTime() - new Date(b).getTime()
+      (a, b) => new Date(a).getTime() - new Date(b).getTime(),
     );
   };
 
@@ -325,12 +324,12 @@ function DatePickerProvider<IsRange extends boolean>(
    * @example 1 // means Farvardin (persian calendar)
    */
   const goToMonth = (month: number) => {
-    const newDate = Temporal.PlainDate.from({
+    const newDate = {
       year: yearInTheCalendar,
       month: month,
       day: 1,
       calendar: calendar,
-    }).getISOFields();
+    };
 
     const date = new Date(`${normalizeTemporal(newDate)}T00:00:00`);
     goToDate?.(date);
@@ -342,12 +341,12 @@ function DatePickerProvider<IsRange extends boolean>(
    * @example 1395 // (persian calendar)
    */
   const goToYear = (year: number) => {
-    const newDate = Temporal.PlainDate.from({
+    const newDate = {
       year: year,
       month: monthInTheCalendar,
       day: 1,
       calendar: calendar,
-    }).getISOFields();
+    };
 
     const date = new Date(`${normalizeTemporal(newDate)}T00:00:00`);
     goToDate?.(date);
@@ -355,7 +354,7 @@ function DatePickerProvider<IsRange extends boolean>(
 
   const monthsList = useMemo(
     () => getAllMonths({ locale: locale!, calendar }),
-    [calendar, locale]
+    [calendar, locale],
   );
 
   /**
